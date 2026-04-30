@@ -1,12 +1,10 @@
-import { Button } from "./components/ui/button"
-
+import { RouterProvider } from "react-router-dom"
+import { router } from "./router/router"
 
 function App() {
 
   return (
-    <>
-      <Button>Hello, Vite + React!</Button>
-    </>
+      <RouterProvider router={router} />
   )
 }
 
