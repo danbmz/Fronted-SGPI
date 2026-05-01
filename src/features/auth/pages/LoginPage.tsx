@@ -1,49 +1,55 @@
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
 // TODO: Agregar validación de formulario, manejo de errores y feedback al usuario
 import { useState } from "react";
-import { AuthError } from "../api";
+import { useForm }from "react-hook-form";
 import { useNavigate } from 'react-router-dom'
-import { useAuth } from '../../../hooks/useAuth'
+import { useAuth } from '../hooks/useAuth'
 
+interface FormValues {
+  usuario: string
+  password: string
+}
 
 
 function LoginPage() {
-    const { login, role } = useAuth()
+  const { login, role } = useAuth()
   const navigate = useNavigate()
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormValues>();
 
-  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    setError(null)
-    setLoading(true)
 
-    const form = e.currentTarget
-    const credentials = {
-      email: (form.elements.namedItem('email') as HTMLInputElement).value,
-      password: (form.elements.namedItem('password') as HTMLInputElement).value,
-    }
+  const onSubmit = async (data: FormValues) => {
+    // react-hook-form ya limpió y validó los datos aquí solo falta llamar a login() y manejar la navegación, errores, etc.
+    setError(null);
+    setLoading(true);
 
     try {
-      await login(credentials)               // useAuth llama al servicio
+      await login(data)
 
-      if (role === 'admin') navigate('/dashboard/admin')
-      if (role === 'supervisor') navigate('/dashboard/supervisor')
+      // Redirige según rol
+      if (role === "admin") navigate("/dashboard/admin")
+      if (role === "supervisor") navigate("/dashboard/supervisor")
 
     } catch (err) {
-      if (err instanceof AuthError) {
-        setError(err.message)                // error controlado de la API
+      if (err instanceof Error) {
+        setError(err.message)
       } else {
-        setError('Error de conexión')        // error de red u otro
+        setError("Error de conexión")
       }
     } finally {
       setLoading(false)
     }
   }
+
 
   return (
     <>
@@ -59,29 +65,46 @@ function LoginPage() {
                     </CardDescription>
                 </CardHeader>
                 <CardContent className="p-0">
-                    <form onSubmit={handleLogin}>
+                    <form onSubmit={handleSubmit(onSubmit)}>
                         <div className="flex flex-col gap-6">
                             <div className="grid gap-2">
-                                <Label htmlFor="email">USUARIO</Label>
+                                <Label htmlFor="usuario">USUARIO</Label>
                                 <Input
-                                    id="email"
-                                    type="email"
-                                    required
+                                    id="usuario"
+                                    type="text"
+                                    {...register('usuario', {
+                                      required: 'El usuario es requerido',
+                                      pattern: {
+                                        value: /^[a-zA-Z0-9_]{3,20}$/,
+                                        message: 'El usuario no es válido',
+                                      },
+                                      setValueAs: (v: string) => v.trim(), // ← limpia espacios
+                                    })}
                                     className="rounded-lg bg-slate-200"
                                 />
+                                {errors.usuario && <p>{errors.usuario.message}</p>}
                             </div>
                             <div className="grid gap-2">
                                 <Label htmlFor="password">CONTRASEÑA</Label>
-                                <Input id="password" type="password" required className="rounded-lg bg-slate-200"/>
+                                <Input 
+                                  id="password" 
+                                  type="password" 
+                                  {...register('password', {
+                                    required: 'La contraseña es requerida',
+                                    minLength: {
+                                      value: 6,
+                                      message: 'La contraseña debe tener al menos 6 caracteres',
+                                    },
+                                  })}
+                                  className="rounded-lg bg-slate-200"/>
+                                {errors.password && <p>{errors.password.message}</p>}
                             </div>
+                            <Button type="submit" disabled={loading} className="w-full rounded-lg bg-slate-800 hover:bg-slate-700 cursor-pointer">
+                            {loading ? 'Entrando...' : 'Iniciar sesión'}
+                            </Button>
                         </div>
                     </form>
                 </CardContent>
-                <CardFooter className="flex-col gap-2 p-0">
-                    <Button type="submit" disabled={loading} className="w-full rounded-lg bg-slate-800 hover:bg-slate-700 cursor-pointer">
-                    {loading ? 'Entrando...' : 'Iniciar sesión'}
-                    </Button>
-                </CardFooter>
             </Card>
         </div>
     </>

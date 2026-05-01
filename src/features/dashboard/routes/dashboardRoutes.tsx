@@ -15,8 +15,8 @@ export const dashboardRoutes: RouteObject = {
     {
       element: <ProtectedRoute allowedRoles={['admin']} />,
       children: [
-        { path: 'admin', element: <AdminHome /> },
-        { path: 'admin/production-orders', element: <ProductionOrders /> },
+        { path: '/dashboard/admin', element: <AdminHome /> },
+        { path: '/dashboard/admin/production-orders', element: <ProductionOrders /> },
       ],
     },
 
@@ -24,8 +24,8 @@ export const dashboardRoutes: RouteObject = {
     {
       element: <ProtectedRoute allowedRoles={['supervisor']} />,
       children: [
-        { path: 'supervisor', element: <SupervisorHome /> },
-        // { path: 'supervisor/shift-progress', element: <ShiftProgress /> },
+        { path: '/dashboard/supervisor', element: <SupervisorHome /> },
+        // { path: '/dashboard/supervisor/shift-progress', element: <ShiftProgress /> },
       ],
     },
 

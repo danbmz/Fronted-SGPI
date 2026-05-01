@@ -1,6 +1,6 @@
 import { Outlet } from 'react-router-dom'
 import Sidebar from '../components/Sidebar'
-import { useAuth } from '../../../hooks/useAuth'
+import { useAuth } from '../../auth/hooks/useAuth'
 
 interface NavLink {
   label: string

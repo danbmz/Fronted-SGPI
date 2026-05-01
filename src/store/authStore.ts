@@ -4,9 +4,9 @@ import { persist } from 'zustand/middleware'
 export type Role = 'admin' | 'supervisor'
 
 export interface User {
-  id: string
+  id: number
   name: string
-  email: string
+  usuario: string
   role: Role
 }
 
@@ -25,17 +25,17 @@ export const useAuthStore = create<AuthState>()(
       token: null,
       isAuthenticated: false,
 
-      login: (user, token) => set({
-        user,
-        token,
-        isAuthenticated: true,
-      }),
+      login: (user, token) => {
+        // localStorage.setItem("token", token)
+        // localStorage.setItem("user", JSON.stringify(user))
+        set({ user, token, isAuthenticated: true,})
+      },
 
-      logout: () => set({
-        user: null,
-        token: null,
-        isAuthenticated: false,
-      }),
+      logout: () => {
+        // localStorage.removeItem("token")
+        // localStorage.removeItem("user")
+        set({ user: null, token: null, isAuthenticated: false,})
+      },
     }),
     {
       name: 'auth-storage',

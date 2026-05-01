@@ -1,7 +1,7 @@
-import { useAuthStore } from '../store/authStore'
-import { loginService, logoutService } from '../features/auth/api'
-import type { LoginCredentials } from '../features/auth/api'
-import type { User, Role } from '../store/authStore'
+import { useAuthStore } from '../../../store/authStore'
+import { loginService, logoutService } from '../authService'
+import type { LoginCredentials } from '../authService'
+import type { User, Role } from '../../../store/authStore'
 
 interface UseAuthReturn {
   user: User | null
