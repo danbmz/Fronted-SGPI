@@ -1,9 +1,10 @@
-import { Button } from "@/components/ui/button"
 import { useAuth } from "@/features/auth/hooks/useAuth"
 import { useState } from "react"
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from "react-router-dom"
 
-function AdminHome() {
+import { Button } from "@/components/ui/button"
+
+function SupervisorDashboard() {
     const { logout } = useAuth()
     const navigate = useNavigate()
     const [error, setError] = useState<string | null>(null)
@@ -29,7 +30,7 @@ function AdminHome() {
 
     return (
         <main>
-            <h1>Admin Home</h1>
+            <h1>Supervisor Dashboard</h1>
             <Button onClick={handleLogout}>
                 {loading ? 'Entrando...' : 'Cerrar sesión'}
             </Button>
@@ -37,4 +38,4 @@ function AdminHome() {
     )
 }
 
-export default AdminHome
+export default SupervisorDashboard

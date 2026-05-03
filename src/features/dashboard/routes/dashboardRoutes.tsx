@@ -1,33 +1,40 @@
-import type { RouteObject } from 'react-router-dom'
+import { Navigate, type RouteObject } from 'react-router-dom'
 import ProtectedRoute from '../../../shared/components/ProtectedRoute'
 import DashboardLayout from '../pages/DashboardLayout'
-import AdminHome from '../pages/admin/AdminHome'
+import AdminDashboard from '../pages/admin/AdminDashboard'
 import ProductionOrders from '@/features/ordenes/pages/ProductionOrders'
-import SupervisorHome from '../pages/supervisor/SupervisorHome'
+import SupervisorDashboard from '../pages/supervisor/SupervisorDashboard'
 // import ShiftProgress from '../pages/supervisor/ShiftProgress'
 
-export const dashboardRoutes: RouteObject = {
-  path: '/dashboard',
-  element: <DashboardLayout />,
-  children: [
+export const dashboardRoutes: RouteObject[] = [
+  // ── Admin ──────────────────────────────────
+  {
+    path: '/admin',
+    element: <ProtectedRoute allowedRoles={['admin']} />,
+    children: [
+      {
+        element: <DashboardLayout />,
+        children: [
+          { index: true, element: <Navigate to="inicio" replace /> },
+          { path: 'dashboard', element: <AdminDashboard /> },
+          { path: 'ordenes', element: <ProductionOrders /> },
+        ],
+      },
+    ],
+  },
 
-    // ── Admin ──────────────────────────────────
-    {
-      element: <ProtectedRoute allowedRoles={['admin']} />,
-      children: [
-        { path: '/dashboard/admin', element: <AdminHome /> },
-        { path: '/dashboard/admin/production-orders', element: <ProductionOrders /> },
-      ],
-    },
-
-    // ── Supervisor ─────────────────────────────
-    {
-      element: <ProtectedRoute allowedRoles={['supervisor']} />,
-      children: [
-        { path: '/dashboard/supervisor', element: <SupervisorHome /> },
-        // { path: '/dashboard/supervisor/shift-progress', element: <ShiftProgress /> },
-      ],
-    },
-
-  ],
-}
+  // ── Supervisor ─────────────────────────────
+  {
+    path: '/supervisor',
+    element: <ProtectedRoute allowedRoles={['supervisor']} />,
+    children: [
+      {
+        element: <DashboardLayout />,
+        children: [
+          { index: true, element: <Navigate to="inicio" replace /> },
+          { path: 'dashboard', element: <SupervisorDashboard /> },
+        ],
+      },
+    ],
+  },
+]

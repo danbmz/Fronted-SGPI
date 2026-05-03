@@ -6,6 +6,11 @@ interface ProtectedRouteProps {
   allowedRoles?: Role[]
 }
 
+const roleDashboard = {
+  admin: "/admin/dashboard",
+  supervisor: "/supervisor/dashboard",
+}
+
 export default function ProtectedRoute({ allowedRoles }: ProtectedRouteProps) {
   const { isAuthenticated, role } = useAuth()
 
@@ -14,7 +19,7 @@ export default function ProtectedRoute({ allowedRoles }: ProtectedRouteProps) {
   }
 
   if (allowedRoles && role && !allowedRoles.includes(role)) {
-    return <Navigate to="/" replace />
+    return <Navigate to={roleDashboard[role]} replace />
   }
 
   return <Outlet />

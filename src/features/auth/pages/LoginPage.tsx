@@ -16,7 +16,7 @@ interface FormValues {
 
 
 function LoginPage() {
-  const { login, role } = useAuth()
+  const { login } = useAuth()
   const navigate = useNavigate()
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
@@ -35,9 +35,12 @@ function LoginPage() {
     try {
       await login(data)
 
+      // Leemos el rol directo del localstorage que ya guardo el store con login()
+      const user = JSON.parse(localStorage.getItem("auth-storage") || "{}")
+
       // Redirige según rol
-      if (role === "admin") navigate("/dashboard/admin")
-      if (role === "supervisor") navigate("/dashboard/supervisor")
+      if (user.state.user.role === "admin") navigate("/admin/dashboard")
+      if (user.state.user.role === "supervisor") navigate("/supervisor/dashboard")
 
     } catch (err) {
       if (err instanceof Error) {

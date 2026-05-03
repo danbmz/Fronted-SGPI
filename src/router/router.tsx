@@ -9,7 +9,7 @@ const router = createBrowserRouter([
     path: "/",
     element: <LoginPage />,
   },
-  dashboardRoutes,
+  ...dashboardRoutes,
   {
     path:"*",
     element: <NotFound/>,
