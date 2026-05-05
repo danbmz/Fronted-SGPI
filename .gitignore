@@ -50,6 +50,3 @@ coverage
 Thumbs.db
 *.tmp
 *.temp
-
-# ---- Archivo de datos para pruebas ----
-/mocks
