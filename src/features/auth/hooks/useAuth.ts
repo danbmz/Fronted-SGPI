@@ -1,6 +1,6 @@
 import { useAuthStore } from '../../../store/authStore'
-import { loginService, logoutService } from '../authService'
-import type { LoginCredentials } from '../authService'
+import { loginService, logoutService } from '../authService.ts'
+import type { LoginCredentials } from '../authService.ts'
 import type { User, Role } from '../../../store/authStore'
 
 interface UseAuthReturn {

@@ -21,7 +21,7 @@ export const sidebarItems: Record<"admin" | "supervisor", SidebarItem[]> = {
     { section: "INVENTARIO", label: "Producto terminado", path: "/admin/producto-terminado", icon: BoxSelect },
     { section: "CATÁLOGOS", label: "Productos", path: "/admin/productos", icon: ShoppingBag },
     { section: "CATÁLOGOS", label: "Máquinas", path: "/admin/maquinas", icon: Wrench },
-    { section: "CATÁLOGOS", label: "Supervisores", path: "/admin/supervisores", icon: HardHat },
+    { section: "CATÁLOGOS", label: "Operadores", path: "/admin/operadores", icon: HardHat },
     { section: "CATÁLOGOS", label: "Fórmulas Pigmentos", path: "/admin/formulas-pigmentos", icon: FlaskConical },
     { section: "ADMINISTRACIÓN", label: "Reportes", path: "/admin/reportes", icon: BarChart2 },
     { section: "ADMINISTRACIÓN", label: "Usuarios", path: "/admin/usuarios", icon: Users },

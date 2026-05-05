@@ -1,0 +1,5 @@
+[
+  { "id": 1, "nombre": "Mañana", "horaInicio": "06:00", "horaFin": "14:00", "duracionHoras": 8 },
+  { "id": 2, "nombre": "Tarde",  "horaInicio": "14:00", "horaFin": "22:00", "duracionHoras": 8 },
+  { "id": 3, "nombre": "Noche",  "horaInicio": "22:00", "horaFin": "06:00", "duracionHoras": 8 }
+]

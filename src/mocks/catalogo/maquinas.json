@@ -1,0 +1,6 @@
+[
+  { "id": 1, "nombre": "TX 268T", "codigo": "TX268T", "numero": 1, "tipoProceso": "Inyección", "capacidadTon": 268, "estado": "activa" },
+  { "id": 2, "nombre": "TX 160T", "codigo": "TX160T", "numero": 2, "tipoProceso": "Inyección", "capacidadTon": 160, "estado": "activa" },
+  { "id": 3, "nombre": "SB 50L",  "codigo": "SB050L", "numero": 3, "tipoProceso": "Soplado",   "capacidadTon": null, "estado": "en mantenimiento" },
+  { "id": 4, "nombre": "TX 350T", "codigo": "TX350T", "numero": 4, "tipoProceso": "Inyección", "capacidadTon": 350, "estado": "inactiva" }
+]

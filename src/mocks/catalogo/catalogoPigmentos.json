@@ -1,0 +1,44 @@
+
+[
+
+  { "id": 1,  "nombre": "Amarillo Sólido",    "color": "Amarillo",    "categoriaColor": "Sólidos",          "tipo": "master", "aplicacion": "PP",       "stockMinimo": 10 },
+  { "id": 2,  "nombre": "Verde Sólido",       "color": "Verde",       "categoriaColor": "Sólidos",          "tipo": "master", "aplicacion": "PP",       "stockMinimo": 10 },
+  { "id": 3,  "nombre": "Naranja Sólido",     "color": "Naranja",     "categoriaColor": "Sólidos",          "tipo": "master", "aplicacion": "PP",       "stockMinimo": 10 },
+  { "id": 4,  "nombre": "Azul Sólido",        "color": "Azul",        "categoriaColor": "Sólidos",          "tipo": "master", "aplicacion": "PP",       "stockMinimo": 10 },
+  { "id": 5,  "nombre": "Rojo Sólido",        "color": "Rojo",        "categoriaColor": "Sólidos",          "tipo": "master", "aplicacion": "PP",       "stockMinimo": 10 },
+  { "id": 6,  "nombre": "Morado Sólido",      "color": "Morado",      "categoriaColor": "Sólidos",          "tipo": "master", "aplicacion": "PP",       "stockMinimo": 10 },
+  { "id": 7,  "nombre": "Blanco Sólido",      "color": "Blanco",      "categoriaColor": "Sólidos",          "tipo": "master", "aplicacion": "PP",       "stockMinimo": 10 },
+  { "id": 8,  "nombre": "Azul Pastel",        "color": "Azul Pastel", "categoriaColor": "Sólidos",          "tipo": "master", "aplicacion": "PP",       "stockMinimo": 10 },
+  { "id": 9,  "nombre": "Rosa Sólido",        "color": "Rosa",        "categoriaColor": "Sólidos",          "tipo": "master", "aplicacion": "PP",       "stockMinimo": 10 },
+  { "id": 10, "nombre": "Beige Sólido",       "color": "Beige",       "categoriaColor": "Sólidos",          "tipo": "master", "aplicacion": "PP",       "stockMinimo": 10 },
+  { "id": 11, "nombre": "Crema Sólido",       "color": "Crema",       "categoriaColor": "Sólidos",          "tipo": "master", "aplicacion": "PP",       "stockMinimo": 10 },
+
+
+  { "id": 12, "nombre": "Amarillo Pastel",    "color": "Amarillo",    "categoriaColor": "Sólidos Pasteles", "tipo": "master", "aplicacion": "PP",       "stockMinimo": 10 },
+  { "id": 13, "nombre": "Verde Pastel",       "color": "Verde",       "categoriaColor": "Sólidos Pasteles", "tipo": "master", "aplicacion": "PP",       "stockMinimo": 10 },
+  { "id": 14, "nombre": "Rosa Pastel",        "color": "Rosa",        "categoriaColor": "Sólidos Pasteles", "tipo": "master", "aplicacion": "PP",       "stockMinimo": 10 },
+  { "id": 15, "nombre": "Azul Pastel Esp",    "color": "Azul",        "categoriaColor": "Sólidos Pasteles", "tipo": "master", "aplicacion": "PP",       "stockMinimo": 10 },
+  { "id": 16, "nombre": "Morado Pastel",      "color": "Morado",      "categoriaColor": "Sólidos Pasteles", "tipo": "master", "aplicacion": "PP",       "stockMinimo": 10 },
+
+
+  { "id": 17, "nombre": "Naranja Neón",       "color": "Naranja",     "categoriaColor": "Neón Traslucidos", "tipo": "master", "aplicacion": "PP",       "stockMinimo": 10 },
+  { "id": 18, "nombre": "Azul Neón",          "color": "Azul",        "categoriaColor": "Neón Traslucidos", "tipo": "master", "aplicacion": "PP",       "stockMinimo": 10 },
+  { "id": 19, "nombre": "Morado Neón",        "color": "Morado",      "categoriaColor": "Neón Traslucidos", "tipo": "master", "aplicacion": "PP",       "stockMinimo": 10 },
+
+
+  { "id": 20, "nombre": "Amarillo Jarra Neón","color": "Amarillo",    "categoriaColor": "Jarra Neón Pastel","tipo": "master", "aplicacion": "PP",       "stockMinimo": 10 },
+  { "id": 21, "nombre": "Verde Jarra Neón",   "color": "Verde",       "categoriaColor": "Jarra Neón Pastel","tipo": "master", "aplicacion": "PP",       "stockMinimo": 10 },
+  { "id": 22, "nombre": "Rosa Jarra Neón",    "color": "Rosa",        "categoriaColor": "Jarra Neón Pastel","tipo": "master", "aplicacion": "PP",       "stockMinimo": 10 },
+  { "id": 23, "nombre": "Azul Jarra Neón",    "color": "Azul",        "categoriaColor": "Jarra Neón Pastel","tipo": "master", "aplicacion": "PP",       "stockMinimo": 10 },
+  { "id": 24, "nombre": "Morado Jarra Neón",  "color": "Morado",      "categoriaColor": "Jarra Neón Pastel","tipo": "master", "aplicacion": "PP",       "stockMinimo": 10 },
+
+
+  { "id": 25, "nombre": "Amarillo Neón Polvo","color": "Amarillo",    "categoriaColor": "Neón Traslucidos", "tipo": "polvo",  "aplicacion": "PP",       "stockMinimo": 5  },
+  { "id": 26, "nombre": "Verde Neón Polvo",   "color": "Verde",       "categoriaColor": "Neón Traslucidos", "tipo": "polvo",  "aplicacion": "PP",       "stockMinimo": 5  },
+  { "id": 27, "nombre": "Rosa Neón Polvo",    "color": "Rosa",        "categoriaColor": "Neón Traslucidos", "tipo": "polvo",  "aplicacion": "PP",       "stockMinimo": 5  },
+
+
+  { "id": 28, "nombre": "Naranja Neón PS-C",  "color": "Naranja",     "categoriaColor": "Neón Traslucidos", "tipo": "polvo",  "aplicacion": "PS-C",     "stockMinimo": 5  },
+  { "id": 29, "nombre": "Azul Neón PS-C",     "color": "Azul",        "categoriaColor": "Neón Traslucidos", "tipo": "polvo",  "aplicacion": "PS-C",     "stockMinimo": 5  },
+  { "id": 30, "nombre": "Morado Neón PS-C",   "color": "Morado",      "categoriaColor": "Neón Traslucidos", "tipo": "polvo",  "aplicacion": "PS-C",     "stockMinimo": 5  }
+]

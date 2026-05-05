@@ -12,7 +12,7 @@ function Header () {
         <header className="px-4 py-6 flex justify-between shadow-md">
             <div className="flex items-center gap-3">
                 <div className="block md:hidden"><Menu /></div>
-                <span className="text-xl font-bold"> {title}</span>
+                <span className="text-xl font-bold text-gray-900"> {title}</span>
             </div>
             <div className="flex gap-2">
                 <p>

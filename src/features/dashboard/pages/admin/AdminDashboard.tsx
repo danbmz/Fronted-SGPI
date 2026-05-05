@@ -28,7 +28,7 @@ function AdminDashboard() {
 
 
     return (
-        <div className="p-6 h-screen bg-blue-100">
+        <div className="p-6 h-screen bg-white-100">
             <h1>Admin Home</h1>
             <Button onClick={handleLogout}>
                 {loading ? 'Entrando...' : 'Cerrar sesión'}

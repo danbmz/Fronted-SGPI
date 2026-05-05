@@ -1,0 +1,7 @@
+[
+  { "id": 1, "productoId": 1, "nombreProducto": "Jarra 2L",    "stockActual": 1200, "stockMinimo": 500,  "ultimoMovimiento": "2026-04-30", "ubicacion": "Almacén A" },
+  { "id": 2, "productoId": 2, "nombreProducto": "Plato Hondo", "stockActual": 430,  "stockMinimo": 800,  "ultimoMovimiento": "2026-04-29", "ubicacion": "Almacén A" },
+  { "id": 3, "productoId": 3, "nombreProducto": "Vaso 500ml",  "stockActual": 200,  "stockMinimo": 1000, "ultimoMovimiento": "2026-04-28", "ubicacion": "Almacén B" },
+  { "id": 4, "productoId": 4, "nombreProducto": "Colador #3",  "stockActual": 750,  "stockMinimo": 300,  "ultimoMovimiento": "2026-04-30", "ubicacion": "Almacén B" },
+  { "id": 5, "productoId": 5, "nombreProducto": "Cubeta 10L",  "stockActual": 90,   "stockMinimo": 200,  "ultimoMovimiento": "2026-04-27", "ubicacion": "Almacén C" }
+]
