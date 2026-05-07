@@ -1,5 +1,5 @@
-import type { User } from '../../store/authStore'
-import { mockUsers, type MockUser } from '@/mocks/users'
+import type { User } from '@/types/usuario'
+import { mockUsers } from '@/mocks/users'
 
 // ── Configuración ───────────────────────────────────────────
 // const API_BASE_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:3000/api'
@@ -32,7 +32,7 @@ export async function loginService(credentials: LoginCredentials): Promise<Login
   await new Promise(resolve => setTimeout(resolve, 800));
   const user = mockUsers.find(
     u => u.usuario === credentials.usuario && u.password === credentials.password
-  ) as MockUser | undefined
+  ) as User | undefined
 
   if (!user) {
     throw new Error("Credenciales incorrectas")
@@ -42,9 +42,10 @@ export async function loginService(credentials: LoginCredentials): Promise<Login
     token: "fake-jwt-token-123",
     user: {
       id: user.id,
-      name: user.nombre,
+      nombre: user.nombre,
       usuario: user.usuario,
-      role: user.role
+      role: user.role,
+      activo: user.activo,
     }
   }
 
