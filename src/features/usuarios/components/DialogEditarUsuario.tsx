@@ -7,6 +7,8 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import type { User } from "@/types/usuario"
+import { editarUsuario } from "../usuariosServices"
+import { useAuth } from "@/features/auth/hooks/useAuth"
 
 interface Props {
   open: boolean
@@ -19,10 +21,13 @@ interface FormValues {
   usuario: string
   password: string
   role: "admin" | "supervisor"
+  id: string | number
+  activo: boolean
 }
 
 export default function DialogEditarUsuario({ open, usuario, onClose }: Props) {
   const { register, handleSubmit, reset, setValue } = useForm<FormValues>()
+  const { user } = useAuth()
 
   // Rellena el form cuando se abre con los datos del usuario seleccionado
   useEffect(() => {
@@ -34,8 +39,11 @@ export default function DialogEditarUsuario({ open, usuario, onClose }: Props) {
     }
   }, [usuario, setValue])
 
-  const onSubmit = (data: FormValues) => {
+  if(!user) return // Validamos que existe sesion activa
+
+  const onSubmit = async (data: FormValues) => {
     console.log("Usuario editado:", data)
+    await editarUsuario(data, user)
     reset()
     onClose()
   }

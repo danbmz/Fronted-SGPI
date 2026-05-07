@@ -6,6 +6,7 @@ export interface MockUser {
   password: string
   role: "admin" | "supervisor"
   activo: boolean
+  createdAt: string
 }
 
 
@@ -17,6 +18,7 @@ export const mockUsers: MockUser[] = [
     password: "admin123",
     role: "admin",
     activo: true,
+    createdAt: "2023-01-01T00:00:00Z"
   }
   ,
   {
@@ -26,6 +28,7 @@ export const mockUsers: MockUser[] = [
     password: "admin123",
     role: "admin",
     activo: true,
+    createdAt: "2023-01-01T00:00:00Z"
   }
   ,
   {
@@ -35,6 +38,7 @@ export const mockUsers: MockUser[] = [
     password: "super123",
     role: "supervisor",
     activo: true,
+    createdAt: "2023-01-01T00:00:00Z"
   }
   ,
   {
@@ -44,6 +48,7 @@ export const mockUsers: MockUser[] = [
     password: "super123",
     role: "supervisor",
     activo: true,
+    createdAt: "2023-01-01T00:00:00Z"
   }
   ,
   {
@@ -52,6 +57,7 @@ export const mockUsers: MockUser[] = [
     usuario: "suupervisora03",
     password: "super123",
     role: "supervisor",
-    activo: true,
+    activo: false,
+    createdAt: "2023-01-01T00:00:00Z"
   }
 ]

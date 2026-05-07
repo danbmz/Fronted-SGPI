@@ -17,13 +17,26 @@ import { Button } from "@/components/ui/button"
 import { MoreHorizontalIcon } from "lucide-react"
 import DialogEditarUsuario from "./DialogEditarUsuario"
 import DialogDesactivarUsuario from "./DialogDesactivarUsuario"
+import DialogReactivarUsuario from "./DialogReactivarUsuario"
+import { Badge } from "@/components/ui/badge"
 
 import type { User } from "@/types/usuario"
 import { useState } from "react"
 import { useAuth } from "@/features/auth/hooks/useAuth"
+import { formatFecha } from "@/utils/formatFecha"
 
 interface Props {
   usuarios: User[]
+}
+
+const colorRol: Record<string, string> = {
+  supervisor: "bg-red-100 text-red-700",
+  admin: "bg-blue-100 text-blue-700",
+}
+
+const colorEstado: Record<string, string> = {
+  Activo: "bg-green-100 text-green-700",
+  Inactivo: "bg-red-100 text-red-700",
 }
 
 
@@ -31,9 +44,9 @@ function TablaUsuarios({usuarios }: Props) {
     const { user } = useAuth()
 
     const [usuarioSeleccionado, setUsuarioSeleccionado] = useState<User | null>(null)
-    const [dialogAbierto, setDialogAbierto] = useState<"editar" | "desactivar" | null>(null)
+    const [dialogAbierto, setDialogAbierto] = useState<"editar" | "desactivar" | "reactivar" | null>(null)
     
-    const abrirDialog = (tipo: "editar" | "desactivar", usuario: User) => {
+    const abrirDialog = (tipo: "editar" | "desactivar" | "reactivar", usuario: User) => {
         setUsuarioSeleccionado(usuario)
         setDialogAbierto(tipo)
     }
@@ -71,8 +84,17 @@ function TablaUsuarios({usuarios }: Props) {
                             )}
                         </TableCell>
                         <TableCell>{usuario.usuario}</TableCell>
-                        <TableCell>{usuario.role}</TableCell>
-                        <TableCell>{usuario.activo ? 'Activo' : 'Inactivo'}</TableCell>
+                        <TableCell>
+                            <Badge className={`text-xs px-2 py-1 rounded-full font-medium ${colorRol[usuario.role] ?? ""}`}>
+                                {usuario.role}
+                            </Badge>
+                        </TableCell>
+                        <TableCell>
+                            <Badge className={`text-xs px-2 py-1 rounded-full font-medium ${colorEstado[usuario.activo ? 'Activo' : 'Inactivo'] ?? ""}`}>
+                                {usuario.activo ? 'Activo' : 'Inactivo'}
+                            </Badge>
+                        </TableCell>
+                        <TableCell>{usuario.createdAt !== undefined ? formatFecha(usuario.createdAt) : "Fecha no obtenida"}</TableCell>
                         <TableCell>{usuario.activo}</TableCell>
                         <TableCell>
                             <DropdownMenu>
@@ -86,9 +108,21 @@ function TablaUsuarios({usuarios }: Props) {
                                         Editar
                                     </DropdownMenuItem>
                                     <DropdownMenuSeparator />
-                                    <DropdownMenuItem variant="destructive" onClick={() => abrirDialog("desactivar", usuario)}>
-                                        Desactivar
-                                    </DropdownMenuItem>
+                                        {usuario.activo ? (
+                                            <DropdownMenuItem
+                                                variant="destructive"
+                                                onClick={() => abrirDialog("desactivar", usuario)}
+                                            >
+                                            Desactivar
+                                            </DropdownMenuItem>
+                                        ) : (
+                                            <DropdownMenuItem
+                                            className="text-green-600 hover:bg-green-200 hover:text-green-600"
+                                            onClick={() => abrirDialog("reactivar", usuario)}
+                                            >
+                                            Reactivar
+                                            </DropdownMenuItem>
+                                        )}
                                 </DropdownMenuContent>
                             </DropdownMenu>
                         </TableCell>
@@ -107,6 +141,12 @@ function TablaUsuarios({usuarios }: Props) {
 
         <DialogDesactivarUsuario
             open={dialogAbierto === "desactivar"}
+            usuario={usuarioSeleccionado}
+            onClose={cerrarDialog}
+        />
+
+        <DialogReactivarUsuario
+            open={dialogAbierto === "reactivar"}
             usuario={usuarioSeleccionado}
             onClose={cerrarDialog}
         />

@@ -5,6 +5,7 @@ import AdminDashboard from '../pages/admin/AdminDashboard'
 import ProductionOrders from '@/features/ordenes/pages/ProductionOrders'
 import SupervisorDashboard from '../pages/supervisor/SupervisorDashboard'
 import Usuarios from '@/features/usuarios/pages/Usuarios'
+import AuditLog from '@/features/auditLogs/pages/AuditLog'
 // import ShiftProgress from '../pages/supervisor/ShiftProgress'
 
 export const dashboardRoutes: RouteObject[] = [
@@ -31,7 +32,7 @@ export const dashboardRoutes: RouteObject[] = [
           { path: 'formulas-pigmentos', element: <ProductionOrders /> },
           { path: 'reportes', element: <ProductionOrders /> },
           { path: 'usuarios', element: <Usuarios /> },
-          { path: 'auditoria', element: <ProductionOrders /> }, 
+          { path: 'auditoria', element: <AuditLog /> }, 
         ],
       },
     ],

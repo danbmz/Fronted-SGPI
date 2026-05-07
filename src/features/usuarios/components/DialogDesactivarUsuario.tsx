@@ -2,6 +2,8 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import type { User } from "@/types/usuario"
+import { desactivarUsuario } from "../usuariosServices"
+import { useAuth } from "@/features/auth/hooks/useAuth"
 
 interface Props {
   open: boolean
@@ -10,8 +12,13 @@ interface Props {
 }
 
 export default function DialogDesactivarUsuario({ open, usuario, onClose }: Props) {
-  const handleConfirmar = () => {
+  const { user } = useAuth()
+
+  if (!user || !usuario) return // Validamos que exista un sesion activa
+
+  const handleConfirmar = async () => {
     // lógica de desactivar
+    await desactivarUsuario(usuario, user)
     console.log("Desactivando:", usuario?.nombre)
     onClose()
   }

@@ -1,7 +1,8 @@
+import { registrarLog } from '@/lib/auditService.ts'
 import { useAuthStore } from '../../../store/authStore'
 import { loginService, logoutService } from '../authService.ts'
 import type { LoginCredentials } from '../authService.ts'
-import type { User, Role } from '../../../store/authStore'
+import type { User, Role } from '@/types/usuario.ts'
 
 interface UseAuthReturn {
   user: User | null
@@ -23,10 +24,29 @@ export function useAuth(): UseAuthReturn {
   const login = async (credentials: LoginCredentials) => {
     const { user, token } = await loginService(credentials)  // llama a la API
     storeLogin(user, token)                                   // guarda en el store
+
+    // Registrar el lOG
+    await registrarLog({
+    usuario: user.usuario,
+    nombre: user.nombre,
+    modulo: "auth",
+    accion: "login",
+    detalle: "Inicio de sesión exitoso"
+  })
   }
 
   const logout = async () => {
     if (token) await logoutService(token)  // avisa al servidor
+
+    // Registramos el Log
+    await registrarLog({
+      usuario: user?.usuario || "Desconocido",
+      nombre: user?.nombre || "Desconocido",
+      modulo: "auth",
+      accion: "logout",
+      detalle: "Cierre de sesión"
+    })
+
     storeLogout()                          // limpia el store y localStorage
   }
 

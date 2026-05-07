@@ -4,7 +4,9 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { crearUsuario } from "../usuariosServices"
 import type { Role } from "@/types/usuario"
+import { useAuth } from "@/features/auth/hooks/useAuth"
 
 interface Props {
   open: boolean
@@ -20,9 +22,14 @@ interface FormValues {
 
 export default function DialogCrearUsuario({ open, onClose }: Props) {
   const { register, handleSubmit, reset, setValue } = useForm<FormValues>()
+  const { user } = useAuth()
 
-  const onSubmit = (data: FormValues) => {
+
+  if (!user) return // Validamos que exista un sesion activa
+
+  const onSubmit = async (data: FormValues) => {
     console.log("Nuevo usuario:", data)
+    await crearUsuario(data, user); // Llamada a la API y a su vez registra el log
     reset()
     onClose()
   }
