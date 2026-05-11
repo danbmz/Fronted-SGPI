@@ -7,25 +7,19 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import type { User } from "@/types/usuario"
+import type { FormValues } from "@/types/userForm"
 import { editarUsuario } from "../usuariosServices"
 import { useAuth } from "@/features/auth/hooks/useAuth"
+import { toast } from "sonner"
 
 interface Props {
   open: boolean
   usuario: User | null
   onClose: () => void
+  onSuccess: (usuario: User) => void
 }
 
-interface FormValues {
-  nombre: string
-  usuario: string
-  password: string
-  role: "admin" | "supervisor"
-  id: string | number
-  activo: boolean
-}
-
-export default function DialogEditarUsuario({ open, usuario, onClose }: Props) {
+export default function DialogEditarUsuario({ open, usuario, onClose, onSuccess }: Props) {
   const { register, handleSubmit, reset, setValue } = useForm<FormValues>()
   const { user } = useAuth()
 
@@ -39,14 +33,25 @@ export default function DialogEditarUsuario({ open, usuario, onClose }: Props) {
     }
   }, [usuario, setValue])
 
-  if(!user) return // Validamos que existe sesion activa
+  
+const onSubmit = async (data: FormValues) => {
+  if (!user || !usuario) return
 
-  const onSubmit = async (data: FormValues) => {
-    console.log("Usuario editado:", data)
-    await editarUsuario(data, user)
+  try {
+    const usuarioEditado = await editarUsuario(
+      String(usuario.id), // ← el id del usuario a editar
+      data, // Los neuvos datos
+      usuario, // El objeto del usuario a editar
+      user // El objeto del usuario que esta editando
+    )
+    toast.success("Usuario editado.")
+    onSuccess(usuarioEditado) // ← igual que en crear, para actualizar la tabla
     reset()
     onClose()
+  } catch {
+    toast.error("No se pudo editar el usuario.")
   }
+}
 
   const handleClose = () => {
     reset()

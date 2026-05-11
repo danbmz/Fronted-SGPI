@@ -27,6 +27,9 @@ import { formatFecha } from "@/utils/formatFecha"
 
 interface Props {
   usuarios: User[]
+  onUsuarioEditado: (usuario: User) => void
+  onUsuarioDesactivado: (usuario: User) => void
+  onUsuarioReactivado: (usuario: User) => void
 }
 
 const colorRol: Record<string, string> = {
@@ -40,7 +43,7 @@ const colorEstado: Record<string, string> = {
 }
 
 
-function TablaUsuarios({usuarios }: Props) {
+function TablaUsuarios({ usuarios, onUsuarioEditado, onUsuarioDesactivado, onUsuarioReactivado }: Props) {
     const { user } = useAuth()
 
     const [usuarioSeleccionado, setUsuarioSeleccionado] = useState<User | null>(null)
@@ -137,18 +140,21 @@ function TablaUsuarios({usuarios }: Props) {
             open={dialogAbierto === "editar"}
             usuario={usuarioSeleccionado}
             onClose={cerrarDialog}
+            onSuccess={onUsuarioEditado} // La funcion viene desde el padre Usuarios.tsx
         />
 
         <DialogDesactivarUsuario
             open={dialogAbierto === "desactivar"}
             usuario={usuarioSeleccionado}
             onClose={cerrarDialog}
+            onSuccess={onUsuarioDesactivado}
         />
 
         <DialogReactivarUsuario
             open={dialogAbierto === "reactivar"}
             usuario={usuarioSeleccionado}
             onClose={cerrarDialog}
+            onSuccess={onUsuarioReactivado}
         />
 
     </div>

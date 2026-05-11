@@ -27,6 +27,30 @@ function Usuarios () {
         fetchUsuarios()
     }, [])
 
+    // Agregar Nuevo Usuario sin recargar, cuando se crea
+    const handleUsuarioCreado = (nuevoUsuario: User) => {
+        setUsuarios(prev => [...prev, nuevoUsuario]) // agrega al estado sin recargar, aunque podemos vovler a llamar al backend para traer la lista completa sin errores
+    }
+
+    // Mostrar los cambios cuando se edita la informacion de un usuario existente
+    const handleUsuarioEditado = (usuarioEditado: User) => {
+        setUsuarios(prev =>
+            prev.map(u => u.id === usuarioEditado.id ? usuarioEditado : u)
+        )
+    }
+
+    const handleUsuarioDesactivado = (usuarioDesactivado: User) => {
+        setUsuarios(prev =>
+            prev.map(u => u.id === usuarioDesactivado.id ? { ...u, activo: false } : u)
+        )
+    }
+
+    const handleUsuarioReactivado = (usuarioReactivado: User) => {
+        setUsuarios(prev =>
+            prev.map(u => u.id === usuarioReactivado.id ? { ...u, activo: true } : u)
+        )
+    }
+
 
     return (
         <div className="p-6 h-screen">
@@ -35,11 +59,12 @@ function Usuarios () {
             </div>
             {loading && <p>Cambiar por skeleton...</p>}
             {error && <p className="text-red-500">{error}</p>}
-            {!loading && <TablaUsuarios usuarios={usuarios} />}
+            {!loading && <TablaUsuarios usuarios={usuarios} onUsuarioEditado={handleUsuarioEditado} onUsuarioDesactivado={handleUsuarioDesactivado} onUsuarioReactivado={handleUsuarioReactivado}/>}
 
             <DialogCrearUsuario
                 open={dialogCrearAbierto}
                 onClose={() => setDialogCrearAbierto(false)}
+                onSucces={handleUsuarioCreado} // ← pasas el callback
             />
         </div>
     )

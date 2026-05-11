@@ -5,22 +5,19 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { crearUsuario } from "../usuariosServices"
-import type { Role } from "@/types/usuario"
 import { useAuth } from "@/features/auth/hooks/useAuth"
+import type { FormValues } from "@/types/userForm"
+import type { Role, User } from "@/types/usuario"
+import { toast } from "sonner"
+
 
 interface Props {
   open: boolean
   onClose: () => void
+  onSucces: (Usuario: User) => void
 }
 
-interface FormValues {
-  nombre: string
-  usuario: string
-  password: string
-  role: Role
-}
-
-export default function DialogCrearUsuario({ open, onClose }: Props) {
+export default function DialogCrearUsuario({ open, onClose, onSucces }: Props) {
   const { register, handleSubmit, reset, setValue } = useForm<FormValues>()
   const { user } = useAuth()
 
@@ -28,10 +25,15 @@ export default function DialogCrearUsuario({ open, onClose }: Props) {
   if (!user) return // Validamos que exista un sesion activa
 
   const onSubmit = async (data: FormValues) => {
-    console.log("Nuevo usuario:", data)
-    await crearUsuario(data, user); // Llamada a la API y a su vez registra el log
-    reset()
-    onClose()
+    try {
+        const nuevoUsuario = await crearUsuario(data, user); // Llamada a la API y a su vez registra el log
+        toast.success("Usuario creado exitosamente.")
+        onSucces(nuevoUsuario);
+        reset()
+        onClose()
+    } catch (error) {
+        toast.error("Error al crear usuario.")
+    }
   }
 
   const handleClose = () => {

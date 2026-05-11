@@ -3,6 +3,7 @@ import { useEffect, useRef, useCallback } from "react"
 import { useNavigate } from "react-router-dom"
 import { registrarLog } from "@/lib/auditService"
 import { useAuth } from "./useAuth"
+import { toast } from "sonner"
 
 const TIMEOUT_MINUTOS = 15
 const ADVERTENCIA_MINUTOS = 1 // avisa 1 minuto antes
@@ -19,7 +20,7 @@ export function useSessionTimeout() {
 
     // Advertencia 1 minuto antes
     advertenciaRef.current = setTimeout(() => {
-      alert("Tu sesión expirará en 1 minuto por inactividad.")
+      toast.info("Tu sesión expira en 1 minuto")
     }, (TIMEOUT_MINUTOS - ADVERTENCIA_MINUTOS) * 60 * 1000)
 
     // Cierre de sesión

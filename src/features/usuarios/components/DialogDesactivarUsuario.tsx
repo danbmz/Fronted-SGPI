@@ -4,24 +4,31 @@ import { Button } from "@/components/ui/button"
 import type { User } from "@/types/usuario"
 import { desactivarUsuario } from "../usuariosServices"
 import { useAuth } from "@/features/auth/hooks/useAuth"
+import { toast } from "sonner"
 
 interface Props {
   open: boolean
   usuario: User | null
   onClose: () => void
+  onSuccess: (usuario: User) => void
 }
 
-export default function DialogDesactivarUsuario({ open, usuario, onClose }: Props) {
+export default function DialogDesactivarUsuario({ open, usuario, onClose, onSuccess }: Props) {
   const { user } = useAuth()
 
   if (!user || !usuario) return // Validamos que exista un sesion activa
 
   const handleConfirmar = async () => {
-    // lógica de desactivar
-    await desactivarUsuario(usuario, user)
-    console.log("Desactivando:", usuario?.nombre)
-    onClose()
-  }
+    if (!usuario || !user) return
+    try {
+      const usuarioDesactivado = await desactivarUsuario(usuario, user)
+      toast.success("Usuario desactivado.")
+      onSuccess(usuarioDesactivado)
+      onClose()
+    } catch {
+      toast.error("No se pudo desactivar el usuario.")
+    }
+}
 
   return (
     <Dialog open={open} onOpenChange={onClose}>

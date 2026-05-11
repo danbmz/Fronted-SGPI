@@ -1,8 +1,8 @@
 import { Outlet } from 'react-router-dom'
 import Sidebar from '../components/Sidebar'
 import Header from '../components/Header'
-import { useSessionTimeout } from '@/features/auth/hooks/useSessionTimeOut'
-
+import { useSessionTimeout } from '@/features/auth/hooks/useSessionTimeout'
+import { Toaster } from 'sonner'
 
 export default function DashboardLayout() {
   useSessionTimeout()
@@ -14,6 +14,7 @@ export default function DashboardLayout() {
         <Header></Header>
         <Outlet />
       </main>
+      <Toaster richColors/>
     </div>
   )
 }

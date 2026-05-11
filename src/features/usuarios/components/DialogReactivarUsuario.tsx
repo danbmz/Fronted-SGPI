@@ -4,21 +4,29 @@ import { Button } from "@/components/ui/button"
 import type { User } from "@/types/usuario"
 import { reactivarUsuario } from "../usuariosServices"
 import { useAuth } from "@/features/auth/hooks/useAuth"
+import { toast } from "sonner"
 
 interface Props {
   open: boolean
   usuario: User | null
   onClose: () => void
+  onSuccess: (usuario: User) => void
 }
 
-export default function DialogReactivarUsuario({ open, usuario, onClose }: Props) {
+export default function DialogReactivarUsuario({ open, usuario, onClose, onSuccess }: Props) {
   const { user } = useAuth()
 
   const handleConfirmar = async () => {
     if (!usuario || !user) return
-    await reactivarUsuario(usuario, user)
-    onClose()
-  }
+    try {
+      const usuarioReactivado = await reactivarUsuario(usuario, user)
+      toast.success("Usuario reactivado.")
+      onSuccess(usuarioReactivado)
+      onClose()
+    } catch {
+      toast.error("No se pudo reactivar el usuario.")
+    }
+}
 
   return (
     <Dialog open={open} onOpenChange={onClose}>

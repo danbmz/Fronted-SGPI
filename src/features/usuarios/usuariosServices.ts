@@ -1,4 +1,4 @@
-import type { User } from "@/types/usuario";
+import type { User, AuthUser, CrearUsuarioDTO, EditarUsuarioDTO } from "@/types/usuario";
 import { mockUsers } from "@/mocks/users";
 import { registrarLog } from "@/lib/auditService";
 
@@ -6,7 +6,7 @@ import { registrarLog } from "@/lib/auditService";
 export async function getUsuarios(): Promise<User[]> {
   await new Promise(resolve => setTimeout(resolve, 800));
   return mockUsers.map((u): User => ({
-    id: u.id,
+    id: String(u.id),
     nombre: u.nombre,
     usuario: u.usuario,
     role: u.role,
@@ -15,14 +15,17 @@ export async function getUsuarios(): Promise<User[]> {
   }))
 }
 
-export const crearUsuario = async (data: Omit<User, "id" | "activo">, usuarioActivo: User): Promise<User> => {
+export const crearUsuario = async (data: CrearUsuarioDTO, usuarioActivo: AuthUser): Promise<User> => {
   await new Promise(resolve => setTimeout(resolve, 800))
 
-  // Simula creación
-  const nuevoUsuario: User = { 
-    ...data, 
+  // Simula lo que devolvería el backend — un User completo con id y fechas generadas
+  const nuevoUsuario: User = {
     id: String(Date.now()),
-    activo: true
+    nombre: data.nombre,
+    usuario: data.usuario,
+    role: data.role,
+    activo: true,
+    createdAt: new Date().toISOString()
   }
 
   await registrarLog({
@@ -38,7 +41,9 @@ export const crearUsuario = async (data: Omit<User, "id" | "activo">, usuarioAct
   return nuevoUsuario
 }
 
-export const editarUsuario = async (data: User, usuarioActivo: User): Promise<User> => {
+export const editarUsuario = async (id: string, data: EditarUsuarioDTO, usuarioOriginal: User,  // ← para conservar activo y createdAt
+usuarioActivo: AuthUser
+): Promise<User> => {
   await new Promise(resolve => setTimeout(resolve, 800))
 
   await registrarLog({
@@ -47,14 +52,18 @@ export const editarUsuario = async (data: User, usuarioActivo: User): Promise<Us
     modulo: "usuarios",
     accion: "editar",
     entidad: "Usuario",
-    entidadId: data.id,
+    entidadId: id,
     detalle: `Usuario '${data.usuario}' editado`
   })
 
-  return data
+  return {
+    ...usuarioOriginal, // conserva activo, createdAt y cualquier otro campo
+    ...data,            // sobreescribe solo los campos editados
+    id                  // aseguras que el id no cambie
+  }
 }
 
-export const desactivarUsuario = async (data: User, usuarioActivo: User): Promise<User> => {
+export const desactivarUsuario = async (data: User, usuarioActivo: AuthUser): Promise<User> => {
   await new Promise(resolve => setTimeout(resolve, 800))
 
   await registrarLog({
@@ -70,7 +79,7 @@ export const desactivarUsuario = async (data: User, usuarioActivo: User): Promis
   return { ...data, activo: false }
 }
 
-export const reactivarUsuario = async (data: User, usuarioActivo: User): Promise<User> => {
+export const reactivarUsuario = async (data: User, usuarioActivo: AuthUser): Promise<User> => {
   await new Promise(resolve => setTimeout(resolve, 800))
 
   await registrarLog({
