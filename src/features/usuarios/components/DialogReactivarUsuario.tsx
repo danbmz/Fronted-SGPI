@@ -1,4 +1,3 @@
-// DialogReactivarUsuario.tsx
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import type { User } from "@/types/usuario"

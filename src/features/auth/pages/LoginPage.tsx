@@ -3,7 +3,6 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
-// TODO: Agregar validación de formulario, manejo de errores y feedback al usuario
 import { useState } from "react";
 import { useForm }from "react-hook-form";
 import { useNavigate } from 'react-router-dom'
@@ -85,7 +84,7 @@ function LoginPage() {
                                     })}
                                     className="rounded-lg bg-slate-200"
                                 />
-                                {errors.usuario && <p>{errors.usuario.message}</p>}
+                                {errors.usuario && <p className="text-xs text-red-500">{errors.usuario.message}</p>}
                             </div>
                             <div className="grid gap-2">
                                 <Label htmlFor="password">CONTRASEÑA</Label>
@@ -99,8 +98,9 @@ function LoginPage() {
                                       message: 'La contraseña debe tener al menos 6 caracteres',
                                     },
                                   })}
-                                  className="rounded-lg bg-slate-200"/>
-                                {errors.password && <p>{errors.password.message}</p>}
+                                  className="rounded-lg bg-slate-200"
+                                />
+                                {errors.password && <p className="text-xs text-red-500">{errors.password.message}</p>}
                             </div>
                             <Button type="submit" disabled={loading} className="w-full rounded-lg bg-slate-800 hover:bg-slate-700 cursor-pointer">
                             {loading ? 'Entrando...' : 'Iniciar sesión'}

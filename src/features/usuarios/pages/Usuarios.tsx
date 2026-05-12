@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { getUsuarios } from "../usuariosServices";
 import type { User } from "@/types/usuario";
+import { UserPlus } from "lucide-react";
 
 function Usuarios () {
     const [dialogCrearAbierto, setDialogCrearAbierto] = useState(false)
@@ -53,13 +54,28 @@ function Usuarios () {
 
 
     return (
-        <div className="p-6 h-screen">
-            <div className="flex justify-end mb-4">
-                <Button className="bg-gray-800 rounded-xl hover:bg-gray-700 cursor-pointer" onClick={() => setDialogCrearAbierto(true)}>Agregar Usuario</Button>
+        <div className="flex flex-col gap-4 h-screen p-6">
+            <div className="flex justify-between items-center">
+                <div>
+                    <p className="text-sm text-muted-foreground">
+                        Gestiona los usuarios del sistema.
+                    </p>
+                </div>
+                <Button className="bg-gray-800 hover:bg-gray-700 cursor-pointer" onClick={() => setDialogCrearAbierto(true)}>
+                    <UserPlus size={16} className="mr-2" />
+                    Agregar Usuario
+                </Button>
             </div>
             {loading && <p>Cambiar por skeleton...</p>}
             {error && <p className="text-red-500">{error}</p>}
-            {!loading && <TablaUsuarios usuarios={usuarios} onUsuarioEditado={handleUsuarioEditado} onUsuarioDesactivado={handleUsuarioDesactivado} onUsuarioReactivado={handleUsuarioReactivado}/>}
+            {!loading && !error && 
+                <TablaUsuarios 
+                    usuarios={usuarios} 
+                    onUsuarioEditado={handleUsuarioEditado} 
+                    onUsuarioDesactivado={handleUsuarioDesactivado} 
+                    onUsuarioReactivado={handleUsuarioReactivado}
+                />
+            }
 
             <DialogCrearUsuario
                 open={dialogCrearAbierto}

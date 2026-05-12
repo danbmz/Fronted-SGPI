@@ -1,0 +1,6 @@
+[
+  { "id": 1, "nombre": "Carlos Mendoza", "numeroEmpleado": "295-R", "turnoHabitual": "Mañana", "area": "Inyección", "activo": true, "createdAt": "2023-01-01T00:00:00Z" },
+  { "id": 2, "nombre": "Luis Hernández", "numeroEmpleado": "312-R", "turnoHabitual": "Tarde", "area": "Inyección", "activo": true, "createdAt": "2023-01-01T00:00:00Z" },
+  { "id": 3, "nombre": "Miguel Ángel Ríos", "numeroEmpleado": "178-R", "turnoHabitual": "Noche", "area": "Soplado", "activo": true, "createdAt": "2023-01-01T00:00:00Z" },
+  { "id": 4, "nombre": "José Ramírez", "numeroEmpleado": "401-R", "turnoHabitual": "Mañana", "area": "Molino", "activo": false, "createdAt": "2023-01-01T00:00:00Z" }
+]

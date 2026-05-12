@@ -16,10 +16,9 @@ interface Props {
 export default function DialogDesactivarUsuario({ open, usuario, onClose, onSuccess }: Props) {
   const { user } = useAuth()
 
-  if (!user || !usuario) return // Validamos que exista un sesion activa
-
   const handleConfirmar = async () => {
     if (!usuario || !user) return
+    
     try {
       const usuarioDesactivado = await desactivarUsuario(usuario, user)
       toast.success("Usuario desactivado.")
