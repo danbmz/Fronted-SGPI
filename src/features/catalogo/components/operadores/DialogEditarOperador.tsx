@@ -21,7 +21,7 @@ interface Props{
 }
 
 export default function DialogEditarOperador({open, operador,  onClose, onSuccess}: Props) {
-    const { register, handleSubmit, reset, setValue, formState: { errors } } = useForm<EditarOperadorForm>({
+    const { register, handleSubmit, reset, setValue, formState: { errors, isSubmitting } } = useForm<EditarOperadorForm>({
     resolver: zodResolver(editarOperadorSchema)
     })
     const { user } = useAuth()
@@ -116,7 +116,9 @@ export default function DialogEditarOperador({open, operador,  onClose, onSucces
                 <Button type="button" variant="outline" onClick={handleClose}>
                     Cancelar
                 </Button>
-                <Button type="submit">Editar operador</Button>
+                <Button type="submit" disabled={isSubmitting}>
+                    {isSubmitting ? "Guardando" : "Guardar cambios"}
+                </Button>
                 </div>
             </form>
             </DialogContent>

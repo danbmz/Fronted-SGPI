@@ -1,7 +1,5 @@
-function FormulaPigmentos() {
+export default function FormulaPigmentos() {
     return (
         <></>
     )
 }
-
-export default FormulaPigmentos

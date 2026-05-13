@@ -7,7 +7,12 @@ import SupervisorDashboard from '../pages/supervisor/SupervisorDashboard'
 import Usuarios from '@/features/usuarios/pages/Usuarios'
 import AuditLog from '@/features/auditLogs/pages/AuditLog'
 import Operadores from '@/features/catalogo/pages/Operadores'
-// import ShiftProgress from '../pages/supervisor/ShiftProgress'
+import Maquinas from '@/features/catalogo/pages/Maquinas'
+import FormulaPigmentos from '@/features/catalogo/pages/FormulaPigmentos'
+import MateriaPrima from '@/features/catalogo/pages/MateriaPrima'
+import MotivosParo from '@/features/catalogo/pages/MotivosParo'
+import Productos from '@/features/catalogo/pages/Productos'
+import Pigmentos from '@/features/catalogo/pages/Pigmentos'
 
 export const dashboardRoutes: RouteObject[] = [
   // ── Admin ──────────────────────────────────
@@ -27,10 +32,13 @@ export const dashboardRoutes: RouteObject[] = [
           { path: 'materias-primas', element: <ProductionOrders /> },
           { path: 'pigmentos', element: <ProductionOrders /> },
           { path: 'producto-terminado', element: <ProductionOrders /> },
-          { path: 'productos', element: <ProductionOrders /> },
-          { path: 'maquinas', element: <ProductionOrders /> },
+          { path: 'productos', element: <Productos /> },
+          { path: 'maquinas', element: <Maquinas /> },
           { path: 'operadores', element: <Operadores /> },
-          { path: 'formulas-pigmentos', element: <ProductionOrders /> },
+          { path: 'formulas-pigmentos', element: <FormulaPigmentos /> },
+          { path: 'materia-prima-catalogo', element: <MateriaPrima /> },
+          { path: 'pigmentos-catalogo', element: <Pigmentos /> },
+          { path: 'motivos-paro', element: <MotivosParo /> },
           { path: 'reportes', element: <ProductionOrders /> },
           { path: 'usuarios', element: <Usuarios /> },
           { path: 'auditoria', element: <AuditLog /> }, 

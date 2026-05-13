@@ -19,7 +19,7 @@ interface Props{
 }
 
 export default function DialogCrearOperador({open, onClose, onSuccess}: Props) {
-    const { register, handleSubmit, reset, setValue, watch, formState: { errors } } = useForm<CrearOperadorForm>({
+    const { register, handleSubmit, reset, setValue, watch, formState: { errors, isSubmitting } } = useForm<CrearOperadorForm>({
     resolver: zodResolver(crearOperadorSchema)
     })
     const { user } = useAuth()
@@ -101,7 +101,9 @@ export default function DialogCrearOperador({open, onClose, onSuccess}: Props) {
                     <Button type="button" variant="outline" onClick={handleClose}>
                       Cancelar
                     </Button>
-                    <Button type="submit">Crear operador</Button>
+                    <Button type="submit" disabled={isSubmitting}>
+                      {isSubmitting ? "Creando" : "Crear operador"}
+                    </Button>
                   </div>
                 </form>
               </DialogContent>

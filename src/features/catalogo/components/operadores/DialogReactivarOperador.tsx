@@ -21,11 +21,11 @@ export default function DialogReactivarOperador ({open, operador, onClose, onSuc
         try {
             const operadorReactivado = await reactivarOperador(operador, user);
             onSuccess(operadorReactivado)
-            toast.success(`Operador ${operador.nombre} desactivado.`)
+            toast.success(`Operador ${operador.nombre} Activado.`)
             onClose()
         } catch (error) {
             onClose()
-            toast.error("Error al intentar desactivar Operador.")
+            toast.error("Error al intentar activar Operador.")
         }
     }
 

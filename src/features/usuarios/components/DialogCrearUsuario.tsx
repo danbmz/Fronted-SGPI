@@ -19,7 +19,7 @@ interface Props {
 }
 
 export default function DialogCrearUsuario({ open, onClose, onSucces }: Props) {
-  const { register, handleSubmit, reset, setValue, watch, formState: { errors } } = useForm<CrearUsuarioForm>({
+  const { register, handleSubmit, reset, setValue, watch, formState: { errors, isSubmitting } } = useForm<CrearUsuarioForm>({
     resolver: zodResolver(crearUsuarioSchema)
   })
   const { user } = useAuth()
@@ -101,7 +101,9 @@ export default function DialogCrearUsuario({ open, onClose, onSucces }: Props) {
             <Button type="button" variant="outline" onClick={handleClose}>
               Cancelar
             </Button>
-            <Button type="submit">Crear usuario</Button>
+            <Button type="submit" disabled={isSubmitting}>
+              {isSubmitting ? "Creando" : "Crear usuario"}
+            </Button>
           </div>
         </form>
       </DialogContent>

@@ -31,6 +31,7 @@ export default function AuditLogs() {
   const [loading, setLoading] = useState(true)
   const [busqueda, setBusqueda] = useState("")
   const [filtroModulo, setFiltroModulo] = useState("todos")
+  const [filtroEntidad, setFiltroEntidad] = useState("todos")
 
   useEffect(() => {
     const fetchLogs = async () => {
@@ -52,7 +53,12 @@ export default function AuditLogs() {
 
     const coincideModulo = filtroModulo === "todos" || log.modulo === filtroModulo
 
-    return coincideBusqueda && coincideModulo
+    const coincideEntidad =
+      filtroEntidad === "todos" ||
+      !filtroEntidad ||
+      log.entidad === filtroEntidad
+
+    return coincideBusqueda && coincideModulo && coincideEntidad
   })
 
   return (
@@ -81,6 +87,23 @@ export default function AuditLogs() {
             <SelectItem value="catalogos">Catálogos</SelectItem>
           </SelectContent>
         </Select>
+
+        {filtroModulo === "catalogos" && (
+          <Select value={filtroEntidad} onValueChange={setFiltroEntidad}>
+            <SelectTrigger className="w-44">
+              <SelectValue placeholder="Catálogo" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="todos">Todos</SelectItem>
+              <SelectItem value="Operador">Operadores</SelectItem>
+              <SelectItem value="Maquina">Máquinas</SelectItem>
+              <SelectItem value="motivos_paro">Motivos de paro</SelectItem>
+              <SelectItem value="materias_primas">Materias primas</SelectItem>
+              <SelectItem value="pigmentos">Pigmentos</SelectItem>
+              <SelectItem value="productos">Productos</SelectItem>
+            </SelectContent>
+          </Select>
+        )}
       </div>
 
       {/* Tabla */}

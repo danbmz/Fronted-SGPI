@@ -21,7 +21,7 @@ interface Props {
 }
 
 export default function DialogEditarUsuario({ open, usuario, onClose, onSuccess }: Props) {
-  const { register, handleSubmit, reset, setValue, formState: {errors} } = useForm<EditarUsuarioForm>({
+  const { register, handleSubmit, reset, setValue, formState: {errors, isSubmitting} } = useForm<EditarUsuarioForm>({
     resolver: zodResolver(editarUsuarioSchema)
   })
   const { user } = useAuth()
@@ -122,7 +122,9 @@ const onSubmit = async (data: EditarUsuarioForm) => {
             <Button type="button" variant="outline" onClick={handleClose}>
               Cancelar
             </Button>
-            <Button type="submit">Guardar cambios</Button>
+            <Button type="submit" disabled={isSubmitting}>
+              {isSubmitting ? "Guardando" : "Guardar cambios"}
+            </Button>
           </div>
         </form>
       </DialogContent>
