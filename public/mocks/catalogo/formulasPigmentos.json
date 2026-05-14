@@ -1,0 +1,42 @@
+[
+  { "id": 1,  "materiaPrimaId": 1, "pigmentoId": 1, "materialBase": "Polipropileno Virgen", "categoriaColor": "Sólidos",           "color": "Amarillo",    "tipoPigmento": "master", "dosisGrPorKg": 21 },
+  { "id": 2,  "materiaPrimaId": 1, "pigmentoId": 1, "materialBase": "Polipropileno Virgen", "categoriaColor": "Sólidos",           "color": "Verde",       "tipoPigmento": "master", "dosisGrPorKg": 22 },
+  { "id": 3,  "materiaPrimaId": 1, "pigmentoId": 1, "materialBase": "Polipropileno Virgen", "categoriaColor": "Sólidos",           "color": "Naranja",     "tipoPigmento": "master", "dosisGrPorKg": 21 },
+  { "id": 4,  "materiaPrimaId": 1, "pigmentoId": 1, "materialBase": "Polipropileno Virgen", "categoriaColor": "Sólidos",           "color": "Azul",        "tipoPigmento": "master", "dosisGrPorKg": 21 },
+  { "id": 5,  "materiaPrimaId": 1, "pigmentoId": 1, "materialBase": "Polipropileno Virgen", "categoriaColor": "Sólidos",           "color": "Rojo",        "tipoPigmento": "master", "dosisGrPorKg": 8  },
+  { "id": 6,  "materiaPrimaId": 1, "pigmentoId": 1, "materialBase": "Polipropileno Virgen", "categoriaColor": "Sólidos",           "color": "Morado",      "tipoPigmento": "master", "dosisGrPorKg": 32 },
+  { "id": 7,  "materiaPrimaId": 1, "pigmentoId": 1, "materialBase": "Polipropileno Virgen", "categoriaColor": "Sólidos",           "color": "Blanco",      "tipoPigmento": "master", "dosisGrPorKg": 20 },
+  { "id": 8,  "materiaPrimaId": 1, "pigmentoId": 1, "materialBase": "Polipropileno Virgen", "categoriaColor": "Sólidos",           "color": "Azul Pastel", "tipoPigmento": "master", "dosisGrPorKg": 10 },
+  { "id": 9,  "materiaPrimaId": 1, "pigmentoId": 1, "materialBase": "Polipropileno Virgen", "categoriaColor": "Sólidos",           "color": "Rosa",        "tipoPigmento": "master", "dosisGrPorKg": 22 },
+  { "id": 10, "materiaPrimaId": 1, "pigmentoId": 1, "materialBase": "Polipropileno Virgen", "categoriaColor": "Sólidos",           "color": "Beige",       "tipoPigmento": "master", "dosisGrPorKg": 18 },
+  { "id": 11, "materiaPrimaId": 1, "pigmentoId": 1, "materialBase": "Polipropileno Virgen", "categoriaColor": "Sólidos",           "color": "Crema",       "tipoPigmento": "master", "dosisGrPorKg": 28 },
+
+
+  { "id": 12, "materiaPrimaId": 1, "pigmentoId": 1, "materialBase": "Polipropileno Virgen", "categoriaColor": "Sólidos Pasteles",  "color": "Amarillo",    "tipoPigmento": "master", "dosisGrPorKg": 14 },
+  { "id": 13, "materiaPrimaId": 1, "pigmentoId": 1, "materialBase": "Polipropileno Virgen", "categoriaColor": "Sólidos Pasteles",  "color": "Verde",       "tipoPigmento": "master", "dosisGrPorKg": 14 },
+  { "id": 14, "materiaPrimaId": 1, "pigmentoId": 1, "materialBase": "Polipropileno Virgen", "categoriaColor": "Sólidos Pasteles",  "color": "Rosa",        "tipoPigmento": "master", "dosisGrPorKg": 14 },
+  { "id": 15, "materiaPrimaId": 1, "pigmentoId": 1, "materialBase": "Polipropileno Virgen", "categoriaColor": "Sólidos Pasteles",  "color": "Azul",        "tipoPigmento": "master", "dosisGrPorKg": 14 },
+  { "id": 16, "materiaPrimaId": 1, "pigmentoId": 1, "materialBase": "Polipropileno Virgen", "categoriaColor": "Sólidos Pasteles",  "color": "Morado",      "tipoPigmento": "master", "dosisGrPorKg": 14 },
+
+
+  { "id": 17, "materiaPrimaId": 1, "pigmentoId": 1, "materialBase": "Polipropileno Virgen", "categoriaColor": "Neón Traslucidos",  "color": "Naranja",     "tipoPigmento": "master", "dosisGrPorKg": 10 },
+  { "id": 18, "materiaPrimaId": 1, "pigmentoId": 1, "materialBase": "Polipropileno Virgen", "categoriaColor": "Neón Traslucidos",  "color": "Azul",        "tipoPigmento": "master", "dosisGrPorKg": 10 },
+  { "id": 19, "materiaPrimaId": 1, "pigmentoId": 1, "materialBase": "Polipropileno Virgen", "categoriaColor": "Neón Traslucidos",  "color": "Morado",      "tipoPigmento": "master", "dosisGrPorKg": 10 },
+
+
+  { "id": 20, "materiaPrimaId": 1, "pigmentoId": 1, "materialBase": "Polipropileno Virgen", "categoriaColor": "Jarra Neón Pastel", "color": "Amarillo",    "tipoPigmento": "master", "dosisGrPorKg": 8  },
+  { "id": 21, "materiaPrimaId": 1, "pigmentoId": 1, "materialBase": "Polipropileno Virgen", "categoriaColor": "Jarra Neón Pastel", "color": "Verde",       "tipoPigmento": "master", "dosisGrPorKg": 8  },
+  { "id": 22, "materiaPrimaId": 1, "pigmentoId": 1, "materialBase": "Polipropileno Virgen", "categoriaColor": "Jarra Neón Pastel", "color": "Rosa",        "tipoPigmento": "master", "dosisGrPorKg": 8  },
+  { "id": 23, "materiaPrimaId": 1, "pigmentoId": 1, "materialBase": "Polipropileno Virgen", "categoriaColor": "Jarra Neón Pastel", "color": "Azul",        "tipoPigmento": "master", "dosisGrPorKg": 8  },
+  { "id": 24, "materiaPrimaId": 1, "pigmentoId": 1, "materialBase": "Polipropileno Virgen", "categoriaColor": "Jarra Neón Pastel", "color": "Morado",      "tipoPigmento": "master", "dosisGrPorKg": 8  },
+
+
+  { "id": 25, "materiaPrimaId": 1, "pigmentoId": 1, "materialBase": "Polipropileno Virgen", "categoriaColor": "Neón Traslucidos",  "color": "Amarillo",    "tipoPigmento": "polvo",  "dosisGrPorKg": 2  },
+  { "id": 26, "materiaPrimaId": 1, "pigmentoId": 1, "materialBase": "Polipropileno Virgen", "categoriaColor": "Neón Traslucidos",  "color": "Verde",       "tipoPigmento": "polvo",  "dosisGrPorKg": 2  },
+  { "id": 27, "materiaPrimaId": 1, "pigmentoId": 1, "materialBase": "Polipropileno Virgen", "categoriaColor": "Neón Traslucidos",  "color": "Rosa",        "tipoPigmento": "polvo",  "dosisGrPorKg": 2  },
+
+
+  { "id": 28, "materiaPrimaId": 3, "pigmentoId": 1, "materialBase": "Poliestireno-Cristal Virgen", "categoriaColor": "Neón Traslucidos", "color": "Naranja", "tipoPigmento": "polvo", "dosisGrPorKg": 0.6 },
+  { "id": 29, "materiaPrimaId": 3, "pigmentoId": 1, "materialBase": "Poliestireno-Cristal Virgen", "categoriaColor": "Neón Traslucidos", "color": "Azul",    "tipoPigmento": "polvo", "dosisGrPorKg": 0.6 },
+  { "id": 30, "materiaPrimaId": 3, "pigmentoId": 1, "materialBase": "Poliestireno-Cristal Virgen", "categoriaColor": "Neón Traslucidos", "color": "Morado",  "tipoPigmento": "polvo", "dosisGrPorKg": 0.3 }
+]

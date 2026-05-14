@@ -21,7 +21,7 @@ interface Props {
 }
 
 export default function DialogEditarUsuario({ open, usuario, onClose, onSuccess }: Props) {
-  const { register, handleSubmit, reset, setValue, formState: {errors, isSubmitting} } = useForm<EditarUsuarioForm>({
+  const { register, handleSubmit, reset, setValue, formState: {errors, isSubmitting, isDirty} } = useForm<EditarUsuarioForm>({
     resolver: zodResolver(editarUsuarioSchema)
   })
   const { user } = useAuth()
@@ -29,12 +29,14 @@ export default function DialogEditarUsuario({ open, usuario, onClose, onSuccess 
   // Rellena el form cuando se abre con los datos del usuario seleccionado
   useEffect(() => {
     if (usuario) {
-      setValue("nombre", usuario.nombre)
-      setValue("usuario", usuario.usuario)
-      setValue("role", usuario.role)
-      // password lo dejamos vacío, solo se actualiza si el admin escribe algo nuevo
+      reset({
+      nombre: usuario.nombre,
+      usuario: usuario.usuario,
+      role: usuario.role,
+      password: "", // Baseline explícito para que isDirty lo considere
+    });
     }
-  }, [usuario, setValue])
+  }, [usuario])
 
   
 const onSubmit = async (data: EditarUsuarioForm) => {
@@ -103,7 +105,7 @@ const onSubmit = async (data: EditarUsuarioForm) => {
             <Label>Rol</Label>
             <Select
               value={usuario?.role ?? ""}
-              onValueChange={(val) => setValue("role", val as Role, {shouldValidate: true})}
+              onValueChange={(val) => setValue("role", val as Role, {shouldValidate: true, shouldDirty: true})}
             >
               <SelectTrigger>
                 <SelectValue placeholder="Selecciona un rol" />
@@ -122,7 +124,7 @@ const onSubmit = async (data: EditarUsuarioForm) => {
             <Button type="button" variant="outline" onClick={handleClose}>
               Cancelar
             </Button>
-            <Button type="submit" disabled={isSubmitting}>
+            <Button type="submit" disabled={isSubmitting || !isDirty}>
               {isSubmitting ? "Guardando" : "Guardar cambios"}
             </Button>
           </div>

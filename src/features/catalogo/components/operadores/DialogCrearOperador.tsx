@@ -46,9 +46,9 @@ export default function DialogCrearOperador({open, onClose, onSuccess}: Props) {
             <Dialog open={open} onOpenChange={handleClose}>
               <DialogContent>
                 <DialogHeader>
-                  <DialogTitle>Crear nuevo usuario</DialogTitle>
+                  <DialogTitle>Crear nuevo operador</DialogTitle>
                   <DialogDescription>
-                    Rellena los campos para crear un nuevo usuario
+                    Rellena los campos para crear un nuevo operador
                   </DialogDescription>
                 </DialogHeader>
         

@@ -1,5 +1,3 @@
-// src/types/usuario.ts
-
 export type Role = "admin" | "supervisor"
 
 // Tipo completo — para gestión de usuarios (admin)

@@ -5,6 +5,7 @@ import type { User } from "@/types/usuario"
 import { desactivarUsuario } from "../usuariosServices"
 import { useAuth } from "@/features/auth/hooks/useAuth"
 import { toast } from "sonner"
+import { useState } from "react"
 
 interface Props {
   open: boolean
@@ -14,10 +15,12 @@ interface Props {
 }
 
 export default function DialogDesactivarUsuario({ open, usuario, onClose, onSuccess }: Props) {
+  const [isLoading, setIsLoading] = useState(false)
   const { user } = useAuth()
 
   const handleConfirmar = async () => {
     if (!usuario || !user) return
+    setIsLoading(true)
     
     try {
       const usuarioDesactivado = await desactivarUsuario(usuario, user)
@@ -26,6 +29,8 @@ export default function DialogDesactivarUsuario({ open, usuario, onClose, onSucc
       onClose()
     } catch {
       toast.error("No se pudo desactivar el usuario.")
+    } finally{
+      setIsLoading(false)
     }
 }
 
@@ -41,7 +46,7 @@ export default function DialogDesactivarUsuario({ open, usuario, onClose, onSucc
         <p>¿Estás seguro que deseas desactivar a <strong>{usuario?.nombre}</strong>?</p>
         <div className="flex justify-end gap-2 mt-4">
           <Button variant="outline" onClick={onClose}>Cancelar</Button>
-          <Button variant="destructive" onClick={handleConfirmar}>Desactivar</Button>
+          <Button variant="destructive" onClick={handleConfirmar} disabled={isLoading}>{isLoading ? "Desactivando" : "Desactivar"}</Button>
         </div>
       </DialogContent>
     </Dialog>

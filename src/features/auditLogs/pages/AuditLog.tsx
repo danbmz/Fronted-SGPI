@@ -45,6 +45,11 @@ export default function AuditLogs() {
     fetchLogs()
   }, [])
 
+  // Para limpiar el filtro de entidades cuando cambia el filtro de modulo
+  useEffect(() => {
+    setFiltroEntidad("todos")
+  }, [filtroModulo])
+
   const logsFiltrados = logs.filter(log => {
     const coincideBusqueda =
       log.usuario.toLowerCase().includes(busqueda.toLowerCase()) ||
@@ -97,7 +102,8 @@ export default function AuditLogs() {
               <SelectItem value="todos">Todos</SelectItem>
               <SelectItem value="Operador">Operadores</SelectItem>
               <SelectItem value="Maquina">Máquinas</SelectItem>
-              <SelectItem value="motivos_paro">Motivos de paro</SelectItem>
+              <SelectItem value="MotivosParo">Motivos de paro</SelectItem>
+              <SelectItem value="FormulasPigmento">Formula de pigmentos</SelectItem>
               <SelectItem value="materias_primas">Materias primas</SelectItem>
               <SelectItem value="pigmentos">Pigmentos</SelectItem>
               <SelectItem value="productos">Productos</SelectItem>

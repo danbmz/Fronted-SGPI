@@ -30,20 +30,16 @@ export default function DialogEditarMaquina({ open, maquina, onClose, onSuccess 
   const { user } = useAuth()
   const {
     register, handleSubmit, reset, setValue, watch,
-    formState: { errors, isSubmitting }
+    formState: { errors, isSubmitting, isDirty }
   } = useForm<EditarMaquinaForm>({
     resolver: zodResolver(editarMaquinaSchema)
   })
 
   useEffect(() => {
     if (maquina) {
-      setValue("nombre", maquina.nombre)
-      setValue("codigo", maquina.codigo)
-      setValue("numero", maquina.numero)
-      setValue("tipoProceso", maquina.tipoProceso)
-      setValue("capacidadTon", maquina.capacidadTon)
+      reset(maquina)
     }
-  }, [maquina, setValue])
+  }, [maquina])
 
   const onSubmit = async (data: EditarMaquinaForm) => {
     if (!user || !maquina) return
@@ -99,7 +95,7 @@ export default function DialogEditarMaquina({ open, maquina, onClose, onSuccess 
             <Label>Tipo de proceso</Label>
             <Select
               value={watch("tipoProceso") ?? ""}
-              onValueChange={val => setValue("tipoProceso", val as "Inyección" | "Soplado", { shouldValidate: true })}
+              onValueChange={val => setValue("tipoProceso", val as "Inyección" | "Soplado", { shouldValidate: true, shouldDirty: true })}
             >
               <SelectTrigger>
                 <SelectValue placeholder="Selecciona un proceso" />
@@ -123,7 +119,7 @@ export default function DialogEditarMaquina({ open, maquina, onClose, onSuccess 
 
           <div className="flex justify-end gap-2 mt-2">
             <Button type="button" variant="outline" onClick={handleClose}>Cancelar</Button>
-            <Button type="submit" disabled={isSubmitting}>
+            <Button type="submit" disabled={isSubmitting || !isDirty}>
                 {isSubmitting ? "Guardando" : "Guardar cambios"}    
             </Button>
           </div>

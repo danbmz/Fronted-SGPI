@@ -53,7 +53,7 @@ usuarioActivo: AuthUser
     accion: "editar",
     entidad: "Usuario",
     entidadId: id,
-    detalle: `Usuario '${data.usuario}' editado`
+    detalle: `Usuario '${usuarioOriginal.usuario}' editado`
   })
 
   return {

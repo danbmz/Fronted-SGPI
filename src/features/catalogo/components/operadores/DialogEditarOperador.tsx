@@ -21,7 +21,7 @@ interface Props{
 }
 
 export default function DialogEditarOperador({open, operador,  onClose, onSuccess}: Props) {
-    const { register, handleSubmit, reset, setValue, formState: { errors, isSubmitting } } = useForm<EditarOperadorForm>({
+    const { register, handleSubmit, reset, setValue, formState: { errors, isSubmitting, isDirty } } = useForm<EditarOperadorForm>({
     resolver: zodResolver(editarOperadorSchema)
     })
     const { user } = useAuth()
@@ -33,6 +33,7 @@ export default function DialogEditarOperador({open, operador,  onClose, onSucces
         setValue("numeroEmpleado", operador.numeroEmpleado)
         setValue("area", operador.area)
         setValue("turnoHabitual", operador.turnoHabitual)
+        reset(operador) // seteamos los valores de operador como los originales, isDirty se vuelve true cuando algun valor del form cambia respecto a los originales
         // password lo dejamos vacío, solo se actualiza si el admin escribe algo nuevo
     }
     }, [operador, setValue])
@@ -61,9 +62,9 @@ export default function DialogEditarOperador({open, operador,  onClose, onSucces
         <Dialog open={open} onOpenChange={handleClose}>
             <DialogContent>
             <DialogHeader>
-                <DialogTitle>Crear nuevo usuario</DialogTitle>
+                <DialogTitle>Editar operador</DialogTitle>
                 <DialogDescription>
-                Rellena los campos para crear un nuevo usuario
+                    Actualiza la información del operador
                 </DialogDescription>
             </DialogHeader>
     
@@ -96,7 +97,7 @@ export default function DialogEditarOperador({open, operador,  onClose, onSucces
                 <Label>Turno</Label>
                 <Select
                     value={operador?.turnoHabitual ?? ""} 
-                    onValueChange={(val) => setValue("turnoHabitual", val as "Mañana" | "Tarde" | "Noche", {shouldValidate: true})}
+                    onValueChange={(val) => setValue("turnoHabitual", val as "Mañana" | "Tarde" | "Noche", {shouldValidate: true, shouldDirty: true})}
                 >
                     <SelectTrigger>
                     <SelectValue placeholder="Selecciona un turno" />
@@ -116,7 +117,7 @@ export default function DialogEditarOperador({open, operador,  onClose, onSucces
                 <Button type="button" variant="outline" onClick={handleClose}>
                     Cancelar
                 </Button>
-                <Button type="submit" disabled={isSubmitting}>
+                <Button type="submit" disabled={isSubmitting || !isDirty}>
                     {isSubmitting ? "Guardando" : "Guardar cambios"}
                 </Button>
                 </div>

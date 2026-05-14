@@ -36,16 +36,20 @@ export default function DialogCambiarEstadoMaquina({ open, maquina, onClose, onS
   const { user } = useAuth()
   const {
     register, handleSubmit, reset, setValue, watch,
-    formState: { errors, isSubmitting }
+    formState: { errors, isSubmitting, isDirty }
   } = useForm<CambiarEstadoForm>({
     resolver: zodResolver(cambiarEstadoSchema)
   })
 
+  // Rellena el form cuando se abre con los datos de la maquina seleccionada
   useEffect(() => {
     if (maquina) {
-      setValue("estado", maquina.estado)
+      reset({
+        estado: maquina.estado,
+        motivo: "", // Baseline explícito para que isDirty lo considere
+      })
     }
-  }, [maquina, setValue])
+  }, [maquina])
 
   const onSubmit = async (data: CambiarEstadoForm) => {
     if (!user || !maquina) return
@@ -90,7 +94,7 @@ export default function DialogCambiarEstadoMaquina({ open, maquina, onClose, onS
             <Label>Nuevo estado</Label>
             <Select
               value={watch("estado") ?? ""}
-              onValueChange={val => setValue("estado", val as EstadoMaquina, { shouldValidate: true })}
+              onValueChange={val => setValue("estado", val as EstadoMaquina, { shouldValidate: true, shouldDirty: true })}
             >
               <SelectTrigger>
                 <SelectValue placeholder="Selecciona un estado" />
@@ -116,7 +120,7 @@ export default function DialogCambiarEstadoMaquina({ open, maquina, onClose, onS
 
           <div className="flex justify-end gap-2 mt-2">
             <Button type="button" variant="outline" onClick={handleClose}>Cancelar</Button>
-            <Button type="submit" disabled={isSubmitting}>
+            <Button type="submit" disabled={isSubmitting || !isDirty}>
                 {isSubmitting ? "Guardando" : "Guardar cambio"}    
             </Button>
           </div>

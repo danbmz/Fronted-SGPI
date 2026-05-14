@@ -46,6 +46,7 @@ export async function loginService(credentials: LoginCredentials): Promise<Login
       usuario: user.usuario,
       role: user.role,
       activo: user.activo,
+      createdAt: String(new Date())
     }
   }
 

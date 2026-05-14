@@ -1,4 +1,3 @@
-// src/pages/admin/catalogos/Maquinas.tsx
 import { useState, useEffect } from "react"
 import { getMaquinas } from "../services/maquinasService"
 import type { Maquina } from "@/types/maquinasCatalogo"
