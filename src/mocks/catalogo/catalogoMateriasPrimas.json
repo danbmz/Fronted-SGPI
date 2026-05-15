@@ -1,7 +1,0 @@
-[
-  { "id": 1, "nombre": "Polipropileno Virgen",       "codigoInterno": "JU-PVL1", "tipo": "Polipropileno",        "subtipo": "virgen",    "proveedor": "Braskem",    "unidadMedida": "kg", "costoUnitario": 28.50 },
-  { "id": 2, "nombre": "Polipropileno Reciclado",    "codigoInterno": "JU-PRL1", "tipo": "Polipropileno",        "subtipo": "reciclado",  "proveedor": "Local",      "unidadMedida": "kg", "costoUnitario": 14.00 },
-  { "id": 3, "nombre": "Poliestireno-Cristal Virgen","codigoInterno": "JU-PSC1", "tipo": "Poliestireno-Cristal", "subtipo": "virgen",    "proveedor": "INEOS",      "unidadMedida": "kg", "costoUnitario": 32.00 },
-  { "id": 4, "nombre": "Aditivo UV",                 "codigoInterno": "JU-AUV1", "tipo": "Aditivo",              "subtipo": "virgen",    "proveedor": "Clariant",   "unidadMedida": "kg", "costoUnitario": 95.00 },
-  { "id": 5, "nombre": "Molido Colores PP",          "codigoInterno": "JU-MCP1", "tipo": "Polipropileno",        "subtipo": "reciclado",  "proveedor": "Interno",    "unidadMedida": "kg", "costoUnitario": 0 }
-]

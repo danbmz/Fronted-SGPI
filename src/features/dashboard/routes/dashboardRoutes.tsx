@@ -9,10 +9,10 @@ import AuditLog from '@/features/auditLogs/pages/AuditLog'
 import Operadores from '@/features/catalogo/pages/Operadores'
 import Maquinas from '@/features/catalogo/pages/Maquinas'
 import FormulaPigmentos from '@/features/catalogo/pages/FormulasPigmento'
-import MateriaPrima from '@/features/catalogo/pages/MateriaPrima'
 import MotivosParo from '@/features/catalogo/pages/MotivosParo'
 import Productos from '@/features/catalogo/pages/Productos'
 import Pigmentos from '@/features/catalogo/pages/Pigmentos'
+import MateriasPrimas from '@/features/catalogo/pages/MateriasPrimas'
 
 export const dashboardRoutes: RouteObject[] = [
   // ── Admin ──────────────────────────────────
@@ -36,7 +36,7 @@ export const dashboardRoutes: RouteObject[] = [
           { path: 'maquinas', element: <Maquinas /> },
           { path: 'operadores', element: <Operadores /> },
           { path: 'formulas-pigmentos', element: <FormulaPigmentos /> },
-          { path: 'materia-prima-catalogo', element: <MateriaPrima /> },
+          { path: 'materia-prima-catalogo', element: <MateriasPrimas /> },
           { path: 'pigmentos-catalogo', element: <Pigmentos /> },
           { path: 'motivos-paro', element: <MotivosParo /> },
           { path: 'reportes', element: <ProductionOrders /> },

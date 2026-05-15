@@ -1,0 +1,10 @@
+[
+  { "id": 1, "nombre": "Polipropileno Virgen",       "codigoInterno": "JU-PVL1", "tipo": "Polipropileno",        "subtipo": "virgen",    "color": "natural", "proveedor": "Braskem",    "unidadMedida": "kg", "activo": true, "costoUnitario": "30" },
+  { "id": 2, "nombre": "Polipropileno Reciclado",    "codigoInterno": "JU-PRL1", "tipo": "Polipropileno",        "subtipo": "reciclado", "color": "rojo",  "proveedor": "Local",      "unidadMedida": "kg", "activo": true, "costoUnitario": "30"},
+  { "id": 3, "nombre": "Poliestireno-Cristal Virgen","codigoInterno": "JU-PSC1", "tipo": "Poliestireno-Cristal", "subtipo": "virgen",    "color": "natural", "proveedor": "INEOS",      "unidadMedida": "kg", "activo": true, "costoUnitario": "30" },
+  { "id": 4, "nombre": "Aditivo UV",                 "codigoInterno": "JU-AUV1", "tipo": "Aditivo",              "subtipo": "virgen",    "color": "natural", "proveedor": "Clariant",   "unidadMedida": "kg", "activo": false, "costoUnitario": "30" },
+  { "id": 5, "nombre": "Molido Colores PP",          "codigoInterno": "JU-MCP1", "tipo": "Polipropileno",        "subtipo": "reciclado", "color": "azul",  "proveedor": "Interno",    "unidadMedida": "kg", "activo": true, "costoUnitario": "30"},
+  { "id": 6, "nombre": "Molido Colores PC",          "codigoInterno": "JU-MPC1", "tipo": "Poliestireno-Cristal", "subtipo": "reciclado", "color": "amarillo",  "proveedor": "Interno",    "unidadMedida": "kg", "activo": true, "costoUnitario": "30"},
+  { "id": 7, "nombre": "Molido Colores PP",          "codigoInterno": "JU-MCP1", "tipo": "Polipropileno",        "subtipo": "reciclado", "color": "verde",  "proveedor": "Interno",    "unidadMedida": "kg", "activo": true, "costoUnitario": "30"},
+  { "id": 8, "nombre": "Molido Colores PC",          "codigoInterno": "JU-MCP1", "tipo": "Poliestireno-Cristal", "subtipo": "reciclado", "color": "morado",  "proveedor": "Interno",    "unidadMedida": "kg", "activo": true, "costoUnitario": "30"}
+]
