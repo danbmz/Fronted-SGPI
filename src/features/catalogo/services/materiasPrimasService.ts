@@ -1,4 +1,3 @@
-// src/services/materiasPrimasService.ts
 import type { MateriaPrima, CrearMateriaPrimaDTO, EditarMateriaPrimaDTO } from "@/types/materiaPrima"
 import type { AuthUser } from "@/types/usuario"
 import { registrarLog } from "@/lib/auditService"

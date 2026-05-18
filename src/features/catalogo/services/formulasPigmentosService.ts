@@ -1,4 +1,4 @@
-import type { FormulaPigmento, CrearFormulaPigmentoDTO, EditarFormulaPigmentoDTO } from "@/types/formulasPigmentosCatalogo"
+import type { FormulaPigmento, CrearFormulaPigmento, EditarFormulaPigmento } from "@/validations/formulasValidations"
 import type { AuthUser } from "@/types/usuario"
 import { registrarLog } from "@/lib/auditService"
 
@@ -14,14 +14,16 @@ export const getFormulasPigmento = async (): Promise<FormulaPigmento[]> => {
 }
 
 export const crearFormulaPigmento = async (
-  data: CrearFormulaPigmentoDTO,
+  data: CrearFormulaPigmento,
   usuarioActivo: AuthUser
 ): Promise<FormulaPigmento> => {
   await new Promise(resolve => setTimeout(resolve, 800))
 
   const nuevaFormula: FormulaPigmento = {
     ...data,
-    id: String(Date.now())
+    id: String(Date.now()),
+    categoriaColor: "Sólidos", // El back devuelve la categoria correcta
+    tipoPigmento: "master" // El back devuelve el tipo de pigmento correcto en base al pigmento elegido, pigmentoId
   }
 
   await registrarLog({
@@ -31,7 +33,7 @@ export const crearFormulaPigmento = async (
     entidad: "FormulasPigmento",
     accion: "crear",
     entidadId: nuevaFormula.id,
-    detalle: `Fórmula creada: ${data.materialBase} — ${data.color} (${data.categoriaColor}) — ${data.dosisGrPorKg} gr/kg`
+    detalle: `Fórmula creada: ${data.materialBase} — ${data.color} — ${data.dosisGrPorKg} gr/kg`
   })
 
   return nuevaFormula
@@ -39,7 +41,7 @@ export const crearFormulaPigmento = async (
 
 export const editarFormulaPigmento = async (
   id: string,
-  data: EditarFormulaPigmentoDTO,
+  data: EditarFormulaPigmento,
   formulaOriginal: FormulaPigmento,
   usuarioActivo: AuthUser
 ): Promise<FormulaPigmento> => {
@@ -52,7 +54,7 @@ export const editarFormulaPigmento = async (
     entidad: "FormulasPigmento",
     accion: "editar",
     entidadId: id,
-    detalle: `Fórmula editada: ${data.materialBase} — ${data.color} de ${formulaOriginal.categoriaColor}`
+    detalle: `Fórmula editada: ${formulaOriginal.materialBase} — ${formulaOriginal.color} de ${formulaOriginal.categoriaColor} a ${data.dosisGrPorKg}gr/kg - motivo: ${data.motivo}`
   })
 
   return { ...formulaOriginal, ...data, id }

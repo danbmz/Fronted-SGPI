@@ -1,4 +1,3 @@
-// src/components/catalogos/materiasPrimas/TablaMateriasPrimas.tsx
 import { useState } from "react"
 import type { MateriaPrima } from "@/types/materiaPrima"
 import {
@@ -33,20 +32,6 @@ const colorSubtipo: Record<string, string> = {
   reciclado: "bg-yellow-100 text-yellow-700"
 }
 
-const categoriaColores: Record<string, string> = {
-    natural: "bg-stone-100 text-stone-700",
-    amarillo: "bg-yellow-100 text-yellow-700",
-    verde: "bg-green-100 text-green-700",
-    naranja: "bg-orange-100 text-orange-700",
-    azul: "bg-blue-100 text-blue-700",
-    rojo: "bg-red-100 text-red-700",
-    morado: "bg-purple-100 text-purple-700",
-    blanco: "bg-gray-100 text-gray-500",
-    rosa: "bg-pink-100 text-pink-700",
-    beige: "bg-amber-100 text-amber-700",
-    crema: "bg-yellow-50 text-yellow-600",
-}
-
 export default function TablaMateriasPrimas({
   materiasPrimas,
   onMateriaPrimaEditada,
@@ -75,7 +60,6 @@ export default function TablaMateriasPrimas({
             <TableHead>Código</TableHead>
             <TableHead>Tipo</TableHead>
             <TableHead>Subtipo</TableHead>
-            <TableHead>Color</TableHead>
             <TableHead>Proveedor</TableHead>
             <TableHead>Unidad</TableHead>
             <TableHead>Estado</TableHead>
@@ -95,11 +79,6 @@ export default function TablaMateriasPrimas({
               <TableCell>
                 <Badge className={`text-xs px-2 py-1 rounded-full font-medium ${colorSubtipo[materiaPrima.subtipo]}`}>
                   {materiaPrima.subtipo}
-                </Badge>
-              </TableCell>
-              <TableCell>
-                <Badge className={`text-xs px-2 py-1 rounded-full font-medium ${categoriaColores[materiaPrima.color]}`}>
-                    {materiaPrima.color}
                 </Badge>
               </TableCell>
               <TableCell>{materiaPrima.proveedor}</TableCell>

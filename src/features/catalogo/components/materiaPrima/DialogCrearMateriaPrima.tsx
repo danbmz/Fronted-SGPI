@@ -2,7 +2,7 @@ import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { crearMateriaPrimaSchema, type CrearMateriaPrimaForm } from "@/validations/materiaPrimaValisations"
 import { crearMateriaPrima } from "../../services/materiasPrimasService"
-import type { MateriaPrima, TipoMateriaPrima, SubtipoMateriaPrima, coloresMateriaPrima } from "@/types/materiaPrima"
+import type { MateriaPrima, TipoMateriaPrima, SubtipoMateriaPrima } from "@/types/materiaPrima"
 import { useAuth } from "@/features/auth/hooks/useAuth"
 import { toast } from "sonner"
 import {
@@ -26,11 +26,9 @@ interface Props {
 const tiposMateriaPrima: TipoMateriaPrima[] = [
   "Polipropileno",
   "Poliestireno-Cristal",
-  "Aditivo"
 ]
 const subtipos: SubtipoMateriaPrima[] = ["virgen", "reciclado"]
 const unidadesMedida = ["kg", "lt", "pza"]
-const colores: coloresMateriaPrima[] = ["natural", "amarillo", "verde", "naranja", "azul", "rojo", "morado", "blanco", "rosa", "beige", "crema"]
 
 export default function DialogCrearMateriaPrima({ open, onClose, onSuccess }: Props) {
   const { user } = useAuth()
@@ -119,24 +117,6 @@ export default function DialogCrearMateriaPrima({ open, onClose, onSuccess }: Pr
               {errors.subtipo && <p className="text-xs text-red-500">{errors.subtipo.message}</p>}
             </div>
           </div>
-
-            <div className="flex flex-col gap-1">
-              <Label>Color</Label>
-              <Select
-                value={watch("color") ?? ""}
-                onValueChange={val => setValue("color", val as coloresMateriaPrima, { shouldValidate: true })}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Selecciona" />
-                </SelectTrigger>
-                <SelectContent>
-                  {colores.map(c => (
-                    <SelectItem key={c} value={c}>{c}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              {errors.color && <p className="text-xs text-red-500">{errors.color.message}</p>}
-            </div>
 
           <div className="flex flex-col gap-1">
             <Label>Proveedor</Label>

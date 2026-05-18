@@ -3,14 +3,11 @@ import { z } from "zod"
 const tiposMateriaPrima = [
   "Polipropileno",
   "Poliestireno-Cristal",
-  "Aditivo"
 ] as const
 
 const subtipos = ["virgen", "reciclado"] as const
 
 const unidadesMedida = ["kg", "lt", "pza"] as const
-
-const colores =["natural", "amarillo", "verde", "naranja", "azul", "rojo", "morado", "blanco", "rosa", "beige", "crema"] as const
 
 export const crearMateriaPrimaSchema = z.object({
   nombre: z
@@ -26,9 +23,6 @@ export const crearMateriaPrimaSchema = z.object({
   }),
   subtipo: z.enum(subtipos, {
     message: "Selecciona un subtipo válido"
-  }),
-  color:z.enum(colores, {
-    message: "Selecciona un color"
   }),
   proveedor: z
     .string()

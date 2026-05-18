@@ -1,9 +1,11 @@
-// src/components/catalogos/formulasPigmento/DialogCrearFormulaPigmento.tsx
+import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { crearFormulaPigmentoSchema, type CrearFormulaPigmentoForm } from "@/validations/formulasValidations"
+import { crearFormulaPigmentoSchema, type CrearFormulaPigmento } from "@/validations/formulasValidations"
 import { crearFormulaPigmento } from "../../services/formulasPigmentosService"
-import type { FormulaPigmento, TipoPigmento, CategoriaColor } from "@/types/formulasPigmentosCatalogo"
+import { getMateriasPrimas } from "../../services/materiasPrimasService"
+import { getPigmentos } from "../../services/pigmentoService"
+import type { FormulaPigmento } from "@/validations/formulasValidations"
 import { useAuth } from "@/features/auth/hooks/useAuth"
 import { toast } from "sonner"
 import {
@@ -17,6 +19,8 @@ import {
   Select, SelectContent, SelectItem,
   SelectTrigger, SelectValue
 } from "@/components/ui/select"
+import type { MateriaPrima } from "@/types/materiaPrima"
+import type { Pigmento } from "@/validations/pigmentosValidations"
 
 interface Props {
   open: boolean
@@ -24,30 +28,31 @@ interface Props {
   onSuccess: (formula: FormulaPigmento) => void
 }
 
-const materialesBases = [
-  { id: "1", nombre: "Polipropileno Virgen" },
-  { id: "3", nombre: "Poliestireno-Cristal Virgen" }
-]
-
-const categoriasColor: CategoriaColor[] = [
-  "Sólidos",
-  "Sólidos Pasteles",
-  "Neón Traslucidos",
-  "Jarra Neón Pastel"
-]
-
-const tiposPigmento: TipoPigmento[] = ["master", "polvo"]
-
 export default function DialogCrearFormulaPigmento({ open, onClose, onSuccess }: Props) {
+  const [materiaPrima, setMateriaPrima] = useState<MateriaPrima[]>([])
+  const [pigmento, setPigmento] = useState<Pigmento[]>([])
   const { user } = useAuth()
   const {
     register, handleSubmit, reset, setValue, watch,
     formState: { errors, isSubmitting }
-  } = useForm<CrearFormulaPigmentoForm>({
+  } = useForm<CrearFormulaPigmento>({
     resolver: zodResolver(crearFormulaPigmentoSchema)
   })
 
-  const onSubmit = async (data: CrearFormulaPigmentoForm) => {
+  // Obtenemos los catalogos de Materias Primas y Pigmentos
+  useEffect(() => {
+    const fetchDatos = async () => {
+      const [materias, pigs] = await Promise.all([
+        getMateriasPrimas(),
+        getPigmentos()
+      ])
+      setMateriaPrima(materias.filter(m=>m.activo))
+      setPigmento(pigs.filter(p=>p.activo))
+    }
+    fetchDatos()
+  },[])
+
+  const onSubmit = async (data: CrearFormulaPigmento) => {
     if (!user) return
     try {
       const nuevaFormula = await crearFormulaPigmento(data, user)
@@ -65,6 +70,14 @@ export default function DialogCrearFormulaPigmento({ open, onClose, onSuccess }:
     onClose()
   }
 
+  // Obtienes el pigmento actualmente seleccionado
+  const pigmentoActual = pigmento.find(p => p.id === watch("pigmentoId"))
+
+  // Filtras los materiales base
+  const materialesFiltrados = pigmentoActual
+    ? materiaPrima.filter(m => m.tipo === pigmentoActual.aplicacion)
+    : materiaPrima // Si no hay pigmento seleccionado, muestra todos
+
   return (
     <Dialog open={open} onOpenChange={handleClose}>
       <DialogContent>
@@ -77,72 +90,50 @@ export default function DialogCrearFormulaPigmento({ open, onClose, onSuccess }:
 
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4 mt-2">
 
+          {/* Pigmento */}
+          <div className="flex flex-col gap-1">
+            <Label>Pigmento</Label>
+            <Select
+              value={watch("pigmentoId") ?? ""}
+              onValueChange={val => {
+                const pigmentoSeleccionado = pigmento.find(p => p.id === val)
+                setValue("pigmentoId", val, { shouldValidate: true, shouldDirty: true })
+                if (pigmentoSeleccionado) {
+                  setValue("color", pigmentoSeleccionado.color, { shouldValidate: true, shouldDirty: true })
+                  // Setear el material base automáticamente según el pigmento
+                  setValue("materialBase", pigmentoSeleccionado.aplicacion, { shouldValidate: true, shouldDirty: true })
+                }
+              }}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Selecciona un pigmento" />
+              </SelectTrigger>
+              <SelectContent>
+                {pigmento.map(p => (
+                  <SelectItem key={p.id} value={p.id}>{`${p.color} ${p.categoriaColor} ${p.tipo}`}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            {errors.color && <p className="text-xs text-red-500">{errors.color.message}</p>}
+          </div>
+
           {/* Material base */}
           <div className="flex flex-col gap-1">
             <Label>Material base</Label>
             <Select
-              value={watch("materiaPrimaId") ?? ""}
-              onValueChange={val => {
-                setValue("materiaPrimaId", val, { shouldValidate: true })
-                const material = materialesBases.find(m => m.id === val)
-                if (material) setValue("materialBase", material.nombre, { shouldValidate: true })
-              }}
+              value={watch("materialBase") ?? ""}
+              onValueChange={val => { setValue("materialBase", val, { shouldValidate: true })}}
             >
               <SelectTrigger>
                 <SelectValue placeholder="Selecciona un material" />
               </SelectTrigger>
               <SelectContent>
-                {materialesBases.map(m => (
-                  <SelectItem key={m.id} value={m.id}>{m.nombre}</SelectItem>
+                {materialesFiltrados.map(m => (
+                  <SelectItem key={m.id} value={m.nombre}>{m.nombre}</SelectItem>
                 ))}
               </SelectContent>
             </Select>
-            {errors.materiaPrimaId && <p className="text-xs text-red-500">{errors.materiaPrimaId.message}</p>}
-          </div>
-
-          {/* Categoría de color */}
-          <div className="flex flex-col gap-1">
-            <Label>Categoría de color</Label>
-            <Select
-              value={watch("categoriaColor") ?? ""}
-              onValueChange={val => setValue("categoriaColor", val as CategoriaColor, { shouldValidate: true })}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Selecciona una categoría" />
-              </SelectTrigger>
-              <SelectContent>
-                {categoriasColor.map(c => (
-                  <SelectItem key={c} value={c}>{c}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            {errors.categoriaColor && <p className="text-xs text-red-500">{errors.categoriaColor.message}</p>}
-          </div>
-
-          {/* Color */}
-          <div className="flex flex-col gap-1">
-            <Label>Color</Label>
-            <Input {...register("color")} placeholder="Ej. Amarillo" />
-            {errors.color && <p className="text-xs text-red-500">{errors.color.message}</p>}
-          </div>
-
-          {/* Tipo de pigmento */}
-          <div className="flex flex-col gap-1">
-            <Label>Tipo de pigmento</Label>
-            <Select
-              value={watch("tipoPigmento") ?? ""}
-              onValueChange={val => setValue("tipoPigmento", val as TipoPigmento, { shouldValidate: true })}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Selecciona un tipo" />
-              </SelectTrigger>
-              <SelectContent>
-                {tiposPigmento.map(t => (
-                  <SelectItem key={t} value={t}>{t}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            {errors.tipoPigmento && <p className="text-xs text-red-500">{errors.tipoPigmento.message}</p>}
+            {errors.materialBase && <p className="text-xs text-red-500">{errors.materialBase.message}</p>}
           </div>
 
           {/* Dosis */}

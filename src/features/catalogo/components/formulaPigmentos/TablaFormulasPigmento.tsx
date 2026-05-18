@@ -1,5 +1,6 @@
 import { useState } from "react"
-import type { FormulaPigmento, CategoriaColor } from "@/types/formulasPigmentosCatalogo"
+import type { FormulaPigmento } from "@/validations/formulasValidations"
+import type { CategoriaColor } from "@/validations/pigmentosValidations"
 import {
   Table, TableBody, TableCell,
   TableHead, TableHeader, TableRow
@@ -57,8 +58,8 @@ export default function TablaFormulasPigmento({
         <TableHeader>
           <TableRow>
             <TableHead>Material base</TableHead>
+            <TableHead>Pigmento</TableHead>
             <TableHead>Categoría</TableHead>
-            <TableHead>Color</TableHead>
             <TableHead>Tipo pigmento</TableHead>
             <TableHead>Dosis (gr/kg)</TableHead>
             <TableHead>Acciones</TableHead>
@@ -68,18 +69,18 @@ export default function TablaFormulasPigmento({
           {formulas.map((formula) => (
             <TableRow key={formula.id}>
               <TableCell className="font-medium">{formula.materialBase}</TableCell>
+              <TableCell>{formula.color}</TableCell>
               <TableCell>
                 <Badge className={`text-xs px-2 py-1 rounded-full font-medium ${colorCategoria[formula.categoriaColor]}`}>
                   {formula.categoriaColor}
                 </Badge>
               </TableCell>
-              <TableCell>{formula.color}</TableCell>
               <TableCell>
                 <span className={`text-xs px-2 py-1 rounded-full font-medium ${colorTipoPigmento[formula.tipoPigmento]}`}>
                   {formula.tipoPigmento}
                 </span>
               </TableCell>
-              <TableCell>{formula.dosisGrPorKg}</TableCell>
+              <TableCell>{`${formula.dosisGrPorKg} gr/kg`}</TableCell>
               <TableCell>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>

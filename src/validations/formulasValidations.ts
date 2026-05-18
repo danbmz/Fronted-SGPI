@@ -1,36 +1,35 @@
 import { z } from "zod"
-
-const categoriasColor = [
-  "Sólidos",
-  "Sólidos Pasteles",
-  "Neón Traslucidos",
-  "Jarra Neón Pastel"
-] as const
-
-const tiposPigmento = ["master", "polvo"] as const
+import type { CategoriaColor, TipoPigmento } from "./pigmentosValidations"
 
 export const crearFormulaPigmentoSchema = z.object({
-  materiaPrimaId: z
-    .string()
-    .min(1, "Selecciona un material base"),
   materialBase: z
     .string()
     .min(1, "El material base es requerido"),
-  categoriaColor: z.enum(categoriasColor, {
-    message: "Selecciona una categoría válida"
-  }),
+  pigmentoId: z
+    .string()
+    .min(1,"Selecciona un pigmento"),
   color: z
     .string()
     .min(1, "El color es requerido"),
-  tipoPigmento: z.enum(tiposPigmento, {
-    message: "Selecciona un tipo de pigmento válido" 
-  }),
   dosisGrPorKg: z
     .number({ message: "La dosis debe ser un valor numérico" })
     .positive("La dosis debe ser mayor a 0")
 })
 
 export const editarFormulaPigmentoSchema = crearFormulaPigmentoSchema
+  .pick( { dosisGrPorKg: true})
+  .extend( { 
+    motivo:z
+    .string()
+    .min(1, "El motivo es requerido")
+    .min(10, "El motivo debe tener al menos 10 caracteres")
+  })
 
-export type CrearFormulaPigmentoForm = z.infer<typeof crearFormulaPigmentoSchema>
-export type EditarFormulaPigmentoForm = z.infer<typeof editarFormulaPigmentoSchema>
+export type CrearFormulaPigmento = z.infer<typeof crearFormulaPigmentoSchema>
+export type EditarFormulaPigmento = z.infer<typeof editarFormulaPigmentoSchema>
+
+export interface FormulaPigmento extends CrearFormulaPigmento {
+  id: string
+  categoriaColor: CategoriaColor
+  tipoPigmento: TipoPigmento
+}

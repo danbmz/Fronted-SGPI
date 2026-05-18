@@ -1,7 +1,6 @@
 export type TipoMateriaPrima =
   | "Polipropileno"
   | "Poliestireno-Cristal"
-  | "Aditivo"
 
 export type SubtipoMateriaPrima = "virgen" | "reciclado"
 
@@ -15,7 +14,6 @@ export interface MateriaPrima {
   codigoInterno: string
   tipo: TipoMateriaPrima
   subtipo: SubtipoMateriaPrima
-  color: coloresMateriaPrima
   proveedor: string
   unidadMedida: unidadesMedida
   costoUnitario: number
@@ -27,7 +25,6 @@ export interface CrearMateriaPrimaDTO {
   codigoInterno: string
   tipo: TipoMateriaPrima
   subtipo: SubtipoMateriaPrima
-  color: coloresMateriaPrima
   proveedor: string
   unidadMedida: unidadesMedida
   costoUnitario: number
@@ -38,7 +35,6 @@ export interface EditarMateriaPrimaDTO {
   codigoInterno: string
   tipo: TipoMateriaPrima
   subtipo: SubtipoMateriaPrima
-  color: coloresMateriaPrima
   proveedor: string
   unidadMedida: unidadesMedida
   costoUnitario: number

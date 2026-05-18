@@ -105,8 +105,8 @@ export default function AuditLogs() {
               <SelectItem value="MotivosParo">Motivos de paro</SelectItem>
               <SelectItem value="FormulasPigmento">Formula de pigmentos</SelectItem>
               <SelectItem value="MateriasPrimas">Materias primas</SelectItem>
-              <SelectItem value="pigmentos">Pigmentos</SelectItem>
-              <SelectItem value="productos">Productos</SelectItem>
+              <SelectItem value="Pigmentos">Pigmentos</SelectItem>
+              <SelectItem value="Productos">Productos</SelectItem>
             </SelectContent>
           </Select>
         )}

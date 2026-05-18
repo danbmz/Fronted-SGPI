@@ -1,9 +1,9 @@
 import { useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { editarFormulaPigmentoSchema, type EditarFormulaPigmentoForm } from "@/validations/formulasValidations"
+import { editarFormulaPigmentoSchema, type EditarFormulaPigmento } from "@/validations/formulasValidations"
 import { editarFormulaPigmento } from "../../services/formulasPigmentosService"
-import type { FormulaPigmento, TipoPigmento, CategoriaColor } from "@/types/formulasPigmentosCatalogo"
+import type { FormulaPigmento } from "@/validations/formulasValidations"
 import { useAuth } from "@/features/auth/hooks/useAuth"
 import { toast } from "sonner"
 import {
@@ -13,10 +13,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import {
-  Select, SelectContent, SelectItem,
-  SelectTrigger, SelectValue
-} from "@/components/ui/select"
+import { Textarea } from "@/components/ui/textarea"
 
 interface Props {
   open: boolean
@@ -25,36 +22,23 @@ interface Props {
   onSuccess: (formula: FormulaPigmento) => void
 }
 
-const materialesBases = [
-  { id: "1", nombre: "Polipropileno Virgen" },
-  { id: "3", nombre: "Poliestireno-Cristal Virgen" }
-]
-
-const categoriasColor: CategoriaColor[] = [
-  "Sólidos",
-  "Sólidos Pasteles",
-  "Neón Traslucidos",
-  "Jarra Neón Pastel"
-]
-
-const tiposPigmento: TipoPigmento[] = ["master", "polvo"]
-
 export default function DialogEditarFormulaPigmento({ open, formula, onClose, onSuccess }: Props) {
   const { user } = useAuth()
   const {
-    register, handleSubmit, reset, setValue, watch,
+    register, handleSubmit, reset,
     formState: { errors, isSubmitting, isDirty }
-  } = useForm<EditarFormulaPigmentoForm>({
+  } = useForm<EditarFormulaPigmento>({
     resolver: zodResolver(editarFormulaPigmentoSchema)
   })
 
+  // Para rellenar los inputs del form con los datos del registro
   useEffect(() => {
     if (formula) {
       reset(formula)
     }
   }, [formula])
 
-  const onSubmit = async (data: EditarFormulaPigmentoForm) => {
+  const onSubmit = async (data: EditarFormulaPigmento) => {
     if (!user || !formula) return
     try {
       const formulaEditada = await editarFormulaPigmento(formula.id, data, formula, user)
@@ -85,70 +69,6 @@ export default function DialogEditarFormulaPigmento({ open, formula, onClose, on
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4 mt-2">
 
           <div className="flex flex-col gap-1">
-            <Label>Material base</Label>
-            <Select
-              value={watch("materiaPrimaId") ?? ""}
-              onValueChange={val => {
-                setValue("materiaPrimaId", val, { shouldValidate: true, shouldDirty: true })
-                const material = materialesBases.find(m => m.id === val)
-                if (material) setValue("materialBase", material.nombre, { shouldValidate: true, shouldDirty: true })
-              }}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Selecciona un material" />
-              </SelectTrigger>
-              <SelectContent>
-                {materialesBases.map(m => (
-                  <SelectItem key={m.id} value={m.id}>{m.nombre}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            {errors.materiaPrimaId && <p className="text-xs text-red-500">{errors.materiaPrimaId.message}</p>}
-          </div>
-
-          <div className="flex flex-col gap-1">
-            <Label>Categoría de color</Label>
-            <Select
-              value={watch("categoriaColor") ?? ""}
-              onValueChange={val => setValue("categoriaColor", val as CategoriaColor, { shouldValidate: true, shouldDirty: true })}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Selecciona una categoría" />
-              </SelectTrigger>
-              <SelectContent>
-                {categoriasColor.map(c => (
-                  <SelectItem key={c} value={c}>{c}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            {errors.categoriaColor && <p className="text-xs text-red-500">{errors.categoriaColor.message}</p>}
-          </div>
-
-          <div className="flex flex-col gap-1">
-            <Label>Color</Label>
-            <Input {...register("color")} placeholder="Ej. Amarillo" />
-            {errors.color && <p className="text-xs text-red-500">{errors.color.message}</p>}
-          </div>
-
-          <div className="flex flex-col gap-1">
-            <Label>Tipo de pigmento</Label>
-            <Select
-              value={watch("tipoPigmento") ?? ""}
-              onValueChange={val => setValue("tipoPigmento", val as TipoPigmento, { shouldValidate: true, shouldDirty: true })}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Selecciona un tipo" />
-              </SelectTrigger>
-              <SelectContent>
-                {tiposPigmento.map(t => (
-                  <SelectItem key={t} value={t}>{t}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            {errors.tipoPigmento && <p className="text-xs text-red-500">{errors.tipoPigmento.message}</p>}
-          </div>
-
-          <div className="flex flex-col gap-1">
             <Label>Dosis (gr / kg de material)</Label>
             <Input
               type="number"
@@ -156,6 +76,16 @@ export default function DialogEditarFormulaPigmento({ open, formula, onClose, on
               {...register("dosisGrPorKg", { valueAsNumber: true })}
             />
             {errors.dosisGrPorKg && <p className="text-xs text-red-500">{errors.dosisGrPorKg.message}</p>}
+          </div>
+
+          <div className="flex flex-col gap-1">
+            <Label>Motivo del cambio</Label>
+            <Textarea
+              {...register("motivo")}
+              placeholder="Describe el motivo del cambio de dosis..."
+              rows={3}
+            />
+            {errors.motivo && <p className="text-xs text-red-500">{errors.motivo.message}</p>}
           </div>
 
           <div className="flex justify-end gap-2 mt-2">
