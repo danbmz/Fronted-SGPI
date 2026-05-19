@@ -1,4 +1,3 @@
-// src/pages/admin/catalogos/MateriasPrimas.tsx
 import { useState, useEffect } from "react"
 import { getMateriasPrimas } from "../services/materiasPrimasService"
 import type { MateriaPrima } from "@/types/materiaPrima"

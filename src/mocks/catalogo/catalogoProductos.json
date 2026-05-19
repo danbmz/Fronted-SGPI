@@ -1,7 +1,0 @@
-[
-  { "id": 1, "nombre": "Jarra 2L",     "codigoBarras": "7501000001", "tipo": "Jarra",    "tipoPlastico": "Polipropileno",        "color": "Rojo",      "cavidades": 2, "cicloEstandar": 28, "pesoGramos": 185 },
-  { "id": 2, "nombre": "Plato Hondo",  "codigoBarras": "7501000002", "tipo": "Plato",    "tipoPlastico": "Polipropileno",        "color": "Amarillo",  "cavidades": 4, "cicloEstandar": 22, "pesoGramos": 95 },
-  { "id": 3, "nombre": "Vaso 500ml",   "codigoBarras": "7501000003", "tipo": "Vaso",     "tipoPlastico": "Poliestireno-Cristal", "color": "Natural",   "cavidades": 8, "cicloEstandar": 18, "pesoGramos": 45 },
-  { "id": 4, "nombre": "Colador #3",   "codigoBarras": "7501000004", "tipo": "Colador",  "tipoPlastico": "Polipropileno",        "color": "Verde",     "cavidades": 2, "cicloEstandar": 30, "pesoGramos": 120 },
-  { "id": 5, "nombre": "Cubeta 10L",   "codigoBarras": "7501000005", "tipo": "Cubeta",   "tipoPlastico": "Polipropileno",        "color": "Azul",      "cavidades": 1, "cicloEstandar": 45, "pesoGramos": 650 }
-]

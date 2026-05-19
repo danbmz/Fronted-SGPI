@@ -1,4 +1,4 @@
-import type { FormulaPigmento, CrearFormulaPigmento, EditarFormulaPigmento } from "@/validations/formulasValidations"
+import type { FormulaPigmento, CrearFormulaPigmento, EditarFormulaPigmento } from "@/validations/catalogo/formulasValidations"
 import type { AuthUser } from "@/types/usuario"
 import { registrarLog } from "@/lib/auditService"
 

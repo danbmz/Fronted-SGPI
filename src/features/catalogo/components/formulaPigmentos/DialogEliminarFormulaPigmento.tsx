@@ -1,5 +1,5 @@
 import { eliminarFormulaPigmento } from "@/features/catalogo/services/formulasPigmentosService"
-import type { FormulaPigmento } from "@/validations/formulasValidations"
+import type { FormulaPigmento } from "@/validations/catalogo/formulasValidations"
 import { useAuth } from "@/features/auth/hooks/useAuth"
 import { toast } from "sonner"
 import {

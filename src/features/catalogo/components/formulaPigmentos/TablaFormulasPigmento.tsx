@@ -1,6 +1,6 @@
 import { useState } from "react"
-import type { FormulaPigmento } from "@/validations/formulasValidations"
-import type { CategoriaColor } from "@/validations/pigmentosValidations"
+import type { FormulaPigmento } from "@/validations/catalogo/formulasValidations"
+import type { CategoriaColor } from "@/validations/catalogo/pigmentosValidations"
 import {
   Table, TableBody, TableCell,
   TableHead, TableHeader, TableRow
@@ -71,7 +71,7 @@ export default function TablaFormulasPigmento({
               <TableCell className="font-medium">{formula.materialBase}</TableCell>
               <TableCell>{formula.color}</TableCell>
               <TableCell>
-                <Badge className={`text-xs px-2 py-1 rounded-full font-medium ${colorCategoria[formula.categoriaColor]}`}>
+                <Badge className={`text-xs px-2 py-1 rounded-full font-medium ${colorCategoria[formula.categoriaColor as CategoriaColor]}`}>
                   {formula.categoriaColor}
                 </Badge>
               </TableCell>

@@ -1,5 +1,5 @@
 import { reactivarPigmento } from "../../services/pigmentoService"
-import type { Pigmento } from "@/validations/pigmentosValidations"
+import type { Pigmento } from "@/validations/catalogo/pigmentosValidations"
 import { useAuth } from "@/features/auth/hooks/useAuth"
 import { toast } from "sonner"
 import {

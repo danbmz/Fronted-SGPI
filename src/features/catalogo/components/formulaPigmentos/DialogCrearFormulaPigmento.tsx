@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { crearFormulaPigmentoSchema, type CrearFormulaPigmento } from "@/validations/formulasValidations"
+import { crearFormulaPigmentoSchema, type CrearFormulaPigmento, type FormulaPigmento } from "@/validations/catalogo/formulasValidations"
 import { crearFormulaPigmento } from "../../services/formulasPigmentosService"
 import { getMateriasPrimas } from "../../services/materiasPrimasService"
 import { getPigmentos } from "../../services/pigmentoService"
-import type { FormulaPigmento } from "@/validations/formulasValidations"
 import { useAuth } from "@/features/auth/hooks/useAuth"
 import { toast } from "sonner"
 import {
@@ -20,7 +19,7 @@ import {
   SelectTrigger, SelectValue
 } from "@/components/ui/select"
 import type { MateriaPrima } from "@/types/materiaPrima"
-import type { Pigmento } from "@/validations/pigmentosValidations"
+import type { Pigmento } from "@/validations/catalogo/pigmentosValidations"
 
 interface Props {
   open: boolean

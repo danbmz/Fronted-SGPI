@@ -1,8 +1,7 @@
-// src/components/catalogos/maquinas/DialogCambiarEstadoMaquina.tsx
 import { useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { cambiarEstadoSchema, type CambiarEstadoForm } from "@/validations/maquinaValidations"
+import { cambiarEstadoSchema, type CambiarEstadoForm } from "@/validations/catalogo/maquinaValidations"
 import { cambiarEstadoMaquina } from "../../services/maquinasService"
 import type { Maquina, EstadoMaquina } from "@/types/maquinasCatalogo"
 import { useAuth } from "@/features/auth/hooks/useAuth"

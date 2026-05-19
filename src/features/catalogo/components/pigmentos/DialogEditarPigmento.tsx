@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { editarPigmentoSchema, type EditarPigmento, type CategoriaColor, type TipoPigmento, type Pigmento } from "@/validations/pigmentosValidations"
+import { editarPigmentoSchema, type EditarPigmento, type CategoriaColor, type TipoPigmento, type Pigmento } from "@/validations/catalogo/pigmentosValidations"
 import { editarPigmento } from "../../services/pigmentoService"
 import type { MateriaPrima } from "@/types/materiaPrima"
 import { getMateriasPrimas } from "../../services/materiasPrimasService"

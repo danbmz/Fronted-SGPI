@@ -1,0 +1,7 @@
+[
+  { "id": 1, "nombre": "Jarra 2L",     "codigo": "7501000001", "tipo": "Jarra",    "tipoPlastico": "Polipropileno",         "cavidades": 2, "ciclo": 28, "peso": 185, "activo": true },
+  { "id": 2, "nombre": "Plato Hondo",  "codigo": "7501000002", "tipo": "Plato",    "tipoPlastico": "Polipropileno",         "cavidades": 4, "ciclo": 22, "peso": 95 , "activo": true },
+  { "id": 3, "nombre": "Vaso 500ml",   "codigo": "7501000003", "tipo": "Vaso",     "tipoPlastico": "Poliestireno-Cristal",  "cavidades": 8, "ciclo": 18, "peso": 45 , "activo": true },
+  { "id": 4, "nombre": "Colador #3",   "codigo": "7501000004", "tipo": "Colador",  "tipoPlastico": "Polipropileno",         "cavidades": 2, "ciclo": 30, "peso": 120, "activo": false },
+  { "id": 5, "nombre": "Cubeta 10L",   "codigo": "7501000005", "tipo": "Cubeta",   "tipoPlastico": "Polipropileno",         "cavidades": 1, "ciclo": 45, "peso": 650, "activo": true }
+]

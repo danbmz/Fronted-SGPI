@@ -1,5 +1,5 @@
 import { useState } from "react"
-import type { Pigmento, CategoriaColor } from "@/validations/pigmentosValidations"
+import type { Pigmento, CategoriaColor } from "@/validations/catalogo/pigmentosValidations"
 import {
   Table, TableBody, TableCell,
   TableHead, TableHeader, TableRow

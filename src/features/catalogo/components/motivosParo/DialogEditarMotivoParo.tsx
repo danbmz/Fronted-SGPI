@@ -1,7 +1,7 @@
 import { useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { editarMotivoParoSchema, type EditarMotivoParoForm } from "@/validations/motivosValisations"
+import { editarMotivoParoSchema, type EditarMotivoParoForm } from "@/validations/catalogo/motivosValidations"
 import { editarMotivoParo } from "../../services/motivosService"
 import type { MotivoParo } from "@/types/motivosCatalogo"
 import { useAuth } from "@/features/auth/hooks/useAuth"

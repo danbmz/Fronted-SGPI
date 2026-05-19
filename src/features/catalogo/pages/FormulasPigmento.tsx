@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
 import { getFormulasPigmento } from "../services/formulasPigmentosService"
-import type { FormulaPigmento } from "@/validations/formulasValidations"
+import type { FormulaPigmento } from "@/validations/catalogo/formulasValidations"
 import { Button } from "@/components/ui/button"
 import { Plus } from "lucide-react"
 import TablaFormulasPigmento from "../components/formulaPigmentos/TablaFormulasPigmento"

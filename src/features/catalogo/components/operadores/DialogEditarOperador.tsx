@@ -1,7 +1,7 @@
 import { useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { type EditarOperadorForm, editarOperadorSchema } from "@/validations/operadorValidations"
+import { type EditarOperadorForm, editarOperadorSchema } from "@/validations/catalogo/operadorValidations"
 import type { Operador } from "@/types/operadoresCatalogo"
 import { editarOperador } from "../../services/operadorService"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"

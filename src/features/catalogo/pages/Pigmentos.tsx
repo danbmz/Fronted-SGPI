@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
 import { getPigmentos } from "../services/pigmentoService"
-import type { Pigmento } from "@/validations/pigmentosValidations"
+import type { Pigmento } from "@/validations/catalogo/pigmentosValidations"
 import TablaPigmentos from "../components/pigmentos/TablaPigmentos"
 import { Button } from "@/components/ui/button"
 import { Plus } from "lucide-react"

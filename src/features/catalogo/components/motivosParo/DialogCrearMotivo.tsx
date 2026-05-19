@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { crearMotivoParoSchema, type CrearMotivoParoForm } from "@/validations/motivosValisations"
+import { crearMotivoParoSchema, type CrearMotivoParoForm } from "@/validations/catalogo/motivosValidations"
 import { crearMotivoParo } from "../../services/motivosService"
 import type { MotivoParo } from "@/types/motivosCatalogo"
 import { useAuth } from "@/features/auth/hooks/useAuth"

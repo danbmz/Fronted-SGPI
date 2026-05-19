@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { type CrearOperadorForm, crearOperadorSchema } from "@/validations/operadorValidations"
+import { type CrearOperadorForm, crearOperadorSchema } from "@/validations/catalogo/operadorValidations"
 import { crearOperador } from "../../services/operadorService"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"

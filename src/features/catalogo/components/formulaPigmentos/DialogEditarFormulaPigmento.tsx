@@ -1,9 +1,8 @@
 import { useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { editarFormulaPigmentoSchema, type EditarFormulaPigmento } from "@/validations/formulasValidations"
+import { editarFormulaPigmentoSchema, type EditarFormulaPigmento, type FormulaPigmento } from "@/validations/catalogo/formulasValidations"
 import { editarFormulaPigmento } from "../../services/formulasPigmentosService"
-import type { FormulaPigmento } from "@/validations/formulasValidations"
 import { useAuth } from "@/features/auth/hooks/useAuth"
 import { toast } from "sonner"
 import {

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import  { crearPigmentoSchema, type Pigmento, type CrearPigmento, type CategoriaColor, type TipoPigmento } from "@/validations/pigmentosValidations"
+import  { crearPigmentoSchema, type Pigmento, type CrearPigmento, type CategoriaColor, type TipoPigmento } from "@/validations/catalogo/pigmentosValidations"
 import { crearPigmento } from "@/features/catalogo/services/pigmentoService"
 import type { MateriaPrima } from "@/types/materiaPrima"
 import { getMateriasPrimas } from "../../services/materiasPrimasService"

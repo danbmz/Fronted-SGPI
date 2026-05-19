@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { crearMateriaPrimaSchema, type CrearMateriaPrimaForm } from "@/validations/materiaPrimaValisations"
+import { crearMateriaPrimaSchema, type CrearMateriaPrimaForm } from "@/validations/catalogo/materiaPrimaValidations"
 import { crearMateriaPrima } from "../../services/materiasPrimasService"
 import type { MateriaPrima, TipoMateriaPrima, SubtipoMateriaPrima } from "@/types/materiaPrima"
 import { useAuth } from "@/features/auth/hooks/useAuth"
@@ -47,7 +47,7 @@ export default function DialogCrearMateriaPrima({ open, onClose, onSuccess }: Pr
       onSuccess(nuevaMateriaPrima)
       reset()
       onClose()
-    } catch {
+    } catch(error) {
       toast.error("Error al crear la materia prima.")
     }
   }

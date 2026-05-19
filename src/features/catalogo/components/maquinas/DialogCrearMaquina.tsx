@@ -1,7 +1,6 @@
-// src/components/catalogos/maquinas/DialogCrearMaquina.tsx
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { crearMaquinaSchema, type CrearMaquinaForm } from "@/validations/maquinaValidations"
+import { crearMaquinaSchema, type CrearMaquinaForm } from "@/validations/catalogo/maquinaValidations"
 import { crearMaquina } from "../../services/maquinasService"
 import type { Maquina } from "@/types/maquinasCatalogo"
 import { useAuth } from "@/features/auth/hooks/useAuth"

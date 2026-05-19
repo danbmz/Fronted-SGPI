@@ -1,4 +1,3 @@
-// src/validations/maquinaValidations.ts
 import { z } from "zod"
 
 export const crearMaquinaSchema = z.object({

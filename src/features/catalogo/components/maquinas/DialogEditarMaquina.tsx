@@ -1,8 +1,7 @@
-// src/components/catalogos/maquinas/DialogEditarMaquina.tsx
 import { useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { editarMaquinaSchema, type EditarMaquinaForm } from "@/validations/maquinaValidations"
+import { editarMaquinaSchema, type EditarMaquinaForm } from "@/validations/catalogo/maquinaValidations"
 import { editarMaquina } from "../../services/maquinasService"
 import type { Maquina } from "@/types/maquinasCatalogo"
 import { useAuth } from "@/features/auth/hooks/useAuth"

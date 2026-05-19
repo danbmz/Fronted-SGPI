@@ -1,4 +1,4 @@
-import type { Pigmento, CrearPigmento, EditarPigmento } from "@/validations/pigmentosValidations"
+import type { Pigmento, CrearPigmento, EditarPigmento } from "@/validations/catalogo/pigmentosValidations"
 import type { AuthUser } from "@/types/usuario"
 import { registrarLog } from "@/lib/auditService"
 

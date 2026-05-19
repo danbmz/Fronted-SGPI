@@ -1,7 +1,7 @@
 import { useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { editarMateriaPrimaSchema, type EditarMateriaPrimaForm } from "@/validations/materiaPrimaValisations"
+import { editarMateriaPrimaSchema, type EditarMateriaPrimaForm } from "@/validations/catalogo/materiaPrimaValidations"
 import { editarMateriaPrima } from "../../services/materiasPrimasService"
 import type { MateriaPrima, TipoMateriaPrima, SubtipoMateriaPrima } from "@/types/materiaPrima"
 import { useAuth } from "@/features/auth/hooks/useAuth"
