@@ -1,43 +1,43 @@
 
 [
-  { "id": 1,  "color": "Amarillo",    "categoriaColor": "Sólidos",          "tipo": "master", "materiaPrimaId": 1, "aplicacion": "Polipropileno", "activo": true },
-  { "id": 2,  "color": "Verde",       "categoriaColor": "Sólidos",          "tipo": "master", "materiaPrimaId": 1, "aplicacion": "Polipropileno", "activo": true },
-  { "id": 3,  "color": "Naranja",     "categoriaColor": "Sólidos",          "tipo": "master", "materiaPrimaId": 1, "aplicacion": "Polipropileno", "activo": true },
-  { "id": 4,  "color": "Azul",        "categoriaColor": "Sólidos",          "tipo": "master", "materiaPrimaId": 1, "aplicacion": "Polipropileno", "activo": true },
-  { "id": 5,  "color": "Rojo",        "categoriaColor": "Sólidos",          "tipo": "master", "materiaPrimaId": 1, "aplicacion": "Polipropileno", "activo": true },
-  { "id": 6,  "color": "Morado",      "categoriaColor": "Sólidos",          "tipo": "master", "materiaPrimaId": 1, "aplicacion": "Polipropileno", "activo": true },
-  { "id": 7,  "color": "Blanco",      "categoriaColor": "Sólidos",          "tipo": "master", "materiaPrimaId": 1, "aplicacion": "Polipropileno", "activo": true },
-  { "id": 8,  "color": "Azul Pastel", "categoriaColor": "Sólidos",          "tipo": "master", "materiaPrimaId": 1, "aplicacion": "Polipropileno", "activo": true },
-  { "id": 9,  "color": "Rosa",        "categoriaColor": "Sólidos",          "tipo": "master", "materiaPrimaId": 1, "aplicacion": "Polipropileno", "activo": true },
-  { "id": 10, "color": "Beige",       "categoriaColor": "Sólidos",          "tipo": "master", "materiaPrimaId": 1, "aplicacion": "Polipropileno", "activo": true },
-  { "id": 11, "color": "Crema",       "categoriaColor": "Sólidos",          "tipo": "master", "materiaPrimaId": 1, "aplicacion": "Polipropileno", "activo": true },
+  { "id": 1,  "color": "amarillo",    "categoriaColor": "Sólidos",          "tipo": "master", "materiaPrimaId": 1, "aplicacion": "Polipropileno", "activo": true },
+  { "id": 2,  "color": "verde",       "categoriaColor": "Sólidos",          "tipo": "master", "materiaPrimaId": 1, "aplicacion": "Polipropileno", "activo": true },
+  { "id": 3,  "color": "naranja",     "categoriaColor": "Sólidos",          "tipo": "master", "materiaPrimaId": 1, "aplicacion": "Polipropileno", "activo": true },
+  { "id": 4,  "color": "azul",        "categoriaColor": "Sólidos",          "tipo": "master", "materiaPrimaId": 1, "aplicacion": "Polipropileno", "activo": true },
+  { "id": 5,  "color": "rojo",        "categoriaColor": "Sólidos",          "tipo": "master", "materiaPrimaId": 1, "aplicacion": "Polipropileno", "activo": true },
+  { "id": 6,  "color": "morado",      "categoriaColor": "Sólidos",          "tipo": "master", "materiaPrimaId": 1, "aplicacion": "Polipropileno", "activo": true },
+  { "id": 7,  "color": "blanco",      "categoriaColor": "Sólidos",          "tipo": "master", "materiaPrimaId": 1, "aplicacion": "Polipropileno", "activo": true },
+  { "id": 8,  "color": "azul pastel", "categoriaColor": "Sólidos",          "tipo": "master", "materiaPrimaId": 1, "aplicacion": "Polipropileno", "activo": true },
+  { "id": 9,  "color": "rosa",        "categoriaColor": "Sólidos",          "tipo": "master", "materiaPrimaId": 1, "aplicacion": "Polipropileno", "activo": true },
+  { "id": 10, "color": "beige",       "categoriaColor": "Sólidos",          "tipo": "master", "materiaPrimaId": 1, "aplicacion": "Polipropileno", "activo": true },
+  { "id": 11, "color": "crema",       "categoriaColor": "Sólidos",          "tipo": "master", "materiaPrimaId": 1, "aplicacion": "Polipropileno", "activo": true },
 
 
-  { "id": 12, "color": "Amarillo",    "categoriaColor": "Sólidos Pasteles", "tipo": "master", "materiaPrimaId": 1, "aplicacion": "Polipropileno", "activo": true },
-  { "id": 13, "color": "Verde",       "categoriaColor": "Sólidos Pasteles", "tipo": "master", "materiaPrimaId": 1, "aplicacion": "Polipropileno", "activo": true },
-  { "id": 14, "color": "Rosa",        "categoriaColor": "Sólidos Pasteles", "tipo": "master", "materiaPrimaId": 1, "aplicacion": "Polipropileno", "activo": true },
-  { "id": 15, "color": "Azul",        "categoriaColor": "Sólidos Pasteles", "tipo": "master", "materiaPrimaId": 1, "aplicacion": "Polipropileno", "activo": true },
-  { "id": 16, "color": "Morado",      "categoriaColor": "Sólidos Pasteles", "tipo": "master", "materiaPrimaId": 1, "aplicacion": "Polipropileno", "activo": true },
+  { "id": 12, "color": "amarillo",    "categoriaColor": "Sólidos Pasteles", "tipo": "master", "materiaPrimaId": 1, "aplicacion": "Polipropileno", "activo": true },
+  { "id": 13, "color": "verde",       "categoriaColor": "Sólidos Pasteles", "tipo": "master", "materiaPrimaId": 1, "aplicacion": "Polipropileno", "activo": true },
+  { "id": 14, "color": "rosa",        "categoriaColor": "Sólidos Pasteles", "tipo": "master", "materiaPrimaId": 1, "aplicacion": "Polipropileno", "activo": true },
+  { "id": 15, "color": "azul",        "categoriaColor": "Sólidos Pasteles", "tipo": "master", "materiaPrimaId": 1, "aplicacion": "Polipropileno", "activo": true },
+  { "id": 16, "color": "morado",      "categoriaColor": "Sólidos Pasteles", "tipo": "master", "materiaPrimaId": 1, "aplicacion": "Polipropileno", "activo": true },
 
 
-  { "id": 17, "color": "Naranja",     "categoriaColor": "Neón Traslucidos", "tipo": "master", "materiaPrimaId": 1, "aplicacion": "Polipropileno", "activo": true },
-  { "id": 18, "color": "Azul",        "categoriaColor": "Neón Traslucidos", "tipo": "master", "materiaPrimaId": 1, "aplicacion": "Polipropileno", "activo": true },
-  { "id": 19, "color": "Morado",      "categoriaColor": "Neón Traslucidos", "tipo": "master", "materiaPrimaId": 1, "aplicacion": "Polipropileno", "activo": true },
+  { "id": 17, "color": "naranja",     "categoriaColor": "Neón Traslucidos", "tipo": "master", "materiaPrimaId": 1, "aplicacion": "Polipropileno", "activo": true },
+  { "id": 18, "color": "azul",        "categoriaColor": "Neón Traslucidos", "tipo": "master", "materiaPrimaId": 1, "aplicacion": "Polipropileno", "activo": true },
+  { "id": 19, "color": "morado",      "categoriaColor": "Neón Traslucidos", "tipo": "master", "materiaPrimaId": 1, "aplicacion": "Polipropileno", "activo": true },
 
 
-  { "id": 20, "color": "Amarillo",    "categoriaColor": "Jarra Neón Pastel","tipo": "master", "materiaPrimaId": 1, "aplicacion": "Polipropileno", "activo": true },
-  { "id": 21, "color": "Verde",       "categoriaColor": "Jarra Neón Pastel","tipo": "master", "materiaPrimaId": 1, "aplicacion": "Polipropileno", "activo": true },
-  { "id": 22, "color": "Rosa",        "categoriaColor": "Jarra Neón Pastel","tipo": "master", "materiaPrimaId": 1, "aplicacion": "Polipropileno", "activo": true },
-  { "id": 23, "color": "Azul",        "categoriaColor": "Jarra Neón Pastel","tipo": "master", "materiaPrimaId": 1, "aplicacion": "Polipropileno", "activo": true },
-  { "id": 24, "color": "Morado",      "categoriaColor": "Jarra Neón Pastel","tipo": "master", "materiaPrimaId": 1, "aplicacion": "Polipropileno", "activo": true },
+  { "id": 20, "color": "amarillo",    "categoriaColor": "Jarra Neón Pastel","tipo": "master", "materiaPrimaId": 1, "aplicacion": "Polipropileno", "activo": true },
+  { "id": 21, "color": "verde",       "categoriaColor": "Jarra Neón Pastel","tipo": "master", "materiaPrimaId": 1, "aplicacion": "Polipropileno", "activo": true },
+  { "id": 22, "color": "rosa",        "categoriaColor": "Jarra Neón Pastel","tipo": "master", "materiaPrimaId": 1, "aplicacion": "Polipropileno", "activo": true },
+  { "id": 23, "color": "azul",        "categoriaColor": "Jarra Neón Pastel","tipo": "master", "materiaPrimaId": 1, "aplicacion": "Polipropileno", "activo": true },
+  { "id": 24, "color": "morado",      "categoriaColor": "Jarra Neón Pastel","tipo": "master", "materiaPrimaId": 1, "aplicacion": "Polipropileno", "activo": true },
 
 
-  { "id": 25, "color": "Amarillo",    "categoriaColor": "Neón Traslucidos", "tipo": "polvo",  "materiaPrimaId": 1, "aplicacion": "Polipropileno", "activo": true },
-  { "id": 26, "color": "Verde",       "categoriaColor": "Neón Traslucidos", "tipo": "polvo",  "materiaPrimaId": 1, "aplicacion": "Polipropileno", "activo": true },
-  { "id": 27, "color": "Rosa",        "categoriaColor": "Neón Traslucidos", "tipo": "polvo",  "materiaPrimaId": 1, "aplicacion": "Polipropileno", "activo": true },
+  { "id": 25, "color": "amarillo",    "categoriaColor": "Neón Traslucidos", "tipo": "polvo",  "materiaPrimaId": 1, "aplicacion": "Polipropileno", "activo": true },
+  { "id": 26, "color": "verde",       "categoriaColor": "Neón Traslucidos", "tipo": "polvo",  "materiaPrimaId": 1, "aplicacion": "Polipropileno", "activo": true },
+  { "id": 27, "color": "rosa",        "categoriaColor": "Neón Traslucidos", "tipo": "polvo",  "materiaPrimaId": 1, "aplicacion": "Polipropileno", "activo": true },
 
 
-  { "id": 28, "color": "Naranja",     "categoriaColor": "Neón Traslucidos", "tipo": "polvo",  "materiaPrimaId": 2, "aplicacion": "Poliestireno-Cristal", "activo": true },
-  { "id": 29, "color": "Azul",        "categoriaColor": "Neón Traslucidos", "tipo": "polvo",  "materiaPrimaId": 2, "aplicacion": "Poliestireno-Cristal", "activo": true},
-  { "id": 30, "color": "Morado",      "categoriaColor": "Neón Traslucidos", "tipo": "polvo",  "materiaPrimaId": 2, "aplicacion": "Poliestireno-Cristal", "activo": true}
+  { "id": 28, "color": "naranja",     "categoriaColor": "Neón Traslucidos", "tipo": "polvo",  "materiaPrimaId": 2, "aplicacion": "Poliestireno-Cristal", "activo": true },
+  { "id": 29, "color": "azul",        "categoriaColor": "Neón Traslucidos", "tipo": "polvo",  "materiaPrimaId": 2, "aplicacion": "Poliestireno-Cristal", "activo": true},
+  { "id": 30, "color": "morado",      "categoriaColor": "Neón Traslucidos", "tipo": "polvo",  "materiaPrimaId": 2, "aplicacion": "Poliestireno-Cristal", "activo": true}
 ]

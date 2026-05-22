@@ -22,16 +22,31 @@ interface Props {
   onPigmentoReactivado: (pigmento: Pigmento) => void
 }
 
-const colorCategoria: Record<CategoriaColor, string> = {
+export const colorCategoria: Record<CategoriaColor, string> = {
   "Sólidos":           "bg-blue-100 text-blue-700",
   "Sólidos Pasteles":  "bg-pink-100 text-pink-700",
   "Neón Traslucidos":  "bg-green-100 text-green-700",
   "Jarra Neón Pastel": "bg-orange-100 text-orange-700"
 }
 
-const colorTipo: Record<string, string> = {
+export const colorTipo: Record<string, string> = {
   master: "bg-purple-100 text-purple-700",
   polvo:  "bg-yellow-100 text-yellow-700"
+}
+
+export const categoriaColores: Record<string, string> = {
+    natural: "bg-stone-100 text-stone-700",
+    amarillo: "bg-yellow-100 text-yellow-700",
+    verde: "bg-green-100 text-green-700",
+    naranja: "bg-orange-100 text-orange-700",
+    azul: "bg-blue-100 text-blue-700",
+    "azul pastel": "bg-blue-100 text-blue-700",
+    rojo: "bg-red-100 text-red-700",
+    morado: "bg-purple-100 text-purple-700",
+    blanco: "bg-gray-100 text-gray-500",
+    rosa: "bg-pink-100 text-pink-700",
+    beige: "bg-amber-100 text-amber-700",
+    crema: "bg-yellow-50 text-yellow-600",
 }
 
 export default function TablaPigmentos({
@@ -69,7 +84,9 @@ export default function TablaPigmentos({
         <TableBody>
           {pigmentos.map((pigmento) => (
             <TableRow key={pigmento.id}>
-              <TableCell className="font-medium">{pigmento.color}</TableCell>
+              <TableCell className="font-medium">
+                {pigmento.color}
+              </TableCell>
               <TableCell>
                 <span className={`text-xs px-2 py-1 rounded-full font-medium ${colorCategoria[pigmento.categoriaColor]}`}>
                   {pigmento.categoriaColor}

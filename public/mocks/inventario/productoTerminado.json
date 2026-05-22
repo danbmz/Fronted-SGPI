@@ -1,0 +1,7 @@
+[
+  { "id": 1, "stockActual": 1200, "stockMinimo": 500,  "ultimoMovimiento": "2026-04-30", "nombre": "Jarra 2L",   "codigoBarras": "7501000001", "tipo": "Jarra",   "color": "Rojo",     "ubicacion": "Almacén A" },
+  { "id": 2, "stockActual": 430,  "stockMinimo": 800,  "ultimoMovimiento": "2026-04-29", "nombre": "Plato Hondo","codigoBarras": "7501000002", "tipo": "Plato",   "color": "Amarillo", "ubicacion": "Almacén A" },
+  { "id": 3, "stockActual": 200,  "stockMinimo": 1000, "ultimoMovimiento": "2026-04-28", "nombre": "Vaso 500ml", "codigoBarras": "7501000003", "tipo": "Vaso",    "color": "Natural",  "ubicacion": "Almacén B" },
+  { "id": 4, "stockActual": 750,  "stockMinimo": 300,  "ultimoMovimiento": "2026-04-30", "nombre": "Colador #3", "codigoBarras": "7501000004", "tipo": "Colador", "color": "Verde",    "ubicacion": "Almacén B" },
+  { "id": 5, "stockActual": 90,   "stockMinimo": 200,  "ultimoMovimiento": "2026-04-27", "nombre": "Cubeta 10L", "codigoBarras": "7501000005", "tipo": "Cubeta",  "color": "Azul",     "ubicacion": "Almacén C" }
+]

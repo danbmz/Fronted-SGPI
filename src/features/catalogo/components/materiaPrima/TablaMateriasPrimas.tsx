@@ -23,11 +23,11 @@ interface Props {
   onMateriaPrimaReactivada: (materiaPrima: MateriaPrima) => void
 }
 
-const colorTipo: Record<string, string> = {
+export const materialColor: Record<string, string> = {
   Polipropileno:   "bg-olive-200 text-olive-700",
   "Poliestireno-Cristal": "bg-slate-200 text-slate-700"
 }
-const colorSubtipo: Record<string, string> = {
+export const colorSubtipo: Record<string, string> = {
   virgen:   "bg-blue-100 text-blue-700",
   reciclado: "bg-yellow-100 text-yellow-700"
 }
@@ -72,7 +72,7 @@ export default function TablaMateriasPrimas({
               <TableCell className="font-medium">{materiaPrima.nombre}</TableCell>
               <TableCell className="font-mono text-sm">{materiaPrima.codigoInterno}</TableCell>
               <TableCell>
-                <Badge className={`text-xs px-2 py-1 rounded-full font-medium ${colorTipo[materiaPrima.tipo]}`}>
+                <Badge className={`text-xs px-2 py-1 rounded-full font-medium ${materialColor[materiaPrima.tipo]}`}>
                     {materiaPrima.tipo}
                 </Badge>
               </TableCell>

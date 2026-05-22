@@ -1,0 +1,7 @@
+[
+  { "id": 1, "stockActual": 45, "colorAproximado": "naranja",  "ultimaEntrada": "2026-04-28", "ordenOrigen": null, "observaciones": "Generado por cambio de color en máquina TX 268T", "materialBase": "Polipropileno Virgen",         "codigoInterno": "JU-MCP1" },
+  { "id": 2, "stockActual": 30, "colorAproximado": "verde",    "ultimaEntrada": "2026-04-29", "ordenOrigen": null, "observaciones": "Piezas malas de producción turno noche",          "materialBase": "Polipropileno Virgen",         "codigoInterno": "JU-MCP1" },
+  { "id": 3, "stockActual": 12, "colorAproximado": "rojo",     "ultimaEntrada": "2026-04-27", "ordenOrigen": null, "observaciones": "Plasta y merma acumulada semana",                 "materialBase": "Polipropileno Virgen",         "codigoInterno": "JU-MCP1" },
+  { "id": 4, "stockActual": 8,  "colorAproximado": "azul",     "ultimaEntrada": "2026-04-26", "ordenOrigen": null, "observaciones": "Piezas de transición cambio de color",            "materialBase": "Poliestireno-Cristal Virgen",  "codigoInterno": "JU-MCC1" },
+  { "id": 5, "stockActual": 0,  "colorAproximado": "morado",   "ultimaEntrada": "2026-04-20", "ordenOrigen": null, "observaciones": "Stock agotado, pendiente de molienda",            "materialBase": "Poliestireno-Cristal Virgen",  "codigoInterno": "JU-MCC1" }
+]

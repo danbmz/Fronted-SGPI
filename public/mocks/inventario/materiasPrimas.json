@@ -1,0 +1,6 @@
+[
+  { "id": 1, "stockActual": 1200, "stockMinimo": 500,  "ultimoMovimiento": "2026-04-30", "nombre": "Polipropileno Virgen",          "codigoInterno": "JU-PVL1", "tipo": "Polipropileno",        "subtipo": "virgen"   },
+  { "id": 2, "stockActual": 340,  "stockMinimo": 200,  "ultimoMovimiento": "2026-04-29", "nombre": "Polipropileno Reciclado",       "codigoInterno": "JU-PRL1", "tipo": "Polipropileno",        "subtipo": "reciclado" },
+  { "id": 3, "stockActual": 80,   "stockMinimo": 300,  "ultimoMovimiento": "2026-04-28", "nombre": "Poliestireno-Cristal Virgen",  "codigoInterno": "JU-PSC1", "tipo": "Poliestireno-Cristal", "subtipo": "virgen"   },
+  { "id": 4, "stockActual": 120,  "stockMinimo": 50,   "ultimoMovimiento": "2026-04-27", "nombre": "Poliestireno-Cristal Reciclado","codigoInterno": "JU-PSR1", "tipo": "Poliestireno-Cristal", "subtipo": "reciclado" }
+]

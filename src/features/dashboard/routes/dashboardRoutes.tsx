@@ -13,6 +13,9 @@ import MotivosParo from '@/features/catalogo/pages/MotivosParo'
 import Productos from '@/features/catalogo/pages/Productos'
 import Pigmentos from '@/features/catalogo/pages/Pigmentos'
 import MateriasPrimas from '@/features/catalogo/pages/MateriasPrimas'
+import MateriasPrimasInventario from '@/features/inventory/pages/MateriasPrimasInventario'
+import PigmentosInventario from '@/features/inventory/pages/PigmentosInventario'
+import ProductoInventario from '@/features/inventory/pages/ProductoTerminado'
 
 export const dashboardRoutes: RouteObject[] = [
   // ── Admin ──────────────────────────────────
@@ -29,9 +32,9 @@ export const dashboardRoutes: RouteObject[] = [
           { path: 'avances-turno', element: <ProductionOrders /> },
           { path: 'tiempos-paro', element: <ProductionOrders /> },
           { path: 'molino', element: <ProductionOrders /> },
-          { path: 'materias-primas', element: <ProductionOrders /> },
-          { path: 'pigmentos', element: <ProductionOrders /> },
-          { path: 'producto-terminado', element: <ProductionOrders /> },
+          { path: 'materias-primas', element: <MateriasPrimasInventario /> },
+          { path: 'pigmentos', element: <PigmentosInventario /> },
+          { path: 'producto-terminado', element: <ProductoInventario /> },
           { path: 'productos', element: <Productos /> },
           { path: 'maquinas', element: <Maquinas /> },
           { path: 'operadores', element: <Operadores /> },

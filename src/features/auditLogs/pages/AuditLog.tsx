@@ -75,6 +75,7 @@ export default function AuditLogs() {
         <Input
           placeholder="Buscar por usuario o detalle..."
           value={busqueda}
+          name="search"
           onChange={(e) => setBusqueda(e.target.value)}
           className="max-w-sm"
         />
@@ -107,6 +108,21 @@ export default function AuditLogs() {
               <SelectItem value="MateriasPrimas">Materias primas</SelectItem>
               <SelectItem value="Pigmentos">Pigmentos</SelectItem>
               <SelectItem value="Productos">Productos</SelectItem>
+            </SelectContent>
+          </Select>
+        )}
+
+        {filtroModulo === "inventario" && (
+          <Select value={filtroEntidad} onValueChange={setFiltroEntidad}>
+            <SelectTrigger className="w-44">
+              <SelectValue placeholder="Inventario" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="todos">Todos</SelectItem>
+              <SelectItem value="MateriasPrimas">Materia Prima</SelectItem>
+              <SelectItem value="Molido">Molido</SelectItem>
+              <SelectItem value="Pigmentos">Pigmentos</SelectItem>
+              <SelectItem value="ProductoTerminado">Productos</SelectItem>
             </SelectContent>
           </Select>
         )}
