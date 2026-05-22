@@ -64,9 +64,25 @@ export const ajusteManualSchema = z.object({
     .min(10, "El motivo debe tener al menos 10 caracteres")
 })
 
+// --- Historial de movimientos -------------------------------------
+export const movimientoInventarioSchema = z.object({
+  id: z.string(),
+  inventarioId: z.string(),
+  tipoInventario: z.enum(["materias_primas", "pigmentos", "producto_terminado", "molido"]),
+  tipoMovimiento: z.enum(["entrada", "consumo", "ajuste_manual"]),
+  cantidadAnterior: z.number(),
+  cantidadNueva: z.number(),
+  diferencia: z.number(),
+  motivo: z.string(),
+  creadoPor: z.string(),
+  fecha: z.string()
+})
+
+
 // ── Tipos inferidos ──────────────────────────────────────────────
 export type InventarioMateriaPrima = z.infer<typeof inventarioMateriaPrimaSchema>
 export type InventarioMolido = z.infer<typeof inventarioMolidoSchema>
 export type InventarioPigmento = z.infer<typeof inventarioPigmentoSchema>
 export type InventarioProductoTerminado = z.infer<typeof inventarioProductoTerminadoSchema>
 export type AjusteManualForm = z.infer<typeof ajusteManualSchema>
+export type MovimientoInventario = z.infer<typeof movimientoInventarioSchema>

@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button"
 import { MoreHorizontal } from "lucide-react"
 import DialogAjusteManualMolido from "./DialogAjusteManualMolido"
 import { Badge } from "@/components/ui/badge"
+import DialogHistorialMovimientos from "../movimientos/DialogHistorialMovimientos"
 
 interface Props {
   molido: InventarioMolido[]
@@ -21,16 +22,16 @@ interface Props {
 
 export default function TablaInventarioMolido({ molido, onActualizado }: Props) {
   const [seleccionado, setSeleccionado] = useState<InventarioMolido | null>(null)
-  const [dialogAbierto, setDialogAbierto] = useState(false)
+  const [dialogAbierto, setDialogAbierto] = useState<"ajustar" | "historial" | null>(null)
 
-  const abrirDialog = (m: InventarioMolido) => {
+  const abrirDialog = (tipo: "ajustar" | "historial",m: InventarioMolido) => {
     setSeleccionado(m)
-    setDialogAbierto(true)
+    setDialogAbierto(tipo)
   }
 
   const cerrarDialog = () => {
     setSeleccionado(null)
-    setDialogAbierto(false)
+    setDialogAbierto(null)
   }
 
   return (
@@ -74,10 +75,10 @@ export default function TablaInventarioMolido({ molido, onActualizado }: Props) 
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
-                    <DropdownMenuItem onClick={() => abrirDialog(m)}>
+                    <DropdownMenuItem onClick={() => abrirDialog("ajustar", m)}>
                       Ajuste manual
                     </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => abrirDialog(m)}>
+                    <DropdownMenuItem onClick={() => abrirDialog("historial", m)}>
                       Historial de ajustes
                     </DropdownMenuItem>
                   </DropdownMenuContent>
@@ -96,10 +97,19 @@ export default function TablaInventarioMolido({ molido, onActualizado }: Props) 
       </Table>
 
       <DialogAjusteManualMolido
-        open={dialogAbierto}
+        open={dialogAbierto === "ajustar"}
         molido={seleccionado}
         onClose={cerrarDialog}
         onSuccess={onActualizado}
+      />
+
+      <DialogHistorialMovimientos
+        open={dialogAbierto === "historial"}
+        onClose={cerrarDialog}
+        inventarioId={seleccionado?.id ?? ""}
+        tipoInventario="molido"
+        titulo={seleccionado?.colorAproximado ?? ""}
+        subtitulo={seleccionado?.codigoInterno}
       />
     </>
   )

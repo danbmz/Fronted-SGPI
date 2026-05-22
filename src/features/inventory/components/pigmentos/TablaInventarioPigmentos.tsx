@@ -7,6 +7,7 @@ import type { InventarioPigmento } from "@/validations/inventario/inventarioVali
 import { AlertTriangle, MoreHorizontal } from "lucide-react"
 import { useState } from "react"
 import DialogAjusteManualPigmento from "./DialogAjusteManualPigmento"
+import DialogHistorialMovimientos from "../movimientos/DialogHistorialMovimientos"
 
 interface Props{
     pigmentos: InventarioPigmento[]
@@ -15,16 +16,16 @@ interface Props{
 
 export default function TablaInventarioPigmentos({pigmentos, onActualizado}: Props){
     const [pigmentoSeleccionado, setPigmentoSeleccionado] = useState<InventarioPigmento | null>(null)
-    const [dialogAbierto, setDialogAbierto] = useState(false)
+    const [dialogAbierto, setDialogAbierto] = useState<"ajustar" | "historial" | null>(null)
 
-    const abrirDialog = (pigmento: InventarioPigmento) => {
+    const abrirDialog = (tipo: "ajustar" | "historial",pigmento: InventarioPigmento) => {
         setPigmentoSeleccionado(pigmento)
-        setDialogAbierto(true)
+        setDialogAbierto(tipo)
     }
 
     const cerrarDialog = () => {
         setPigmentoSeleccionado(null)
-        setDialogAbierto(false)
+        setDialogAbierto(null)
     }
 
     return(
@@ -76,10 +77,10 @@ export default function TablaInventarioPigmentos({pigmentos, onActualizado}: Pro
                                         </Button>
                                         </DropdownMenuTrigger>
                                         <DropdownMenuContent align="end">
-                                        <DropdownMenuItem onClick={() => abrirDialog(pigmento)}>
+                                        <DropdownMenuItem onClick={() => abrirDialog("ajustar", pigmento)}>
                                             Ajuste manual
                                         </DropdownMenuItem>
-                                        <DropdownMenuItem onClick={() => abrirDialog(pigmento)}>
+                                        <DropdownMenuItem onClick={() => abrirDialog("historial", pigmento)}>
                                             Historial de ajustes
                                         </DropdownMenuItem>
                                         </DropdownMenuContent>
@@ -92,7 +93,7 @@ export default function TablaInventarioPigmentos({pigmentos, onActualizado}: Pro
                     {pigmentos.length === 0 && (
                         <TableRow>
                             <TableCell colSpan={8} className="text-center text-muted-foreground py-8">
-                                No hay materias primas registradas.
+                                No hay Pigmentos registrados.
                             </TableCell>
                         </TableRow>
                     )}
@@ -101,10 +102,19 @@ export default function TablaInventarioPigmentos({pigmentos, onActualizado}: Pro
             </Table>
 
             <DialogAjusteManualPigmento
-               open={dialogAbierto}
+               open={dialogAbierto === "ajustar"}
                pigmento={pigmentoSeleccionado}
                onClose={cerrarDialog}
                onSuccess={onActualizado} 
+            />
+
+            <DialogHistorialMovimientos
+                open={dialogAbierto === "historial"}
+                onClose={cerrarDialog}
+                inventarioId={pigmentoSeleccionado?.id ?? ""}
+                tipoInventario="pigmentos"
+                titulo={pigmentoSeleccionado?.color ?? ""}
+                subtitulo={pigmentoSeleccionado?.categoriaColor}
             />
         </>
     )

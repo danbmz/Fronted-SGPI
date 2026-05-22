@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button"
 import { MoreHorizontal, AlertTriangle } from "lucide-react"
 import DialogAjusteManualMateriaPrima from "./DialogAjusteManualMateriaPrima"
 import { colorSubtipo } from "@/features/catalogo/components/materiaPrima/TablaMateriasPrimas"
+import DialogHistorialMovimientos from "../movimientos/DialogHistorialMovimientos"
 
 
 interface Props {
@@ -21,16 +22,16 @@ interface Props {
 
 export default function TablaInventarioMateriasPrimas({ materiasPrimas, onActualizada }: Props) {
   const [seleccionada, setSeleccionada] = useState<InventarioMateriaPrima | null>(null)
-  const [dialogAbierto, setDialogAbierto] = useState(false)
+  const [dialogAbierto, setDialogAbierto] = useState<"ajustar" | "historial" | null>(null)
 
-  const abrirDialog = (materiaPrima: InventarioMateriaPrima) => {
+  const abrirDialog = (tipo: "ajustar" | "historial",materiaPrima: InventarioMateriaPrima) => {
     setSeleccionada(materiaPrima)
-    setDialogAbierto(true)
+    setDialogAbierto(tipo)
   }
 
   const cerrarDialog = () => {
     setSeleccionada(null)
-    setDialogAbierto(false)
+    setDialogAbierto(null)
   }
 
   return (
@@ -81,10 +82,10 @@ export default function TablaInventarioMateriasPrimas({ materiasPrimas, onActual
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
-                      <DropdownMenuItem onClick={() => abrirDialog(m)}>
+                      <DropdownMenuItem onClick={() => abrirDialog("ajustar", m)}>
                         Ajuste manual
                       </DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => abrirDialog(m)}>
+                      <DropdownMenuItem onClick={() => abrirDialog("historial", m)}>
                         Historial de ajustes
                       </DropdownMenuItem>
                     </DropdownMenuContent>
@@ -104,10 +105,19 @@ export default function TablaInventarioMateriasPrimas({ materiasPrimas, onActual
       </Table>
 
       <DialogAjusteManualMateriaPrima
-        open={dialogAbierto}
+        open={dialogAbierto === "ajustar"}
         materiaPrima={seleccionada}
         onClose={cerrarDialog}
         onSuccess={onActualizada}
+      />
+
+      <DialogHistorialMovimientos
+        open={dialogAbierto === "historial"}
+        onClose={cerrarDialog}
+        inventarioId={seleccionada?.id ?? ""}
+        tipoInventario="materias_primas"
+        titulo={seleccionada?.nombre ?? ""}
+        subtitulo={seleccionada?.codigoInterno}
       />
     </>
   )

@@ -30,7 +30,7 @@ export default function DialogAjusteManualPigmento({open, pigmento, onClose, onS
         if(pigmento) {
             setValue("stockNuevo", pigmento.stockActual)
         }
-    }, [])
+    }, [pigmento, setValue])
 
     const onSubmit = async (data: AjusteManualForm) => {
         if(!user || !pigmento) return
