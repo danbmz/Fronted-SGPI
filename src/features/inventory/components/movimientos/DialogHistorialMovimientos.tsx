@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
 import type { MovimientoInventario } from "@/validations/inventario/inventarioValidations"
-import { getHistorialMovimientos } from "../../services/history/historialMovimientosService"
+import { getHistorialMovimientos } from "../../services/movimientos/historialMovimientosService"
 import {
   Dialog, DialogContent, DialogHeader,
   DialogTitle, DialogDescription
@@ -10,6 +10,9 @@ import {
   TableHead, TableHeader, TableRow
 } from "@/components/ui/table"
 import { ArrowUpCircle, ArrowDownCircle, SlidersHorizontal } from "lucide-react"
+import { Label } from "@/components/ui/label"
+import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button"
 
 interface Props {
   open: boolean
@@ -43,6 +46,8 @@ export default function DialogHistorialMovimientos({
 }: Props) {
   const [movimientos, setMovimientos] = useState<MovimientoInventario[]>([])
   const [loading, setLoading] = useState(true)
+  const [fechaInicio, setFechaInicio] = useState("")
+  const [fechaFin, setFechaFin] = useState("")
 
   useEffect(() => {
     if (!open) return
@@ -56,7 +61,27 @@ export default function DialogHistorialMovimientos({
       }
     }
     fetchHistorial()
+
+    // Limpia filtros al abrir
+    setFechaInicio("")
+    setFechaFin("")
   }, [open, inventarioId, tipoInventario])
+
+  const handleLimpiarFiltros = () => {
+    setFechaInicio("")
+    setFechaFin("")
+  }
+
+  const movimientosFiltrados = movimientos.filter(m => {
+    const fecha = new Date(m.fecha)
+    const inicio = fechaInicio ? new Date(fechaInicio) : null
+    const fin = fechaFin ? new Date(`${fechaFin}T23:59:59`) : null
+
+    if (inicio && fecha < inicio) return false
+    if (fin && fecha > fin) return false
+    return true
+  })
+
 
   const formatFecha = (fecha: string) => {
     return new Date(fecha).toLocaleString("es-MX", {
@@ -75,9 +100,39 @@ export default function DialogHistorialMovimientos({
           </DialogDescription>
         </DialogHeader>
 
+                {/* Filtros de fecha */}
+        <div className="flex items-end gap-3 flex-wrap">
+          <div className="flex flex-col gap-1">
+            <Label className="text-xs">Desde</Label>
+            <Input
+              type="date"
+              value={fechaInicio}
+              onChange={e => setFechaInicio(e.target.value)}
+              className="w-40"
+            />
+          </div>
+          <div className="flex flex-col gap-1">
+            <Label className="text-xs">Hasta</Label>
+            <Input
+              type="date"
+              value={fechaFin}
+              onChange={e => setFechaFin(e.target.value)}
+              className="w-40"
+            />
+          </div>
+          {(fechaInicio || fechaFin) && (
+            <Button variant="ghost" size="sm" onClick={handleLimpiarFiltros}>
+              Limpiar filtros
+            </Button>
+          )}
+          <span className="text-xs text-muted-foreground ml-auto">
+            {movimientosFiltrados.length} de {movimientos.length} registros
+          </span>
+        </div>
+
         {loading ? (
           <p className="text-muted-foreground py-4 text-sm">Cargando historial...</p>
-        ) : movimientos.length === 0 ? (
+        ) : movimientosFiltrados.length === 0 ? (
           <p className="text-muted-foreground py-4 text-sm text-center">
             No hay movimientos registrados.
           </p>
@@ -95,7 +150,7 @@ export default function DialogHistorialMovimientos({
               </TableRow>
             </TableHeader>
             <TableBody>
-              {movimientos.map((m) => (
+              {movimientosFiltrados.map((m) => (
                 <TableRow key={m.id}>
                   <TableCell className="text-sm text-muted-foreground whitespace-nowrap">
                     {formatFecha(m.fecha)}

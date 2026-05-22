@@ -55,14 +55,14 @@ export default function TablaProductosInventario({productos, onActualizado}: Pro
                                 <TableCell>
                                     <div className="flex items-center gap-2">
                                         <span className={stockBajo ? "text-red-600 font-medium" : ""}>
-                                        {producto.stockActual} kg
+                                        {producto.stockActual} pzas
                                         </span>
                                         {stockBajo && (
                                         <AlertTriangle size={14} className="text-red-600" />
                                         )}
                                     </div>
                                 </TableCell>
-                                <TableCell>{producto.stockMinimo} Kg</TableCell>
+                                <TableCell>{producto.stockMinimo} pzas</TableCell>
                                 <TableCell>{producto.ultimoMovimiento}</TableCell>
                                 <TableCell>{producto.ubicacion}</TableCell>
                                 <TableCell>
