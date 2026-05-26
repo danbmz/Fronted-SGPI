@@ -2,7 +2,7 @@ import { Navigate, type RouteObject } from 'react-router-dom'
 import ProtectedRoute from '../../../shared/components/ProtectedRoute'
 import DashboardLayout from '../pages/DashboardLayout'
 import AdminDashboard from '../pages/admin/AdminDashboard'
-import ProductionOrders from '@/features/ordenes/pages/ProductionOrders'
+import OrdenesProduccion from '@/features/ordenes/pages/OrdenesProduccion'
 import SupervisorDashboard from '../pages/supervisor/SupervisorDashboard'
 import Usuarios from '@/features/usuarios/pages/Usuarios'
 import AuditLog from '@/features/auditLogs/pages/AuditLog'
@@ -28,10 +28,10 @@ export const dashboardRoutes: RouteObject[] = [
         children: [
           { index: true, element: <Navigate to="inicio" replace /> },
           { path: 'dashboard', element: <AdminDashboard /> },
-          { path: 'ordenes', element: <ProductionOrders /> },
-          { path: 'avances-turno', element: <ProductionOrders /> },
-          { path: 'tiempos-paro', element: <ProductionOrders /> },
-          { path: 'molino', element: <ProductionOrders /> },
+          { path: 'ordenes', element: <OrdenesProduccion /> },
+          { path: 'avances-turno', element: <OrdenesProduccion /> },
+          { path: 'tiempos-paro', element: <OrdenesProduccion /> },
+          { path: 'molino', element: <OrdenesProduccion /> },
           { path: 'materias-primas', element: <MateriasPrimasInventario /> },
           { path: 'pigmentos', element: <PigmentosInventario /> },
           { path: 'producto-terminado', element: <ProductoInventario /> },
@@ -42,7 +42,7 @@ export const dashboardRoutes: RouteObject[] = [
           { path: 'materia-prima-catalogo', element: <MateriasPrimas /> },
           { path: 'pigmentos-catalogo', element: <Pigmentos /> },
           { path: 'motivos-paro', element: <MotivosParo /> },
-          { path: 'reportes', element: <ProductionOrders /> },
+          { path: 'reportes', element: <OrdenesProduccion /> },
           { path: 'usuarios', element: <Usuarios /> },
           { path: 'auditoria', element: <AuditLog /> }, 
         ],

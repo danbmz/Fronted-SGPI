@@ -44,6 +44,7 @@ export const inventarioProductoTerminadoSchema = z.object({
 // ── Molido ───────────────────────────────────────────────────────
 export const inventarioMolidoSchema = z.object({
   id: z.string(),
+  materiaPrimaId: z.string(), 
   stockActual: z.number(),
   colorAproximado: z.string(),
   ultimaEntrada: z.string(),
