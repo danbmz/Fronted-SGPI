@@ -61,10 +61,6 @@ export default function Paso4Resumen({ paso1, paso2, paso3, guardando, onGuardar
         <Fila label="Proceso" valor={paso3.proceso} />
         <Fila label="Cavidades" valor={String(paso3.cavidades)} />
         <Fila label="Ciclo estándar" valor={`${paso3.cicloEstandarSeg} seg`} />
-        <Fila
-          label="Operadores"
-          valor={paso3.operadores.map(o => `${o.nombre} (${o.numeroEmpleado})`).join(", ")}
-        />
       </Seccion>
 
       {/* Cálculos automáticos */}

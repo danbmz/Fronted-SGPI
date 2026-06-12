@@ -16,6 +16,7 @@ import MateriasPrimas from '@/features/catalogo/pages/MateriasPrimas'
 import MateriasPrimasInventario from '@/features/inventory/pages/MateriasPrimasInventario'
 import PigmentosInventario from '@/features/inventory/pages/PigmentosInventario'
 import ProductoInventario from '@/features/inventory/pages/ProductoTerminado'
+import AvancesTurno from '@/features/avancesTurno/pages/supervisor/AvancesTurno'
 
 export const dashboardRoutes: RouteObject[] = [
   // ── Admin ──────────────────────────────────
@@ -60,6 +61,7 @@ export const dashboardRoutes: RouteObject[] = [
         children: [
           { index: true, element: <Navigate to="inicio" replace /> },
           { path: 'dashboard', element: <SupervisorDashboard /> },
+          { path: 'avances-turno', element: <AvancesTurno /> },
         ],
       },
     ],

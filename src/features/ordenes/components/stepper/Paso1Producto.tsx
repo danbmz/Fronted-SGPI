@@ -57,6 +57,8 @@ export default function Paso1Producto({ defaultValues, onNext, onCancel }: Props
             setValue("producto", producto.nombre)
             setValue("codigoBarras", producto.codigo)
             setValue("pesoUnitarioGr", producto.peso)
+            setValue("cavidades", producto.cavidades)       // ← agregar
+            setValue("cicloEstandarSeg", producto.ciclo) // ← agregar
           }}
         >
           <SelectTrigger>

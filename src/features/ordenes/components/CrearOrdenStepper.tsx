@@ -127,6 +127,7 @@ export default function CrearOrdenStepper({ open, onClose, onSuccess }: Props) {
           )}
           {pasoActual === 2 && (
             <Paso3Produccion
+              paso1={paso1!}
               defaultValues={paso3}
               onNext={handlePaso3}
               onBack={() => setPasoActual(1)}

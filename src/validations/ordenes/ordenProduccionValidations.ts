@@ -34,7 +34,9 @@ export const paso1Schema = z.object({
     .positive("El total debe ser mayor a 0"),
   clienteDestino: z.string().min(1, "El cliente o destino es requerido"),
   remision: z.string().optional(),
-  observaciones: z.string().optional()
+  observaciones: z.string().optional(),
+  cavidades: z.number(),       // ← agregar
+  cicloEstandarSeg: z.number() // ← agregar
 })
 
 // Paso 2 — Materiales
@@ -68,14 +70,7 @@ export const paso3Schema = z.object({
     .positive("Las cavidades deben ser mayor a 0"),
   cicloEstandarSeg: z
     .number({ message: "El ciclo debe ser un valor numérico" })
-    .positive("El ciclo debe ser mayor a 0"),
-  operadores: z
-    .array(z.object({
-      id: z.string(),
-      nombre: z.string(),
-      numeroEmpleado: z.string()
-    }))
-    .min(1, "Asigna al menos un operador")
+    .positive("El ciclo debe ser mayor a 0")
 })
 
 // Tipos inferidos
@@ -124,7 +119,6 @@ export interface OrdenProduccion {
   proceso: string
   cavidades: number
   cicloEstandarSeg: number
-  operadores: { id: string; nombre: string; numeroEmpleado: string }[]
   // Calculados
   piezasPorHora: number
   piezasPorTurno: number
