@@ -31,13 +31,12 @@ export default function TablaOrdenesActivas({
       a.estado === "abierto"
     )
   }
-    console.log(avances)
-    console.log(ordenes)
-    const calcularPiezas = (ordenId: string): number => {
-        return avances
-            .filter(a => a.ordenId === ordenId)
-            .reduce((total, avance) => total + avance.piezasBuenas, 0)
-    }
+
+  const calcularPiezas = (ordenId: string): number => {
+      return avances
+          .filter(a => a.ordenId === ordenId)
+          .reduce((total, avance) => total + avance.piezasBuenas, 0)
+  }
 
   const colorEstado: Record<string, string> = {
     activa:      "bg-blue-100 text-blue-700",
