@@ -1,6 +1,6 @@
 import { Navigate, Outlet } from 'react-router-dom'
 import { useAuth } from '../../features/auth/hooks/useAuth'
-import type { Role } from '../../store/authStore'
+import type { Role } from '@/types/usuario'
 
 interface ProtectedRouteProps {
   allowedRoles?: Role[]
@@ -8,7 +8,7 @@ interface ProtectedRouteProps {
 
 const roleDashboard = {
   admin: "/admin/dashboard",
-  supervisor: "/supervisor/dashboard",
+  supervisor: "/supervisor/avances-turno",
 }
 
 export default function ProtectedRoute({ allowedRoles }: ProtectedRouteProps) {

@@ -3,7 +3,6 @@ import ProtectedRoute from '../../../shared/components/ProtectedRoute'
 import DashboardLayout from '../pages/DashboardLayout'
 import AdminDashboard from '../pages/admin/AdminDashboard'
 import OrdenesProduccion from '@/features/ordenes/pages/OrdenesProduccion'
-import SupervisorDashboard from '../pages/supervisor/SupervisorDashboard'
 import Usuarios from '@/features/usuarios/pages/Usuarios'
 import AuditLog from '@/features/auditLogs/pages/AuditLog'
 import Operadores from '@/features/catalogo/pages/Operadores'
@@ -61,7 +60,6 @@ export const dashboardRoutes: RouteObject[] = [
         element: <DashboardLayout />,
         children: [
           { index: true, element: <Navigate to="inicio" replace /> },
-          { path: 'dashboard', element: <SupervisorDashboard /> },
           { path: 'avances-turno', element: <AvancesTurno /> },
         ],
       },

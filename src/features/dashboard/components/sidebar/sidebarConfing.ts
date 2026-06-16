@@ -31,10 +31,6 @@ export const sidebarItems: Record<"admin" | "supervisor", SidebarItem[]> = {
     { section: "ADMINISTRACIÓN", label: "Auditoría", path: "/admin/auditoria", icon: ShieldCheck },
   ],
   supervisor: [
-    { section: "PRINCIPAL", label: "Dashboard", path: "/supervisor/dashboard", icon: LayoutDashboard, exact: true },
-    { section: "PRINCIPAL", label: "Órdenes", path: "/supervisor/ordenes", icon: ClipboardList },
-    { section: "OPERACIONES", label: "Avances de turno", path: "/supervisor/avances-turno", icon: TrendingUp },
-    { section: "OPERACIONES", label: "Tiempos paro", path: "/supervisor/tiempos-paro", icon: Timer },
-    { section: "OPERACIONES", label: "Molino", path: "/supervisor/molino", icon: Cog },
+    { section: "OPERACIONES", label: "Avances de turno", path: "/supervisor/avances-turno", icon: TrendingUp, exact: true },
   ],
 }
