@@ -1,0 +1,28 @@
+[
+  {
+    "id": "1",
+    "ordenId": "2",
+    "folio": "OP-2026-002",
+    "producto": "Colador #3",
+    "color": "Verde",
+    "materialBase": "Polipropileno Virgen",
+    "materiaPrimaId": "1",
+    "colorAproximado": "Verde",
+    "kgIngresados": 10.5,
+    "fecha": "2026-04-29T10:00:00Z",
+    "observaciones": "Molienda completada sin incidencias."
+  },
+  {
+    "id": "2",
+    "ordenId": "1",
+    "folio": "OP-2026-001",
+    "producto": "Jarra 2L",
+    "color": "Rojo",
+    "materialBase": "Polipropileno Virgen",
+    "materiaPrimaId": "1",
+    "colorAproximado": "Rojo",
+    "kgIngresados": 8.2,
+    "fecha": "2026-04-25T14:00:00Z",
+    "observaciones": null
+  }
+]
