@@ -18,6 +18,7 @@ import ProductoInventario from '@/features/inventory/pages/ProductoTerminado'
 import AvancesTurno from '@/features/avancesTurno/pages/supervisor/AvancesTurno'
 import SeguimientoOrdenes from '@/features/avancesTurno/pages/admin/SeguimientoOrdenes'
 import MolinoAdmin from '@/features/molino/Pages/admin/MolinoAdmin'
+import Reportes from '@/features/reportes/pages/Reportes'
 
 export const dashboardRoutes: RouteObject[] = [
   // ── Admin ──────────────────────────────────
@@ -32,7 +33,6 @@ export const dashboardRoutes: RouteObject[] = [
           { path: 'dashboard', element: <AdminDashboard /> },
           { path: 'ordenes', element: <OrdenesProduccion /> },
           { path: 'avances-turno', element: <SeguimientoOrdenes /> },
-          { path: 'tiempos-paro', element: <OrdenesProduccion /> },
           { path: 'molino', element: <MolinoAdmin /> },
           { path: 'materias-primas', element: <MateriasPrimasInventario /> },
           { path: 'pigmentos', element: <PigmentosInventario /> },
@@ -44,7 +44,7 @@ export const dashboardRoutes: RouteObject[] = [
           { path: 'materia-prima-catalogo', element: <MateriasPrimas /> },
           { path: 'pigmentos-catalogo', element: <Pigmentos /> },
           { path: 'motivos-paro', element: <MotivosParo /> },
-          { path: 'reportes', element: <OrdenesProduccion /> },
+          { path: 'reportes', element: <Reportes /> },
           { path: 'usuarios', element: <Usuarios /> },
           { path: 'auditoria', element: <AuditLog /> }, 
         ],

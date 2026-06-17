@@ -1,5 +1,5 @@
 // src/components/sidebar/sidebarConfig.ts
-import { LayoutDashboard, Users, ClipboardList, TrendingUp, Timer, Cog, Package, Droplets, BoxSelect, ShoppingBag, Wrench, FlaskConical, BarChart2, HardHat, ShieldCheck, TextAlignJustify, Package2Icon, Droplet } from "lucide-react"
+import { LayoutDashboard, Users, ClipboardList, TrendingUp, Cog, Package, Droplets, BoxSelect, ShoppingBag, Wrench, FlaskConical, BarChart2, HardHat, ShieldCheck, TextAlignJustify, Package2Icon, Droplet } from "lucide-react"
 
 export interface SidebarItem {
   label: string
@@ -14,7 +14,6 @@ export const sidebarItems: Record<"admin" | "supervisor", SidebarItem[]> = {
     { section: "PRINCIPAL", label: "Dashboard", path: "/admin/dashboard", icon: LayoutDashboard, exact: true },
     { section: "PRINCIPAL", label: "Órdenes", path: "/admin/ordenes", icon: ClipboardList },
     { section: "OPERACIONES", label: "Avances de turno", path: "/admin/avances-turno", icon: TrendingUp },
-    { section: "OPERACIONES", label: "Tiempos paro", path: "/admin/tiempos-paro", icon: Timer },
     { section: "OPERACIONES", label: "Molino", path: "/admin/molino", icon: Cog },
     { section: "INVENTARIO", label: "Materias primas", path: "/admin/materias-primas", icon: Package },
     { section: "INVENTARIO", label: "Pigmentos", path: "/admin/pigmentos", icon: Droplets },
