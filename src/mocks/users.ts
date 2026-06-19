@@ -1,10 +1,11 @@
-// src/mocks/users.js
+import type { Role } from "@/types/usuario"
+
 export interface MockUser {
   id: number
   nombre: string
   usuario: string
   password: string
-  role: "admin" | "supervisor"
+  role: Role
   activo: boolean
   createdAt: string
 }
@@ -59,5 +60,23 @@ export const mockUsers: MockUser[] = [
     role: "supervisor",
     activo: false,
     createdAt: "2023-01-01T00:00:00Z"
+  },
+  { 
+    id: 6, 
+    nombre: "Roberto Sánchez", 
+    usuario: "molino01",    
+    password: "molino123",    
+    role: "molino",    
+    activo: true, 
+    createdAt: "2026-01-01" 
+  },
+  { 
+    id: 7, 
+    nombre: "Patricia Lima",   
+    usuario: "pigmentos01", 
+    password: "pigmentos123", 
+    role: "pigmentos", 
+    activo: true, 
+    createdAt: "2026-01-01" 
   }
 ]

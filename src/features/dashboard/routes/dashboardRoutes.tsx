@@ -19,6 +19,9 @@ import AvancesTurno from '@/features/avancesTurno/pages/supervisor/AvancesTurno'
 import SeguimientoOrdenes from '@/features/avancesTurno/pages/admin/SeguimientoOrdenes'
 import MolinoAdmin from '@/features/molino/Pages/admin/MolinoAdmin'
 import Reportes from '@/features/reportes/pages/Reportes'
+import MolinoPendientes from '@/features/molino/Pages/molino/MolinoPendientes'
+import PigmentosOrdenes from '@/features/pigmentos/pages/PigmentosOrdenes'
+import Ordenes from '@/features/avancesTurno/pages/supervisor/Ordenes'
 
 export const dashboardRoutes: RouteObject[] = [
   // ── Admin ──────────────────────────────────
@@ -61,7 +64,43 @@ export const dashboardRoutes: RouteObject[] = [
         element: <DashboardLayout />,
         children: [
           { index: true, element: <Navigate to="inicio" replace /> },
-          { path: 'avances-turno', element: <AvancesTurno /> },
+          { path: 'avances', element: <AvancesTurno /> },
+          { path: 'ordenes', element: <Ordenes /> },
+          { path: 'molino', element: <AvancesTurno /> },
+        ],
+      },
+    ],
+  },
+
+  // ── Molino ─────────────────────────────
+  {
+    path: '/molino',
+    element: <ProtectedRoute allowedRoles={['molino']} />,
+    children: [
+      {
+        element: <DashboardLayout />,
+        children: [
+          { index: true, element: <Navigate to="inicio" replace /> },
+          { path: 'pendientes', element: <MolinoPendientes /> },
+          { path: 'registrar', element: <AvancesTurno /> },
+          { path: 'historial', element: <AvancesTurno /> },
+        ],
+      },
+    ],
+  },
+
+  // ── Pigmentos ─────────────────────────────
+  {
+    path: '/pigmentos',
+    element: <ProtectedRoute allowedRoles={['pigmentos']} />,
+    children: [
+      {
+        element: <DashboardLayout />,
+        children: [
+          { index: true, element: <Navigate to="inicio" replace /> },
+          { path: 'ordenes', element: <PigmentosOrdenes /> },
+          { path: 'alertas', element: <AvancesTurno /> },
+          { path: 'formulas', element: <AvancesTurno /> },
         ],
       },
     ],

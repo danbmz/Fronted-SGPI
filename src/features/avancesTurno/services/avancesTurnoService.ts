@@ -5,6 +5,21 @@ import type { OrdenProduccion } from "@/validations/ordenes/ordenProduccionValid
 import type { AuthUser } from "@/types/usuario"
 import { registrarLog } from "@/lib/auditService"
 
+export const getFechaTurnoActual = (): string => {
+  const ahora = new Date()
+  const hora = ahora.getHours()
+
+  // Si estamos entre 00:00 y 06:00 pertenecemos al turno noche de AYER
+  if (hora >= 0 && hora < 6) {
+    const ayer = new Date(ahora)
+    ayer.setDate(ahora.getDate() - 1)
+    return ayer.toLocaleDateString("sv-SE")
+  }
+
+  // Resto del día → fecha de hoy
+  return ahora.toLocaleDateString("sv-SE")
+}
+
 // Detecta el turno actual por hora
 export const detectarTurnoActual = (): "Mañana" | "Tarde" | "Noche" => {
   const hora = new Date().getHours()
@@ -14,7 +29,7 @@ export const detectarTurnoActual = (): "Mañana" | "Tarde" | "Noche" => {
 }
 
 export const getAvancesTurno = async (): Promise<AvanceTurno[]> => {
-  await new Promise(resolve => setTimeout(resolve, 500))
+  await new Promise(resolve => setTimeout(resolve, 100))
   const response = await fetch("/mocks/avancesTurno/avancesTurno.json")
   const data = await response.json()
   return data.map((a: any) => ({
@@ -51,7 +66,7 @@ export const abrirAvance = async (
     supervisorId: usuarioActivo.id,
     supervisorNombre: usuarioActivo.nombre,
     turno: turnoActual,
-    fecha: ahora.split("T")[0],
+    fecha: getFechaTurnoActual(),
     horaInicio: ahora,
     horaFin: null,
     estado: "abierto",

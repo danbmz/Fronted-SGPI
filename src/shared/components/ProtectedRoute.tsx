@@ -8,7 +8,9 @@ interface ProtectedRouteProps {
 
 const roleDashboard = {
   admin: "/admin/dashboard",
-  supervisor: "/supervisor/avances-turno",
+  supervisor: "/supervisor/ordenes",
+  molino: "/molino/pendientes",
+  pigmentos: "/pigmentos/ordenes",
 }
 
 export default function ProtectedRoute({ allowedRoles }: ProtectedRouteProps) {

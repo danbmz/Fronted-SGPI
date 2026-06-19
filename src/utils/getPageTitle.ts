@@ -18,8 +18,14 @@ const pageTitles: Record<string, string> = {
   "/admin/usuarios": "Gestión de usuarios",
   "/admin/auditoria": "Auditoría",
   "/supervisor/ordenes": "Órdenes",
-  "/supervisor/avances-turno": "Avances de turno",
-  "/supervisor/molino": "Molino",
+  "/supervisor/avances": "Avances de turno",
+  "/supervisor/molino": "Envios a molino",
+  "/molino/pendientes": "Pendientes por Moler",
+  "/molino/registrar": "Registrar Molienda",
+  "/molino/historial": "Historial",
+  "/pigmentos/ordenes": "Órdenes",
+  "/pigmentos/alertas": "Alertas",
+  "/pigmentos/formulas": "Formulas de pigmentos",
 }
 
 export function getPageTitle(pathname: string): string {

@@ -39,7 +39,9 @@ function LoginPage() {
 
       // Redirige según rol
       if (user.state.user.role === "admin") navigate("/admin/dashboard")
-      if (user.state.user.role === "supervisor") navigate("/supervisor/avances-turno")
+      if (user.state.user.role === "supervisor") navigate("/supervisor/ordenes")
+      if (user.state.user.role === "molino") navigate("/molino/pendientes")
+      if (user.state.user.role === "pigmentos") navigate("/pigmentos/ordenes")
 
     } catch (err) {
       if (err instanceof Error) {

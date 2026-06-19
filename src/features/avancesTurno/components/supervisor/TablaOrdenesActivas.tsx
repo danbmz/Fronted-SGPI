@@ -8,6 +8,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { PlayCircle } from "lucide-react"
 import DialogAbrirAvance from "./DialogAbrirAvance"
+import { getFechaTurnoActual } from "../../services/avancesTurnoService"
 
 interface Props {
   ordenes: OrdenProduccion[]
@@ -24,18 +25,19 @@ export default function TablaOrdenesActivas({
 
   // Verifica si ya existe un avance abierto para esta orden en el turno actual
   const tieneAvanceAbierto = (ordenId: string) => {
+    const fechaTurnoActual = getFechaTurnoActual();
     return avances.some(a =>
       a.ordenId === ordenId &&
       a.turno === turnoActual &&
-      a.fecha === new Date().toISOString().split("T")[0] &&
+      a.fecha === fechaTurnoActual &&
       a.estado === "abierto"
     )
   }
 
   const calcularPiezas = (ordenId: string): number => {
-      return avances
-          .filter(a => a.ordenId === ordenId)
-          .reduce((total, avance) => total + avance.piezasBuenas, 0)
+    return avances
+        .filter(a => a.ordenId === ordenId)
+        .reduce((total, avance) => total + avance.piezasBuenas, 0)
   }
 
   const colorEstado: Record<string, string> = {

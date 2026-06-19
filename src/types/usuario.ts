@@ -1,4 +1,4 @@
-export type Role = "admin" | "supervisor"
+export type Role = "admin" | "supervisor" | "molino" | "pigmentos"
 
 // Tipo completo — para gestión de usuarios (admin)
 export interface User {

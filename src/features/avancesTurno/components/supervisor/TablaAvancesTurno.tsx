@@ -27,7 +27,6 @@ export default function TablaAvancesTurno({
   const [avanceSeleccionado, setAvanceSeleccionado] = useState<AvanceTurno | null>(null)
   const [dialogAbierto, setDialogAbierto] = useState<"cerrar" | "paro" | "material" | null>(null)
 
-
   const abrirDialog = (tipo: "cerrar" | "paro" | "material", avance: AvanceTurno) => {
     setAvanceSeleccionado(avance)
     setDialogAbierto(tipo)
@@ -78,9 +77,9 @@ export default function TablaAvancesTurno({
               </TableCell>
               <TableCell className="text-sm">{formatHora(avance.horaInicio)}</TableCell>
               <TableCell className="text-sm">{formatHora(avance.horaFin)}</TableCell>
-              <TableCell>{avance.piezasBuenas.toLocaleString()}</TableCell>
-              <TableCell>{avance.piezasDefectuosas.toLocaleString()}</TableCell>
-              <TableCell>{avance.kgMerma}</TableCell>
+              <TableCell>{avance.piezasBuenas.toLocaleString() ?? 0}</TableCell>
+              <TableCell>{avance.piezasDefectuosas.toLocaleString() ?? 0}</TableCell>
+              <TableCell>{avance.kgMerma ?? 0}</TableCell>
               <TableCell>
                 {avance.tiemposParo.length > 0 ? (
                   <div className="flex flex-col">

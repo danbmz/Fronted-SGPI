@@ -1,44 +1,27 @@
 import { useState, useEffect } from "react"
-import { getOrdenesProduccion } from "@/features/ordenes/services/ordenesProduccionService"
-import { getAvancesTurno, detectarTurnoActual } from "../../services/avancesTurnoService"
-import type { OrdenProduccion } from "@/validations/ordenes/ordenProduccionValidations"
+import { getAvancesTurno, detectarTurnoActual, getFechaTurnoActual } from "../../services/avancesTurnoService"
 import type { AvanceTurno } from "@/validations/avancesTurno/avanceTurnoValidations"
-import TablaOrdenesActivas from "../../components/supervisor/TablaOrdenesActivas"
 import TablaAvancesTurno from "../../components/supervisor/TablaAvancesTurno"
 import { Clock } from "lucide-react"
 
 export default function AvancesTurno() {
-    const [ordenes, setOrdenes] = useState<OrdenProduccion[]>([])
     const [avances, setAvances] = useState<AvanceTurno[]>([])
     const [loading, setLoading] = useState(true)
     const turnoActual = detectarTurnoActual()
+    const fechaTurnoActual = getFechaTurnoActual()
 
     useEffect(() => {
         const fetchDatos = async () => {
         try {
-            const [ordenesData, avancesData] = await Promise.all([
-            getOrdenesProduccion(),
-            getAvancesTurno()
-            ])
-            // Solo muestra órdenes activas y en progreso
-            setOrdenes(ordenesData.filter(o =>
-            o.estado === "activa" || o.estado === "en_progreso"
-            ))
+            const avancesData = await getAvancesTurno()
             setAvances(avancesData)
-        } finally {
+          } finally {
             setLoading(false)
-        }
+          }
         }
         fetchDatos()
-    }, [])
-
-    const handleAvanceAbierto = (nuevoAvance: AvanceTurno, ordenActualizada: OrdenProduccion) => {
-        setAvances(prev => [nuevoAvance, ...prev])
-        setOrdenes(prev =>
-        prev.map(o => o.id === ordenActualizada.id ? ordenActualizada : o)
-        )
-    }
-
+      }, [])
+      
     const handleAvanceCerrado = (avanceCerrado: AvanceTurno) => {
         setAvances(prev =>
         prev.map(a => a.id === avanceCerrado.id ? avanceCerrado : a)
@@ -78,19 +61,6 @@ export default function AvancesTurno() {
         <p className="text-muted-foreground">Cargando datos...</p>
       ) : (
         <>
-          {/* Órdenes disponibles */}
-          <div className="flex flex-col gap-2">
-            <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-wider">
-              Órdenes activas y en progreso
-            </h3>
-            <TablaOrdenesActivas
-              ordenes={ordenes}
-              avances={avances}
-              turnoActual={turnoActual}
-              onAvanceAbierto={handleAvanceAbierto}
-            />
-          </div>
-
           {/* Avances del turno actual */}
           <div className="flex flex-col gap-2">
             <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-wider">
@@ -99,8 +69,8 @@ export default function AvancesTurno() {
             <div className="overflow-y-auto">
                 <TablaAvancesTurno
                 avances={avances.filter(a =>
-                    a.turno === turnoActual &&
-                    a.fecha === new Date().toISOString().split("T")[0]
+                      a.turno === turnoActual &&
+                      a.fecha === fechaTurnoActual
                 )}
                 onAvanceCerrado={handleAvanceCerrado}
                 onTiempoParoAgregado={handleTiempoParoAgregado}

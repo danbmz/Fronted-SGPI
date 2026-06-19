@@ -1,5 +1,4 @@
-// src/components/sidebar/sidebarConfig.ts
-import { LayoutDashboard, Users, ClipboardList, TrendingUp, Cog, Package, Droplets, BoxSelect, ShoppingBag, Wrench, FlaskConical, BarChart2, HardHat, ShieldCheck, TextAlignJustify, Package2Icon, Droplet } from "lucide-react"
+import { LayoutDashboard, Users, ClipboardList, TrendingUp, Cog, Package, Droplets, BoxSelect, ShoppingBag, Wrench, FlaskConical, BarChart2, HardHat, ShieldCheck, TextAlignJustify, Package2Icon, Droplet, Clock, Hammer, History, Bell } from "lucide-react"
 
 export interface SidebarItem {
   label: string
@@ -9,7 +8,7 @@ export interface SidebarItem {
   exact?: boolean
 }
 
-export const sidebarItems: Record<"admin" | "supervisor", SidebarItem[]> = {
+export const sidebarItems: Record<"admin" | "supervisor" | "molino" | "pigmentos", SidebarItem[]> = {
   admin: [
     { section: "PRINCIPAL", label: "Dashboard", path: "/admin/dashboard", icon: LayoutDashboard, exact: true },
     { section: "PRINCIPAL", label: "Órdenes", path: "/admin/ordenes", icon: ClipboardList },
@@ -30,6 +29,18 @@ export const sidebarItems: Record<"admin" | "supervisor", SidebarItem[]> = {
     { section: "ADMINISTRACIÓN", label: "Auditoría", path: "/admin/auditoria", icon: ShieldCheck },
   ],
   supervisor: [
-    { section: "OPERACIONES", label: "Avances de turno", path: "/supervisor/avances-turno", icon: TrendingUp, exact: true },
+    { section: "OPERACIONES", label: "Órdenes", path: "/supervisor/ordenes", icon: ClipboardList, exact: true },
+    { section: "OPERACIONES", label: "Avances de turno", path: "/supervisor/avances", icon: TrendingUp, exact: true },
+    { section: "OPERACIONES", label: "Molino", path: "/supervisor/molino", icon: Cog, exact: true },
+  ],
+  molino: [
+    { section: "OPERACIONES", label: "Pendientes", path: "/molino/pendientes", icon: Clock, exact: true },
+    { section: "OPERACIONES", label: "Registrar", path: "/molino/registrar", icon: Hammer, exact: true },
+    { section: "OPERACIONES", label: "Historial", path: "/molino/historial", icon: History, exact: true },
+  ],
+  pigmentos: [
+    { section: "OPERACIONES", label: "Órdenes", path: "/pigmentos/ordenes", icon: ClipboardList, exact: true },
+    { section: "OPERACIONES", label: "Alertas", path: "/pigmentos/alertas", icon: Bell, exact: true },
+    { section: "OPERACIONES", label: "Formulas", path: "/pigmentos/formulas", icon: FlaskConical, exact: true },
   ],
 }
