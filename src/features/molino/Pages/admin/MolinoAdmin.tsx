@@ -63,7 +63,7 @@ export default function MolinoAdmin() {
                   key={orden.id}
                   orden={orden}
                   avances={avances.filter(a => a.ordenId === orden.id)}
-                  moliendas={moliendas.filter(m => m.ordenId === orden.id)}
+                  moliendas={moliendas.filter(m => m.ordenesIds.includes(orden.id))}
                 />
               ))
             )}

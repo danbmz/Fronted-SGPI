@@ -68,10 +68,9 @@ export default function AvancesTurno() {
             </h3>
             <div className="overflow-y-auto">
                 <TablaAvancesTurno
-                avances={avances.filter(a =>
-                      a.turno === turnoActual &&
-                      a.fecha === fechaTurnoActual
-                )}
+                avances={avances}
+                turnoActual={turnoActual}
+                fechaActual={fechaTurnoActual}
                 onAvanceCerrado={handleAvanceCerrado}
                 onTiempoParoAgregado={handleTiempoParoAgregado}
                 />

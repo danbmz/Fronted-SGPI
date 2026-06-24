@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import type { AvanceTurno } from "@/validations/avancesTurno/avanceTurnoValidations"
 import {
   Table, TableBody, TableCell,
@@ -14,22 +14,53 @@ import { MoreHorizontal } from "lucide-react"
 import DialogCerrarAvance from "./DialogCerrarAvance"
 import DialogRegistrarParo from "./DialogRegistrarParo"
 import DialogSolicitarMaterial from "./DialogSolicitarMaterial"
+import type { OrdenProduccion } from "@/validations/ordenes/ordenProduccionValidations"
+import { getOrdenesProduccion } from "@/features/ordenes/services/ordenesProduccionService"
+import { toast } from "sonner"
+import { useAuth } from "@/features/auth/hooks/useAuth"
 
 interface Props {
   avances: AvanceTurno[]
+  turnoActual: string
+  fechaActual: string
   onAvanceCerrado: (avance: AvanceTurno) => void
   onTiempoParoAgregado: (avance: AvanceTurno) => void
 }
 
 export default function TablaAvancesTurno({
-  avances, onAvanceCerrado, onTiempoParoAgregado
+  avances, turnoActual, fechaActual, onAvanceCerrado, onTiempoParoAgregado
 }: Props) {
+  const user = useAuth()
   const [avanceSeleccionado, setAvanceSeleccionado] = useState<AvanceTurno | null>(null)
   const [dialogAbierto, setDialogAbierto] = useState<"cerrar" | "paro" | "material" | null>(null)
+  const [ordenes, setOrdenes] = useState<OrdenProduccion[]>([])
+
+  useEffect(() => {
+      const fetchDatos = async () => {
+        try {
+            const ordenesData = await getOrdenesProduccion()
+            // Solo muestra órdenes activas y en progreso
+            setOrdenes(ordenesData.filter(o =>
+            o.estado === "activa" || o.estado === "en_progreso"
+            ))
+        } catch(error) {
+            toast.error("No se pudieron cargar los datos correctamente.")
+        }
+      }
+      fetchDatos()
+  },[])
+
+  const avancesActivos = avances.filter(a =>
+        a.estado === "abierto" ||
+        (a.turno === turnoActual && a.fecha === fechaActual) && 
+        a.supervisorId === user.user?.id
+  )
 
   const abrirDialog = (tipo: "cerrar" | "paro" | "material", avance: AvanceTurno) => {
     setAvanceSeleccionado(avance)
     setDialogAbierto(tipo)
+    console.log(`Avance abierto: ${avance.id}`, avance)
+    console.log("Duplicacion de datos entre formularios")
   }
 
   const cerrarDialog = () => {
@@ -66,7 +97,7 @@ export default function TablaAvancesTurno({
           </TableRow>
         </TableHeader>
         <TableBody>
-          {avances.map((avance) => (
+          {avancesActivos.map((avance) => (
             <TableRow key={avance.id}>
               <TableCell className="font-mono text-sm">{avance.folio}</TableCell>
               <TableCell>
@@ -129,7 +160,7 @@ export default function TablaAvancesTurno({
               </TableCell>
             </TableRow>
           ))}
-          {avances.length === 0 && (
+          {avancesActivos.length === 0 && (
             <TableRow>
               <TableCell colSpan={10} className="text-center text-muted-foreground py-8">
                 No hay avances registrados en este turno.
@@ -142,6 +173,8 @@ export default function TablaAvancesTurno({
       <DialogCerrarAvance
         open={dialogAbierto === "cerrar"}
         avance={avanceSeleccionado}
+        orden={ordenes.find(o => o.id === avanceSeleccionado?.ordenId) ?? null}
+        avancesAnteriores={avancesActivos}
         onClose={cerrarDialog}
         onSuccess={onAvanceCerrado}
       />

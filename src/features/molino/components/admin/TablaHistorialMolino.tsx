@@ -125,11 +125,16 @@ export default function TablaHistorialMolino({ moliendas }: Props) {
               <TableCell className="text-sm text-muted-foreground whitespace-nowrap">
                 {formatFecha(m.fecha)}
               </TableCell>
-              <TableCell className="font-mono text-sm">{m.folio}</TableCell>
               <TableCell>
-                <div className="flex flex-col">
-                  <span className="text-sm font-medium">{m.producto}</span>
-                  <span className="text-xs text-muted-foreground">{m.color}</span>
+                <div className="flex flex-wrap gap-1">
+                  {m.folios.map(folio => (
+                    <span
+                      key={folio}
+                      className="font-mono text-xs bg-muted px-1.5 py-0.5 rounded"
+                    >
+                      {folio}
+                    </span>
+                  ))}
                 </div>
               </TableCell>
               <TableCell className="text-sm">{m.materialBase}</TableCell>

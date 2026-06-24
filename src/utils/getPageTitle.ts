@@ -1,4 +1,3 @@
-// src/utils/getPageTitle.ts
 const pageTitles: Record<string, string> = {
   "/admin/dashboard": "Dashboard",
   "/admin/ordenes": "Órdenes",
@@ -19,10 +18,8 @@ const pageTitles: Record<string, string> = {
   "/admin/auditoria": "Auditoría",
   "/supervisor/ordenes": "Órdenes",
   "/supervisor/avances": "Avances de turno",
-  "/supervisor/molino": "Envios a molino",
   "/molino/pendientes": "Pendientes por Moler",
   "/molino/registrar": "Registrar Molienda",
-  "/molino/historial": "Historial",
   "/pigmentos/ordenes": "Órdenes",
   "/pigmentos/alertas": "Alertas",
   "/pigmentos/formulas": "Formulas de pigmentos",

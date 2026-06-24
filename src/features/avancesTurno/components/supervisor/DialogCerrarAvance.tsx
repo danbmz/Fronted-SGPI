@@ -14,29 +14,32 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { useEffect, useState } from "react"
 import { CheckCircle, Save } from "lucide-react"
+import type { OrdenProduccion } from "@/validations/ordenes/ordenProduccionValidations"
 
 interface Props {
   open: boolean
   avance: AvanceTurno | null
+  orden: OrdenProduccion | null        // ← necesario para calcular piezas extra
+  avancesAnteriores: AvanceTurno[]     // ← para sumar piezas ya producidas
   onClose: () => void
   onSuccess: (avance: AvanceTurno) => void
 }
 
-export default function DialogCerrarAvance({ open, avance, onClose, onSuccess }: Props) {
+export default function DialogCerrarAvance({ open, avance, orden, avancesAnteriores, onClose, onSuccess }: Props) {
   const { user } = useAuth()
   const [isLoading, setIsLoading] = useState(false)
   const {
     register, handleSubmit, reset, getValues,
-    formState: { errors, isSubmitting, isDirty }
+    formState: { errors, isSubmitting, isDirty}
   } = useForm<CerrarAvanceForm>({
     resolver: zodResolver(cerrarAvanceSchema),
     defaultValues: {
-        piezasBuenas: undefined,
-        piezasDefectuosas: undefined,
+        piezasBuenas: 0,
+        piezasDefectuosas: 0,
         kgMerma: undefined,
         kgPlasta: undefined,
         kgSobrante: undefined,
-        productosExtra: undefined,
+        piezasCambioColor: undefined,
         observaciones: ""
     }
   })
@@ -55,8 +58,8 @@ export default function DialogCerrarAvance({ open, avance, onClose, onSuccess }:
             piezasDefectuosas: avance.piezasDefectuosas,
             kgMerma: avance.kgMerma,
             kgPlasta: avance.kgPlasta,
-            kgSobrante: avance.kgSobrante,
-            productosExtra: avance.productosExtra,
+            kgSobrante: avance.kgSobrante || undefined,
+            piezasCambioColor: avance.piezasCambioColor || undefined,
             observaciones: avance.observaciones ?? ""
         })
         }
@@ -80,9 +83,10 @@ export default function DialogCerrarAvance({ open, avance, onClose, onSuccess }:
     }
 
     const onSubmit = async (data: CerrarAvanceForm) => {
-    if (!user || !avance) return
+    if (!user || !avance || !orden) return
     try {
-        const avanceCerrado = await cerrarAvance(avance, data, user)
+        const avanceCerrado = await cerrarAvance(avance, data, orden, avancesAnteriores, user)
+        console.log(`Avance creado: `, avanceCerrado)
         toast.success("Avance de turno cerrado correctamente.")
         onSuccess(avanceCerrado)
         reset()
@@ -157,16 +161,16 @@ export default function DialogCerrarAvance({ open, avance, onClose, onSuccess }:
                 {errors.piezasDefectuosas && <p className="text-xs text-red-500">{errors.piezasDefectuosas.message}</p>}
                 </div>
                 <div className="flex flex-col gap-1">
-                <Label>Productos extra</Label>
+                <Label>Piezas por Cambio de color</Label>
                 <Input
                     type="number"
-                    {...register("productosExtra", { 
+                    {...register("piezasCambioColor", { 
                         setValueAs: v => v === "" || isNaN(v) ? undefined : Number(v)
                      })}
                     placeholder="0"
                 />
-                <p className="text-xs text-muted-foreground">Van automáticamente a STOCK.</p>
-                {errors.productosExtra && <p className="text-xs text-red-500">{errors.productosExtra.message}</p>}
+                <p className="text-xs text-muted-foreground">Piezas de transición entre colores — van a molino.</p>
+                {errors.piezasCambioColor && <p className="text-xs text-red-500">{errors.piezasCambioColor.message}</p>}
                 </div>
             </div>
             </div>

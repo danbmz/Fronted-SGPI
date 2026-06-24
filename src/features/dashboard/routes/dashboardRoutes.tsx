@@ -22,6 +22,7 @@ import Reportes from '@/features/reportes/pages/Reportes'
 import MolinoPendientes from '@/features/molino/Pages/molino/MolinoPendientes'
 import PigmentosOrdenes from '@/features/pigmentos/pages/PigmentosOrdenes'
 import Ordenes from '@/features/avancesTurno/pages/supervisor/Ordenes'
+import MolinoRegistrar from '@/features/molino/Pages/molino/MolinoRegistrar'
 
 export const dashboardRoutes: RouteObject[] = [
   // ── Admin ──────────────────────────────────
@@ -66,7 +67,6 @@ export const dashboardRoutes: RouteObject[] = [
           { index: true, element: <Navigate to="inicio" replace /> },
           { path: 'avances', element: <AvancesTurno /> },
           { path: 'ordenes', element: <Ordenes /> },
-          { path: 'molino', element: <AvancesTurno /> },
         ],
       },
     ],
@@ -82,8 +82,7 @@ export const dashboardRoutes: RouteObject[] = [
         children: [
           { index: true, element: <Navigate to="inicio" replace /> },
           { path: 'pendientes', element: <MolinoPendientes /> },
-          { path: 'registrar', element: <AvancesTurno /> },
-          { path: 'historial', element: <AvancesTurno /> },
+          { path: 'registrar', element: <MolinoRegistrar /> },
         ],
       },
     ],

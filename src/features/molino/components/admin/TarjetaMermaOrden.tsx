@@ -112,6 +112,11 @@ export default function TarjetaMermaOrden({ orden, avances, moliendas }: Props) 
                   </div>
                   <div className="flex items-center gap-3 text-xs text-muted-foreground">
                     <span>{molienda.materialBase} — {molienda.colorAproximado}</span>
+                    {molienda.ordenesIds.length > 1 && (
+                      <span className="text-blue-600">
+                        Compartida con {molienda.ordenesIds.length - 1} orden(es) más
+                      </span>
+                    )}
                     <span>{formatFecha(molienda.fecha)} {formatHora(molienda.fecha)}</span>
                   </div>
                 </div>

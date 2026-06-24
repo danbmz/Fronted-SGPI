@@ -1,4 +1,4 @@
-import { LayoutDashboard, Users, ClipboardList, TrendingUp, Cog, Package, Droplets, BoxSelect, ShoppingBag, Wrench, FlaskConical, BarChart2, HardHat, ShieldCheck, TextAlignJustify, Package2Icon, Droplet, Clock, Hammer, History, Bell } from "lucide-react"
+import { LayoutDashboard, Users, ClipboardList, TrendingUp, Cog, Package, Droplets, BoxSelect, ShoppingBag, Wrench, FlaskConical, BarChart2, HardHat, ShieldCheck, TextAlignJustify, Package2Icon, Droplet, Clock, Hammer, Bell } from "lucide-react"
 
 export interface SidebarItem {
   label: string
@@ -31,12 +31,10 @@ export const sidebarItems: Record<"admin" | "supervisor" | "molino" | "pigmentos
   supervisor: [
     { section: "OPERACIONES", label: "Órdenes", path: "/supervisor/ordenes", icon: ClipboardList, exact: true },
     { section: "OPERACIONES", label: "Avances de turno", path: "/supervisor/avances", icon: TrendingUp, exact: true },
-    { section: "OPERACIONES", label: "Molino", path: "/supervisor/molino", icon: Cog, exact: true },
   ],
   molino: [
     { section: "OPERACIONES", label: "Pendientes", path: "/molino/pendientes", icon: Clock, exact: true },
     { section: "OPERACIONES", label: "Registrar", path: "/molino/registrar", icon: Hammer, exact: true },
-    { section: "OPERACIONES", label: "Historial", path: "/molino/historial", icon: History, exact: true },
   ],
   pigmentos: [
     { section: "OPERACIONES", label: "Órdenes", path: "/pigmentos/ordenes", icon: ClipboardList, exact: true },

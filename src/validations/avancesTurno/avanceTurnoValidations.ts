@@ -30,6 +30,34 @@ export const solicitarMaterialSchema = z.object({
   motivo: z.string().optional()
 })
 
+export const confirmacionMolinoSchema = z.object({
+  confirmado: z.boolean(),
+  kgMermaRecibida: z.number().min(0),
+  kgPlastaRecibida: z.number().min(0),
+  piezasMalasRecibidas: z.number().int().min(0),
+  piezasCambioColorRecibidas: z.number().int().min(0),
+  fecha: z.string(),
+  hayDiferencia: z.boolean() // ← para saber si hubo discrepancia
+})
+
+// Schema para el form de diferencia — solo se usa cuando hay discrepancia
+export const reportarDiferenciaSchema = z.object({
+  kgMermaRecibida: z
+    .number({ message: "Debe ser un valor numérico" })
+    .min(0, "No puede ser negativo"),
+  kgPlastaRecibida: z
+    .number({ message: "Debe ser un valor numérico" })
+    .min(0, "No puede ser negativo"),
+  piezasMalasRecibidas: z
+    .number({ message: "Debe ser un valor numérico" })
+    .int()
+    .min(0, "No puede ser negativo"),
+  piezasCambioColorRecibidas: z
+    .number({ message: "Debe ser un valor numérico" })
+    .int()
+    .min(0, "No puede ser negativo")
+})
+
 export const avanceTurnoSchema = z.object({
   id: z.string(),
   ordenId: z.string(),
@@ -50,16 +78,12 @@ export const avanceTurnoSchema = z.object({
   kgMerma: z.number(),
   kgPlasta: z.number(),
   kgSobrante: z.number(),
-  productosExtra: z.number(),
+  piezasCambioColor: z.number(),
   observaciones: z.string().nullable(),
   tiemposParo: z.array(registrarParoSchema),
-  solicitudesMaterial: z.array(solicitudMaterialSchema)
+  solicitudesMaterial: z.array(solicitudMaterialSchema),
+  confirmacionMolino: confirmacionMolinoSchema.nullable() 
 })
-
-// Schema para crear un nuevo avance
-// export const crearAvanceSchema = z.object({
-//   ordenId: z.string().min(1, "Selecciona una orden"),
-// })
 
 // Schema para cerrar un avance
 export const cerrarAvanceSchema = z.object({
@@ -70,7 +94,7 @@ export const cerrarAvanceSchema = z.object({
   piezasDefectuosas: z
     .number({ message: "Debe ser un valor numérico" })
     .int()
-    .min(1, "Ingresa un valor válido"),
+    .min(0, "Ingresa un valor válido"),
   kgMerma: z
     .number({ message: "Debe ser un valor numérico" })
     .min(1, "Ingresa un valor válido"),
@@ -81,7 +105,7 @@ export const cerrarAvanceSchema = z.object({
     .number({ message: "Debe ser un valor numérico" })
     .min(0, "Ingresa un valor válido")
     .optional(),
-  productosExtra: z
+  piezasCambioColor: z
     .number({ message: "Debe ser un valor numérico" })
     .min(0, "Ingresa un valor válido")
     .optional(),
@@ -90,11 +114,11 @@ export const cerrarAvanceSchema = z.object({
 
 export type AvanceTurno = z.infer<typeof avanceTurnoSchema>
 export type RegistrarParo = z.infer<typeof registrarParoSchema>
-// export type CrearAvanceForm = z.infer<typeof crearAvanceSchema>
 export type CerrarAvanceForm = z.infer<typeof cerrarAvanceSchema>
 export type Turno = typeof turnos[number]
 export type SolicitudMaterial = z.infer<typeof solicitudMaterialSchema>
 export type SolicitarMaterialForm = z.infer<typeof solicitarMaterialSchema>
+export type ReportarDiferenciaForm = z.infer<typeof reportarDiferenciaSchema>
 
 export interface TiempoParo extends RegistrarParo {
   id: string

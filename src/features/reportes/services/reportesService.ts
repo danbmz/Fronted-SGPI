@@ -1,6 +1,4 @@
-// import { getOrdenesProduccion } from "@/features/ordenes/services/ordenesProduccionService"
 import { getAvancesTurno } from "@/features/avancesTurno/services/avancesTurnoService"
-// import { getMoliendas } from "@/features/molino/services/moliendaService"
 import { produccionSemana, parosPorMotivo } from "@/mocks/dashboard/dashboardData"
 import { ordenesCompletadas } from "@/mocks/reportes/reportesData"
 

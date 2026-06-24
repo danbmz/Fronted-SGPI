@@ -76,7 +76,8 @@ export const abrirAvance = async (
     kgMerma: 0,
     kgPlasta: 0,
     kgSobrante: 0,
-    productosExtra: 0,
+    piezasCambioColor: 0,
+    confirmacionMolino: null,
     observaciones: null,
     tiemposParo: [],
     solicitudesMaterial: []
@@ -125,18 +126,36 @@ export const guardarBorradorAvance = async (
 export const cerrarAvance = async (
   avance: AvanceTurno,
   data: CerrarAvanceForm,
+  orden: OrdenProduccion,
+  avancesAnteriores: AvanceTurno[],
   usuarioActivo: AuthUser
 ): Promise<AvanceTurno> => {
   await new Promise(resolve => setTimeout(resolve, 800))
 
   const ahora = new Date().toISOString()
 
+  // Suma piezas buenas de avances anteriores cerrados
+  const piezasProducidasPrevias = avancesAnteriores
+    .filter(a => a.estado === "cerrado")
+    .reduce((acc, a) => acc + a.piezasBuenas, 0)
+
+  const piezasProducidasTotal = piezasProducidasPrevias + data.piezasBuenas
+
+  // Calcula si hubo producción extra
+  const piezasExtra = Math.max(0, piezasProducidasTotal - orden.totalPiezas)
+
+  // Determina si la orden se completó
+  const ordenCompletada = piezasProducidasTotal >= orden.totalPiezas
+
   const avanceCerrado: AvanceTurno = {
     ...avance,
     ...data,
+    piezasCambioColor: data.piezasCambioColor ?? 0,
+    kgSobrante: data.kgSobrante ?? 0,
     horaFin: ahora,
     estado: "cerrado",
-    borradorGuardado: false
+    borradorGuardado: false,
+    confirmacionMolino: null
   }
 
   await registrarLog({
@@ -146,8 +165,34 @@ export const cerrarAvance = async (
     entidad: "AvanceTurno",
     accion: "cerrar_avance",
     entidadId: avance.id,
-    detalle: `Avance ${avance.turno} cerrado — ${data.piezasBuenas} pzas buenas, ${data.piezasDefectuosas} defectuosas, ${data.kgMerma}kg merma`
+    detalle: `Avance ${avance.turno} cerrado — ${data.piezasBuenas} pzas buenas, ${data.piezasDefectuosas} defectuosas, ${data.kgMerma}kg merma${data.piezasCambioColor ? `, ${data.piezasCambioColor} pzas cambio color` : ""}`
   })
+
+  // Log de piezas extra si las hay
+  if (piezasExtra > 0) {
+    await registrarLog({
+      usuario: usuarioActivo.usuario,
+      nombre: usuarioActivo.nombre,
+      modulo: "inventario",
+      entidad: "ProductoTerminado",
+      accion: "entrada_automatica",
+      entidadId: orden.id,
+      detalle: `${piezasExtra} piezas extra de ${orden.producto} ${orden.color} agregadas a STOCK automáticamente al completar orden ${orden.folio}`
+    })
+  }
+
+  // Log de orden completada si aplica
+  if (ordenCompletada) {
+    await registrarLog({
+      usuario: usuarioActivo.usuario,
+      nombre: usuarioActivo.nombre,
+      modulo: "ordenes",
+      entidad: "OrdenProduccion",
+      accion: "completar",
+      entidadId: orden.id,
+      detalle: `Orden ${orden.folio} completada — ${piezasProducidasTotal} piezas producidas de ${orden.totalPiezas} objetivo${piezasExtra > 0 ? `, ${piezasExtra} piezas extra a STOCK` : ""}`
+    })
+  }
 
   return avanceCerrado
 }
