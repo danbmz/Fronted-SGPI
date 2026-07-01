@@ -23,5 +23,34 @@ export const registrarMoliendaSchema = z.object({
   observaciones: z.string().optional()
 })
 
+export const confirmacionMolinoSchema = z.object({
+  confirmado: z.boolean(),
+  kgMermaRecibida: z.number().min(0),
+  kgPlastaRecibida: z.number().min(0),
+  piezasMalasRecibidas: z.number().int().min(0),
+  piezasCambioColorRecibidas: z.number().int().min(0),
+  fecha: z.string(),
+  hayDiferencia: z.boolean() // ← para saber si hubo discrepancia
+})
+
+// Schema para el form de diferencia — solo se usa cuando hay discrepancia
+export const reportarDiferenciaSchema = z.object({
+  kgMermaRecibida: z
+    .number({ message: "Debe ser un valor numérico" })
+    .min(0, "No puede ser negativo"),
+  kgPlastaRecibida: z
+    .number({ message: "Debe ser un valor numérico" })
+    .min(0, "No puede ser negativo"),
+  piezasMalasRecibidas: z
+    .number({ message: "Debe ser un valor numérico" })
+    .int()
+    .min(0, "No puede ser negativo"),
+  piezasCambioColorRecibidas: z
+    .number({ message: "Debe ser un valor numérico" })
+    .int()
+    .min(0, "No puede ser negativo")
+})
+
 export type Molienda = z.infer<typeof moliendaSchema>
 export type RegistrarMoliendaForm = z.infer<typeof registrarMoliendaSchema>
+export type ReportarDiferenciaForm = z.infer<typeof reportarDiferenciaSchema>

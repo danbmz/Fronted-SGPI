@@ -1,4 +1,5 @@
 import { z } from "zod"
+import { confirmacionMolinoSchema } from "../molino/moliendaValidations"
 
 export const turnos = ["Mañana", "Tarde", "Noche"] as const
 export const estadosAvance = ["abierto", "cerrado"] as const
@@ -28,34 +29,6 @@ export const solicitarMaterialSchema = z.object({
     .number({ message: "Debe ser un valor numérico" })
     .positive("Los kg deben ser mayor a 0"),
   motivo: z.string().optional()
-})
-
-export const confirmacionMolinoSchema = z.object({
-  confirmado: z.boolean(),
-  kgMermaRecibida: z.number().min(0),
-  kgPlastaRecibida: z.number().min(0),
-  piezasMalasRecibidas: z.number().int().min(0),
-  piezasCambioColorRecibidas: z.number().int().min(0),
-  fecha: z.string(),
-  hayDiferencia: z.boolean() // ← para saber si hubo discrepancia
-})
-
-// Schema para el form de diferencia — solo se usa cuando hay discrepancia
-export const reportarDiferenciaSchema = z.object({
-  kgMermaRecibida: z
-    .number({ message: "Debe ser un valor numérico" })
-    .min(0, "No puede ser negativo"),
-  kgPlastaRecibida: z
-    .number({ message: "Debe ser un valor numérico" })
-    .min(0, "No puede ser negativo"),
-  piezasMalasRecibidas: z
-    .number({ message: "Debe ser un valor numérico" })
-    .int()
-    .min(0, "No puede ser negativo"),
-  piezasCambioColorRecibidas: z
-    .number({ message: "Debe ser un valor numérico" })
-    .int()
-    .min(0, "No puede ser negativo")
 })
 
 export const avanceTurnoSchema = z.object({
@@ -118,7 +91,7 @@ export type CerrarAvanceForm = z.infer<typeof cerrarAvanceSchema>
 export type Turno = typeof turnos[number]
 export type SolicitudMaterial = z.infer<typeof solicitudMaterialSchema>
 export type SolicitarMaterialForm = z.infer<typeof solicitarMaterialSchema>
-export type ReportarDiferenciaForm = z.infer<typeof reportarDiferenciaSchema>
+
 
 export interface TiempoParo extends RegistrarParo {
   id: string

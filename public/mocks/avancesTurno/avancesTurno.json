@@ -133,7 +133,15 @@
     "kgSobrante": 0,
     "kgFaltante": 0,
   "piezasCambioColor": 0,
-  "confirmacionMolino": null,
+  "confirmacionMolino": {
+      "confirmado": true,
+      "kgMermaRecibida": 10,
+      "kgPlastaRecibida": 12,
+      "piezasMalasRecibidas": 100,
+      "piezasCambioColorRecibidas": 120,
+      "hayDiferencia": false,
+      "fecha": "2026-04-28"
+    },
     "observaciones": null,
     "tiemposParo": []
   },
@@ -159,7 +167,15 @@
     "kgSobrante": 0,
     "kgFaltante": 0,
     "piezasCambioColor": 0,
-  "confirmacionMolino": null,
+  "confirmacionMolino": {
+      "confirmado": true,
+      "kgMermaRecibida": 4.8,
+      "kgPlastaRecibida": 1.2,
+      "piezasMalasRecibidas": 40,
+      "piezasCambioColorRecibidas": 0,
+      "hayDiferencia": false,
+      "fecha": "2026-04-28"
+    },
     "observaciones": "Producción normal sin incidencias.",
     "tiemposParo": []
   },

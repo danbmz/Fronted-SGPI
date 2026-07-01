@@ -10,7 +10,6 @@ import type { AvanceTurno } from "@/validations/avancesTurno/avanceTurnoValidati
 import type { Molienda } from "@/validations/molino/moliendaValidations"
 import { useAuth } from "@/features/auth/hooks/useAuth"
 import { toast } from "sonner"
-import { Checkbox } from "@/components/ui/checkbox"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -46,7 +45,7 @@ export default function MolinoRegistrar() {
           getMoliendas()
         ])
         setOrdenes(ordenesData.filter(o => o.estado === "en_progreso"))
-        setAvances(avancesData)
+        setAvances(avancesData.filter(a => a.confirmacionMolino?.confirmado === true))
         setMoliendas(moliendasData)
       } finally {
         setLoading(false)
@@ -59,36 +58,57 @@ export default function MolinoRegistrar() {
   const ordenesIdsSeleccionadas = watch("ordenesIds") ?? []
 
   // Solo muestra órdenes del material filtrado y con merma disponible
-  const calcularDisponible = (ordenId: string) => {
-    const avancesOrden = avances.filter(a => a.ordenId === ordenId)
-    const merma = avancesOrden.reduce((acc, a) => acc + a.kgMerma + a.kgPlasta, 0)
-    const molido = moliendas
-      .filter(m => m.ordenesIds.includes(ordenId))
-      .reduce((acc, m) => acc + m.kgIngresados, 0)
-    return merma - molido
-  }
+const calcularDisponible = (ordenId: string) => {
+  const orden = ordenes.find(o => o.id === ordenId)
+  if (!orden) return 0
+
+  const avancesOrden = avances.filter(a => a.ordenId === ordenId)
+
+  const kgMerma = avancesOrden.reduce((acc, a) => acc + a.kgMerma, 0)
+  const kgPlasta = avancesOrden.reduce((acc, a) => acc + a.kgPlasta, 0)
+
+  // Convertimos piezas a kg usando el peso unitario de la orden
+  const kgDefectuosas = avancesOrden.reduce((acc, a) =>
+    acc + (a.piezasDefectuosas * orden.pesoUnitarioGr) / 1000, 0
+  )
+  const kgCambioColor = avancesOrden.reduce((acc, a) =>
+    acc + (a.piezasCambioColor * orden.pesoUnitarioGr) / 1000, 0
+  )
+
+  const totalDisponibleOrden = kgMerma + kgPlasta + kgDefectuosas + kgCambioColor
+
+  // Resta lo que ya fue molido
+  const molido = moliendas
+    .filter(m => m.ordenesIds.includes(ordenId))
+    .reduce((acc, m) => acc + m.kgIngresados, 0)
+
+  return totalDisponibleOrden - molido
+}
 
   const ordenesDisponibles = ordenes.filter(o =>
     o.materiaPrima === filtroMaterial && calcularDisponible(o.id) > 0
   )
 
   const toggleOrden = (ordenId: string) => {
-    const actuales = ordenesIdsSeleccionadas
-    if (actuales.includes(ordenId)) {
-      setValue("ordenesIds", actuales.filter(id => id !== ordenId), { shouldValidate: true })
-    } else {
-      setValue("ordenesIds", [...actuales, ordenId], { shouldValidate: true })
-    }
+  const actuales = ordenesIdsSeleccionadas
+  let nuevasIds: string[]
+
+  if (actuales.includes(ordenId)) {
+    nuevasIds = actuales.filter(id => id !== ordenId)
+  } else {
+    nuevasIds = [...actuales, ordenId]
   }
 
-  // Recalcula el color sugerido cada vez que cambia la selección
-  useEffect(() => {
-    const seleccionadas = ordenes.filter(o => ordenesIdsSeleccionadas.includes(o.id))
-    if (seleccionadas.length > 0) {
-      const colorSugerido = calcularColorMasFrecuente(seleccionadas)
-      setValue("colorAproximado", colorSugerido)
-    }
-  }, [ordenesIdsSeleccionadas, ordenes, setValue])
+  setValue("ordenesIds", nuevasIds, { shouldValidate: true })
+
+  // Calcula el color sugerido aquí directamente — sin useEffect
+  const seleccionadas = ordenes.filter(o => nuevasIds.includes(o.id))
+  if (seleccionadas.length > 0) {
+    setValue("colorAproximado", calcularColorMasFrecuente(seleccionadas))
+  } else {
+    setValue("colorAproximado", "")
+  }
+}
 
   const totalDisponible = ordenesIdsSeleccionadas.reduce(
     (acc, id) => acc + calcularDisponible(id), 0
@@ -153,7 +173,10 @@ export default function MolinoRegistrar() {
           {/* Selección de órdenes */}
           {filtroMaterial && (
             <div className="flex flex-col gap-2">
-              <Label>Órdenes con merma disponible</Label>
+              <div className="flex gap-1">
+                <Label>Órdenes con merma disponible</Label>
+                <p className="text-sm text-muted-foreground">- Contempla piezas defectuosas y/o cambio de color</p>
+              </div>
               {ordenesDisponibles.length === 0 ? (
                 <p className="text-xs text-muted-foreground px-1">
                   No hay merma pendiente para este material.
@@ -170,16 +193,48 @@ export default function MolinoRegistrar() {
                         onClick={() => toggleOrden(orden.id)}
                       >
                         <div className="flex items-center gap-3">
-                          <Checkbox checked={seleccionada} />
+                          <input
+                            type="checkbox"
+                            checked={seleccionada}
+                            onChange={() => {}}
+                            className="w-4 h-4 accent-primary cursor-pointer"
+                          />
                           <div className="flex flex-col">
                             <span className="text-sm font-medium">{orden.folio}</span>
                             <span className="text-xs text-muted-foreground">
                               {orden.producto} — {orden.color}
                             </span>
+                            {/* Desglose de lo que se va a moler */}
+                            <div className="flex items-center gap-2 mt-0.5 flex-wrap">
+                              {avances.filter(a => a.ordenId === orden.id).some(a => a.kgMerma > 0) && (
+                                <span className="text-xs text-red-600">
+                                  {avances.filter(a => a.ordenId === orden.id)
+                                    .reduce((acc, a) => acc + a.kgMerma, 0).toFixed(1)} kg merma
+                                </span>
+                              )}
+                              {avances.filter(a => a.ordenId === orden.id).some(a => a.kgPlasta > 0) && (
+                                <span className="text-xs text-orange-600">
+                                  {avances.filter(a => a.ordenId === orden.id)
+                                    .reduce((acc, a) => acc + a.kgPlasta, 0).toFixed(1)} kg plasta
+                                </span>
+                              )}
+                              {avances.filter(a => a.ordenId === orden.id).some(a => a.piezasDefectuosas > 0) && (
+                                <span className="text-xs text-yellow-600">
+                                  {avances.filter(a => a.ordenId === orden.id)
+                                    .reduce((acc, a) => acc + a.piezasDefectuosas, 0)} pzas defectuosas
+                                </span>
+                              )}
+                              {avances.filter(a => a.ordenId === orden.id).some(a => a.piezasCambioColor > 0) && (
+                                <span className="text-xs text-blue-600">
+                                  {avances.filter(a => a.ordenId === orden.id)
+                                    .reduce((acc, a) => acc + a.piezasCambioColor, 0)} pzas cambio color
+                                </span>
+                              )}
+                            </div>
                           </div>
                         </div>
                         <span className="text-sm font-medium text-orange-600">
-                          {disponible.toFixed(1)} kg
+                          {disponible.toFixed(1)} kg total
                         </span>
                       </div>
                     )

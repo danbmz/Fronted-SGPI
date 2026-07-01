@@ -1,7 +1,7 @@
 [
   {
     "id": "1",
-    "ordenesIds": ["2"],
+    "ordenesIds": ["2", "1"],
     "folios": ["OP-2026-002"],
     "materialBase": "Polipropileno Virgen",
     "materiaPrimaId": "1",
