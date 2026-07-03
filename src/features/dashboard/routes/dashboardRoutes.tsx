@@ -20,9 +20,11 @@ import SeguimientoOrdenes from '@/features/avancesTurno/pages/admin/SeguimientoO
 import MolinoAdmin from '@/features/molino/Pages/admin/MolinoAdmin'
 import Reportes from '@/features/reportes/pages/Reportes'
 import MolinoPendientes from '@/features/molino/Pages/molino/MolinoPendientes'
-import PigmentosOrdenes from '@/features/pigmentos/pages/PigmentosOrdenes'
+import PigmentosOrdenes from '@/features/pigmentos/pages/pigmentos/PigmentosOrdenes'
 import Ordenes from '@/features/avancesTurno/pages/supervisor/Ordenes'
 import MolinoRegistrar from '@/features/molino/Pages/molino/MolinoRegistrar'
+import PigmentosAlertas from '@/features/pigmentos/pages/pigmentos/PigmentosAlertas'
+import PigmentosFormulas from '@/features/pigmentos/pages/pigmentos/PigmentosFormulas'
 
 export const dashboardRoutes: RouteObject[] = [
   // ── Admin ──────────────────────────────────
@@ -98,8 +100,8 @@ export const dashboardRoutes: RouteObject[] = [
         children: [
           { index: true, element: <Navigate to="inicio" replace /> },
           { path: 'ordenes', element: <PigmentosOrdenes /> },
-          { path: 'alertas', element: <AvancesTurno /> },
-          { path: 'formulas', element: <AvancesTurno /> },
+          { path: 'alertas', element: <PigmentosAlertas /> },
+          { path: 'formulas', element: <PigmentosFormulas /> },
         ],
       },
     ],

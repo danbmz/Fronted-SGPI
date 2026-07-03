@@ -78,6 +78,7 @@ export const abrirAvance = async (
     kgSobrante: 0,
     piezasCambioColor: 0,
     confirmacionMolino: null,
+    sobranteConfirmado: false,
     observaciones: null,
     tiemposParo: [],
     solicitudesMaterial: []

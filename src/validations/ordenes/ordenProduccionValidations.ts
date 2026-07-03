@@ -87,6 +87,7 @@ export interface OrdenProduccion {
   estado: EstadoOrden
   fechaCreacion: string
   stockInsuficiente?: boolean
+  materialSiguienteConfirmado: boolean
   alertasStock?: { tipo: string; nombre: string; requerido: number; disponible: number }[]
   // Paso 1
   productoId: string

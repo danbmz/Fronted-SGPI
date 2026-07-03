@@ -55,7 +55,8 @@ export const avanceTurnoSchema = z.object({
   observaciones: z.string().nullable(),
   tiemposParo: z.array(registrarParoSchema),
   solicitudesMaterial: z.array(solicitudMaterialSchema),
-  confirmacionMolino: confirmacionMolinoSchema.nullable() 
+  confirmacionMolino: confirmacionMolinoSchema.nullable(),
+  sobranteConfirmado: z.boolean()
 })
 
 // Schema para cerrar un avance

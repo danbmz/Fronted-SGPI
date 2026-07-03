@@ -2,6 +2,7 @@ import { NavLink, useNavigate } from "react-router-dom"
 import { LogOut, PanelLeftClose, PanelLeftOpen } from "lucide-react"
 import { useAuth } from "@/features/auth/hooks/useAuth"
 import { sidebarItems } from "./sidebar/sidebarConfing"
+import { useAlertasPigmentos } from "@/features/pigmentos/hooks/useAlertasPigmentos"
 
 interface Props {
   collapsed: boolean
@@ -15,6 +16,10 @@ export default function Sidebar({ collapsed, onToggle }: Props) {
   if (!role) return null
 
   const items = sidebarItems[role]
+
+  // Solo carga el conteo si el rol es pigmentos
+  const alertasPigmentos = useAlertasPigmentos()
+  const mostrarBadge = role === "pigmentos" && alertasPigmentos > 0
 
   const handleLogout = () => {
     logout()
@@ -60,6 +65,7 @@ export default function Sidebar({ collapsed, onToggle }: Props) {
             !collapsed &&
             item.section &&
             item.section !== items[index - 1]?.section
+          const esPigmentosAlertas = role === "pigmentos" && item.path.includes("alertas")
 
           return (
             <div key={item.path}>
@@ -82,10 +88,28 @@ export default function Sidebar({ collapsed, onToggle }: Props) {
                   }`
                 }
               >
-                <item.icon size={18} className="shrink-0" />
+              
+                <div className="relative shrink-0">
+                  <item.icon size={18} />
+                  {collapsed && esPigmentosAlertas && mostrarBadge && (
+                    <span className="absolute -top-1.5 -right-1.5 flex items-center justify-center w-4 h-4 text-[10px] font-bold bg-red-500 text-white rounded-full">
+                      {alertasPigmentos > 9 ? "9+" : alertasPigmentos}
+                    </span>
+                  )}
+                </div>
+
                 {!collapsed && (
-                  <span className="whitespace-nowrap overflow-hidden">{item.label}</span>
+                  <span className="whitespace-nowrap overflow-hidden flex items-center gap-2">
+                    {item.label}
+                    {/* Badge también en el texto cuando está expandido */}
+                    {esPigmentosAlertas && mostrarBadge && (
+                      <span className="ml-auto text-[10px] font-bold bg-red-500 text-white px-1.5 py-0.5 rounded-full">
+                        {alertasPigmentos > 9 ? "9+" : alertasPigmentos}
+                      </span>
+                    )}
+                  </span>
                 )}
+
               </NavLink>
             </div>
           )

@@ -30,6 +30,7 @@ export type EditarFormulaPigmento = z.infer<typeof editarFormulaPigmentoSchema>
 
 export interface FormulaPigmento extends CrearFormulaPigmento {
   id: string
+  materialBaseId: string 
   categoriaColor: CategoriaColor
   tipoPigmento: TipoPigmento
 }
