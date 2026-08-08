@@ -1,98 +1,41 @@
-import type { MateriaPrima, CrearMateriaPrimaDTO, EditarMateriaPrimaDTO } from "@/types/materiaPrima"
-import type { AuthUser } from "@/types/usuario"
-import { registrarLog } from "@/lib/auditService"
+import { httpClient } from "@/lib/httpClient";
+import {
+  materiaPrimaSchema,
+  listaMateriaPrimaSchema,
+  type CrearMateriaPrimaInput,
+  type EditarMateriaPrimaInput,
+} from "../schemas/materiaPrima";
+import { parseOrThrow } from "@/lib/parseOrThrow"
+import { okResponseSchema } from "@/lib/commonSchemas";
 
-export const getMateriasPrimas = async (): Promise<MateriaPrima[]> => {
-  await new Promise(resolve => setTimeout(resolve, 800))
-  const response = await fetch("/mocks/catalogo/materiaPrima.json")
-  const data = await response.json()
-  return data.map((m: any) => ({
-    ...m,
-    id: String(m.id),
-    activo: m.activo ?? true
-  }))
+
+export async function listarMateriasPrimas() {
+  const response = await httpClient("/materias-primas");
+  return parseOrThrow(response, listaMateriaPrimaSchema);
 }
 
-export const crearMateriaPrima = async (
-  data: CrearMateriaPrimaDTO,
-  usuarioActivo: AuthUser
-): Promise<MateriaPrima> => {
-  await new Promise(resolve => setTimeout(resolve, 800))
-
-  const nuevaMateriaPrima: MateriaPrima = {
-    ...data,
-    id: String(Date.now()),
-    activo: true
-  }
-
-  await registrarLog({
-    usuario: usuarioActivo.usuario,
-    nombre: usuarioActivo.nombre,
-    modulo: "catalogos",
-    entidad: "MateriasPrimas",
-    accion: "crear",
-    entidadId: nuevaMateriaPrima.id,
-    detalle: `Materia prima '${nuevaMateriaPrima.nombre}' (${nuevaMateriaPrima.codigoInterno}) creada`
-  })
-
-  return nuevaMateriaPrima
+export async function crearMateriaPrima(data: CrearMateriaPrimaInput) {
+  const response = await httpClient("/materias-primas", {
+    method: "POST",
+    body: JSON.stringify(data),
+  });
+  return parseOrThrow(response, materiaPrimaSchema);
 }
 
-export const editarMateriaPrima = async (
-  id: string,
-  data: EditarMateriaPrimaDTO,
-  materiaPrimaOriginal: MateriaPrima,
-  usuarioActivo: AuthUser
-): Promise<MateriaPrima> => {
-  await new Promise(resolve => setTimeout(resolve, 800))
-
-  await registrarLog({
-    usuario: usuarioActivo.usuario,
-    nombre: usuarioActivo.nombre,
-    modulo: "catalogos",
-    entidad: "MateriasPrimas",
-    accion: "editar",
-    entidadId: id,
-    detalle: `Materia prima '${data.nombre}' (${data.codigoInterno}) editada`
-  })
-
-  return { ...materiaPrimaOriginal, ...data, id }
+export async function editarMateriaPrima(id: string, data: EditarMateriaPrimaInput) {
+  const response = await httpClient(`/materias-primas/${id}`, {
+    method: "PATCH",
+    body: JSON.stringify(data),
+  });
+  return parseOrThrow(response, materiaPrimaSchema);
 }
 
-export const desactivarMateriaPrima = async (
-  materiaPrima: MateriaPrima,
-  usuarioActivo: AuthUser
-): Promise<MateriaPrima> => {
-  await new Promise(resolve => setTimeout(resolve, 800))
-
-  await registrarLog({
-    usuario: usuarioActivo.usuario,
-    nombre: usuarioActivo.nombre,
-    modulo: "catalogos",
-    entidad: "MateriasPrimas",
-    accion: "desactivar",
-    entidadId: materiaPrima.id,
-    detalle: `Materia prima '${materiaPrima.nombre}' desactivada`
-  })
-
-  return { ...materiaPrima, activo: false }
+export async function desactivarMateriaPrima(id: string) {
+  const response = await httpClient(`/materias-primas/${id}`, { method: "DELETE" });
+  await parseOrThrow(response, okResponseSchema)
 }
 
-export const reactivarMateriaPrima = async (
-  materiaPrima: MateriaPrima,
-  usuarioActivo: AuthUser
-): Promise<MateriaPrima> => {
-  await new Promise(resolve => setTimeout(resolve, 800))
-
-  await registrarLog({
-    usuario: usuarioActivo.usuario,
-    nombre: usuarioActivo.nombre,
-    modulo: "catalogos",
-    entidad: "MateriasPrimas",
-    accion: "reactivar",
-    entidadId: materiaPrima.id,
-    detalle: `Materia prima '${materiaPrima.nombre}' reactivada`
-  })
-
-  return { ...materiaPrima, activo: true }
+export async function reactivarMateriaPrima(id: string) {
+  const response = await httpClient(`/materias-primas/${id}/reactivar`, { method: "PATCH" });
+  await parseOrThrow(response, okResponseSchema)
 }

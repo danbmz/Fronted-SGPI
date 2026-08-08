@@ -8,8 +8,8 @@ export interface SidebarItem {
   exact?: boolean
 }
 
-export const sidebarItems: Record<"admin" | "supervisor" | "molino" | "pigmentos", SidebarItem[]> = {
-  admin: [
+export const sidebarItems: Record<"ADMIN" | "SUPERVISOR" | "MOLINO" | "PIGMENTOS", SidebarItem[]> = {
+  ADMIN: [
     { section: "PRINCIPAL", label: "Dashboard", path: "/admin/dashboard", icon: LayoutDashboard, exact: true },
     { section: "PRINCIPAL", label: "Órdenes", path: "/admin/ordenes", icon: ClipboardList },
     { section: "OPERACIONES", label: "Avances de turno", path: "/admin/avances-turno", icon: TrendingUp },
@@ -28,15 +28,15 @@ export const sidebarItems: Record<"admin" | "supervisor" | "molino" | "pigmentos
     { section: "ADMINISTRACIÓN", label: "Usuarios", path: "/admin/usuarios", icon: Users },
     { section: "ADMINISTRACIÓN", label: "Auditoría", path: "/admin/auditoria", icon: ShieldCheck },
   ],
-  supervisor: [
+  SUPERVISOR: [
     { section: "OPERACIONES", label: "Órdenes", path: "/supervisor/ordenes", icon: ClipboardList, exact: true },
     { section: "OPERACIONES", label: "Avances de turno", path: "/supervisor/avances", icon: TrendingUp, exact: true },
   ],
-  molino: [
+  MOLINO: [
     { section: "OPERACIONES", label: "Pendientes", path: "/molino/pendientes", icon: Clock, exact: true },
     { section: "OPERACIONES", label: "Registrar", path: "/molino/registrar", icon: Hammer, exact: true },
   ],
-  pigmentos: [
+  PIGMENTOS: [
     { section: "OPERACIONES", label: "Órdenes", path: "/pigmentos/ordenes", icon: ClipboardList, exact: true },
     { section: "OPERACIONES", label: "Alertas", path: "/pigmentos/alertas", icon: Bell, exact: true },
     { section: "OPERACIONES", label: "Formulas", path: "/pigmentos/formulas", icon: FlaskConical, exact: true },

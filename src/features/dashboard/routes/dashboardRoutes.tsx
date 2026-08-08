@@ -30,7 +30,7 @@ export const dashboardRoutes: RouteObject[] = [
   // ── Admin ──────────────────────────────────
   {
     path: '/admin',
-    element: <ProtectedRoute allowedRoles={['admin']} />,
+    element: <ProtectedRoute allowedRoles={['ADMIN']} />,
     children: [
       {
         element: <DashboardLayout />,
@@ -61,7 +61,7 @@ export const dashboardRoutes: RouteObject[] = [
   // ── Supervisor ─────────────────────────────
   {
     path: '/supervisor',
-    element: <ProtectedRoute allowedRoles={['supervisor']} />,
+    element: <ProtectedRoute allowedRoles={['SUPERVISOR']} />,
     children: [
       {
         element: <DashboardLayout />,
@@ -77,7 +77,7 @@ export const dashboardRoutes: RouteObject[] = [
   // ── Molino ─────────────────────────────
   {
     path: '/molino',
-    element: <ProtectedRoute allowedRoles={['molino']} />,
+    element: <ProtectedRoute allowedRoles={['MOLINO']} />,
     children: [
       {
         element: <DashboardLayout />,
@@ -93,7 +93,7 @@ export const dashboardRoutes: RouteObject[] = [
   // ── Pigmentos ─────────────────────────────
   {
     path: '/pigmentos',
-    element: <ProtectedRoute allowedRoles={['pigmentos']} />,
+    element: <ProtectedRoute allowedRoles={['PIGMENTOS']} />,
     children: [
       {
         element: <DashboardLayout />,

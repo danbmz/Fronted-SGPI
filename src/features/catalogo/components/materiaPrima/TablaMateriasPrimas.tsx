@@ -1,55 +1,44 @@
-import { useState } from "react"
-import type { MateriaPrima } from "@/types/materiaPrima"
+import { useState } from "react";
+import type { MateriaPrima } from "../../schemas/materiaPrima";
 import {
   Table, TableBody, TableCell,
   TableHead, TableHeader, TableRow
-} from "@/components/ui/table"
+} from "@/components/ui/table";
 import {
   DropdownMenu, DropdownMenuContent,
   DropdownMenuItem, DropdownMenuSeparator,
   DropdownMenuTrigger
-} from "@/components/ui/dropdown-menu"
-import { Button } from "@/components/ui/button"
-import { MoreHorizontal } from "lucide-react"
-import DialogEditarMateriaPrima from "./DialogEditarMateriaPrima"
-import DialogDesactivarMateriaPrima from "./DialogDesactivarMateriaPrima"
-import DialogReactivarMateriaPrima from "./DialogReactivarMateriaPrima"
-import { Badge } from "@/components/ui/badge"
+} from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
+import { MoreHorizontal } from "lucide-react";
+import DialogEditarMateriaPrima from "./DialogEditarMateriaPrima";
+import DialogDesactivarMateriaPrima from "./DialogDesactivarMateriaPrima";
+import DialogReactivarMateriaPrima from "./DialogReactivarMateriaPrima";
+import { Badge } from "@/components/ui/badge";
 
 interface Props {
-  materiasPrimas: MateriaPrima[]
-  onMateriaPrimaEditada: (materiaPrima: MateriaPrima) => void
-  onMateriaPrimaDesactivada: (materiaPrima: MateriaPrima) => void
-  onMateriaPrimaReactivada: (materiaPrima: MateriaPrima) => void
+  materiasPrimas: MateriaPrima[];
 }
 
 export const materialColor: Record<string, string> = {
-  Polipropileno:   "bg-olive-200 text-olive-700",
-  "Poliestireno-Cristal": "bg-slate-200 text-slate-700"
-}
-export const colorSubtipo: Record<string, string> = {
-  virgen:   "bg-blue-100 text-blue-700",
-  reciclado: "bg-yellow-100 text-yellow-700"
-}
+  POLIPROPILENO: "bg-olive-200 text-olive-700",
+  POLIESTIRENO: "bg-slate-200 text-slate-700",
+  POLIETILENO: "bg-purple-200 text-purple-700",
+};
 
-export default function TablaMateriasPrimas({
-  materiasPrimas,
-  onMateriaPrimaEditada,
-  onMateriaPrimaDesactivada,
-  onMateriaPrimaReactivada
-}: Props) {
-  const [materiaPrimaSeleccionada, setMateriaPrimaSeleccionada] = useState<MateriaPrima | null>(null)
-  const [dialogAbierto, setDialogAbierto] = useState<"editar" | "desactivar" | "reactivar" | null>(null)
+export default function TablaMateriasPrimas({ materiasPrimas }: Props) {
+  const [materiaPrimaSeleccionada, setMateriaPrimaSeleccionada] = useState<MateriaPrima | null>(null);
+  const [dialogAbierto, setDialogAbierto] = useState<"editar" | "desactivar" | "reactivar" | null>(null);
 
   const abrirDialog = (tipo: "editar" | "desactivar" | "reactivar", materiaPrima: MateriaPrima) => {
-    setMateriaPrimaSeleccionada(materiaPrima)
-    setDialogAbierto(tipo)
-  }
+    setMateriaPrimaSeleccionada(materiaPrima);
+    setDialogAbierto(tipo);
+  };
 
   const cerrarDialog = () => {
-    setMateriaPrimaSeleccionada(null)
-    setDialogAbierto(null)
-  }
+    setMateriaPrimaSeleccionada(null);
+    setDialogAbierto(null);
+  };
 
   return (
     <>
@@ -59,7 +48,6 @@ export default function TablaMateriasPrimas({
             <TableHead>Nombre</TableHead>
             <TableHead>Código</TableHead>
             <TableHead>Tipo</TableHead>
-            <TableHead>Subtipo</TableHead>
             <TableHead>Proveedor</TableHead>
             <TableHead>Unidad</TableHead>
             <TableHead>Estado</TableHead>
@@ -73,15 +61,10 @@ export default function TablaMateriasPrimas({
               <TableCell className="font-mono text-sm">{materiaPrima.codigoInterno}</TableCell>
               <TableCell>
                 <Badge className={`text-xs px-2 py-1 rounded-full font-medium ${materialColor[materiaPrima.tipo]}`}>
-                    {materiaPrima.tipo}
+                  {materiaPrima.tipo}
                 </Badge>
               </TableCell>
-              <TableCell>
-                <Badge className={`text-xs px-2 py-1 rounded-full font-medium ${colorSubtipo[materiaPrima.subtipo]}`}>
-                  {materiaPrima.subtipo}
-                </Badge>
-              </TableCell>
-              <TableCell>{materiaPrima.proveedor}</TableCell>
+              <TableCell>{materiaPrima.proveedor ?? "—"}</TableCell>
               <TableCell>{materiaPrima.unidadMedida}</TableCell>
               <TableCell>
                 <span className={`text-xs px-2 py-1 rounded-full font-medium ${
@@ -126,7 +109,7 @@ export default function TablaMateriasPrimas({
           ))}
           {materiasPrimas.length === 0 && (
             <TableRow>
-              <TableCell colSpan={9} className="text-center text-muted-foreground py-8">
+              <TableCell colSpan={7} className="text-center text-muted-foreground py-8">
                 No hay materias primas registradas.
               </TableCell>
             </TableRow>
@@ -138,22 +121,19 @@ export default function TablaMateriasPrimas({
         open={dialogAbierto === "editar"}
         materiaPrima={materiaPrimaSeleccionada}
         onClose={cerrarDialog}
-        onSuccess={onMateriaPrimaEditada}
       />
 
       <DialogDesactivarMateriaPrima
         open={dialogAbierto === "desactivar"}
         materiaPrima={materiaPrimaSeleccionada}
         onClose={cerrarDialog}
-        onSuccess={onMateriaPrimaDesactivada}
       />
 
       <DialogReactivarMateriaPrima
         open={dialogAbierto === "reactivar"}
         materiaPrima={materiaPrimaSeleccionada}
         onClose={cerrarDialog}
-        onSuccess={onMateriaPrimaReactivada}
       />
     </>
-  )
+  );
 }

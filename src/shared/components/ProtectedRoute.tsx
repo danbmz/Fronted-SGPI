@@ -7,14 +7,18 @@ interface ProtectedRouteProps {
 }
 
 const roleDashboard = {
-  admin: "/admin/dashboard",
-  supervisor: "/supervisor/ordenes",
-  molino: "/molino/pendientes",
-  pigmentos: "/pigmentos/ordenes",
+  ADMIN: "/admin/dashboard",
+  SUPERVISOR: "/supervisor/ordenes",
+  MOLINO: "/molino/pendientes",
+  PIGMENTOS: "/pigmentos/ordenes",
 }
 
 export default function ProtectedRoute({ allowedRoles }: ProtectedRouteProps) {
-  const { isAuthenticated, role } = useAuth()
+  const { isAuthenticated, role, cargando } = useAuth()
+
+  if (cargando) {
+    return <div>Cargando...</div> // o un spinner real de tu diseño
+  }
 
   if (!isAuthenticated) {
     return <Navigate to="/" replace />

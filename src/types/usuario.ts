@@ -1,4 +1,4 @@
-export type Role = "admin" | "supervisor" | "molino" | "pigmentos"
+import type { Role } from "./enums"
 
 // Tipo completo — para gestión de usuarios (admin)
 export interface User {
@@ -14,7 +14,6 @@ export interface User {
 export interface AuthUser {
   id: string
   nombre: string
-  usuario: string
   role: Role
 }
 

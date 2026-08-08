@@ -1,40 +1,32 @@
-import { reactivarMateriaPrima } from "../../services/materiasPrimasService"
-import type { MateriaPrima } from "@/types/materiaPrima"
-import { useAuth } from "@/features/auth/hooks/useAuth"
-import { toast } from "sonner"
+import { useReactivarMateriaPrima } from "../../hooks/useMateriasPrimas";
+import type { MateriaPrima } from "../../schemas/materiaPrima";
+import { toast } from "sonner";
 import {
   Dialog, DialogContent, DialogHeader,
   DialogTitle, DialogDescription
-} from "@/components/ui/dialog"
-import { Button } from "@/components/ui/button"
-import { useState } from "react"
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 
 interface Props {
-  open: boolean
-  materiaPrima: MateriaPrima | null
-  onClose: () => void
-  onSuccess: (materiaPrima: MateriaPrima) => void
+  open: boolean;
+  materiaPrima: MateriaPrima | null;
+  onClose: () => void;
 }
 
-export default function DialogReactivarMateriaPrima({ open, materiaPrima, onClose, onSuccess }: Props) {
-  const [isLoading, setIsLoading] = useState(false)  
-  const { user } = useAuth()
+export default function DialogReactivarMateriaPrima({ open, materiaPrima, onClose }: Props) {
+  const reactivarMutation = useReactivarMateriaPrima();
 
   const handleConfirmar = async () => {
-    if (!user || !materiaPrima) return
-    setIsLoading(true)
+    if (!materiaPrima) return;
 
     try {
-      const materiaPrimaReactivada = await reactivarMateriaPrima(materiaPrima, user)
-      toast.success("Materia prima reactivada.")
-      onSuccess(materiaPrimaReactivada)
-      onClose()
-    } catch {
-      toast.error("Error al reactivar la materia prima.")
-    } finally{
-        setIsLoading(false)
+      await reactivarMutation.mutateAsync(materiaPrima.id);
+      toast.success("Materia prima reactivada.");
+      onClose();
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Error al reactivar la materia prima.");
     }
-  }
+  };
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
@@ -55,9 +47,11 @@ export default function DialogReactivarMateriaPrima({ open, materiaPrima, onClos
 
         <div className="flex justify-end gap-2 mt-4">
           <Button variant="outline" onClick={onClose}>Cancelar</Button>
-          <Button onClick={handleConfirmar} disabled={isLoading}>{isLoading ? "Reactivando" : "Reactivar"}</Button>
+          <Button onClick={handleConfirmar} disabled={reactivarMutation.isPending}>
+            {reactivarMutation.isPending ? "Reactivando..." : "Reactivar"}
+          </Button>
         </div>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

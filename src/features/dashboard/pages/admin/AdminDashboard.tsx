@@ -39,7 +39,7 @@ export default function AdminDashboard() {
   }, [])
 
   if (!datos) return null
-  console.log(datos)
+  // console.log(datos)
 
 
   const eficiencia = datos.piezasSemana > 0

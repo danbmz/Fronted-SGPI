@@ -19,7 +19,7 @@ export default function Sidebar({ collapsed, onToggle }: Props) {
 
   // Solo carga el conteo si el rol es pigmentos
   const alertasPigmentos = useAlertasPigmentos()
-  const mostrarBadge = role === "pigmentos" && alertasPigmentos > 0
+  const mostrarBadge = role === "PIGMENTOS" && alertasPigmentos > 0
 
   const handleLogout = () => {
     logout()
@@ -65,7 +65,7 @@ export default function Sidebar({ collapsed, onToggle }: Props) {
             !collapsed &&
             item.section &&
             item.section !== items[index - 1]?.section
-          const esPigmentosAlertas = role === "pigmentos" && item.path.includes("alertas")
+          const esPigmentosAlertas = role === "PIGMENTOS" && item.path.includes("alertas")
 
           return (
             <div key={item.path}>

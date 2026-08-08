@@ -1,60 +1,44 @@
-import { registrarLog } from '@/lib/auditService.ts'
-import { useAuthStore } from '../../../store/authStore'
-import { loginService, logoutService } from '../authService.ts'
-import type { LoginCredentials } from '../authService.ts'
-import type { User, Role } from '@/types/usuario.ts'
+import { useAuthStore } from '@/store/authStore'
+import { login as loginService, logout as logoutService } from '@/features/auth/authService'
+import type { AuthUser, Role } from '@/types/usuario'
+
+interface LoginCredentials {
+  usuario: string
+  password: string
+}
 
 interface UseAuthReturn {
-  user: User | null
-  token: string | null
+  user: ReturnType<typeof useAuthStore.getState>['user']
   isAuthenticated: boolean
+  cargando: boolean
   role: Role | null
-  login: (credentials: LoginCredentials) => Promise<void>
+  login: (credentials: LoginCredentials) => Promise<AuthUser>
   logout: () => Promise<void>
 }
 
 export function useAuth(): UseAuthReturn {
-  const user = useAuthStore(state => state.user)
-  const token = useAuthStore(state => state.token)
-  const isAuthenticated = useAuthStore(state => state.isAuthenticated)
-  const storeLogin = useAuthStore(state => state.login)
-  const storeLogout = useAuthStore(state => state.logout)
-
+  const user = useAuthStore((state) => state.user)
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated)
+  const storeLogin = useAuthStore((state) => state.login)
+  const storeLogout = useAuthStore((state) => state.logout)
+  const cargando = useAuthStore((state) => state.cargando)
 
   const login = async (credentials: LoginCredentials) => {
-    const { user, token } = await loginService(credentials)  // llama a la API
-    storeLogin(user, token)                                   // guarda en el store
-
-    // Registrar el lOG
-    await registrarLog({
-    usuario: user.usuario,
-    nombre: user.nombre,
-    modulo: "auth",
-    accion: "login",
-    detalle: "Inicio de sesión exitoso"
-  })
+    const { usuario } = await loginService(credentials.usuario, credentials.password)
+    storeLogin(usuario)
+    return usuario;
   }
 
   const logout = async () => {
-    if (token) await logoutService(token)  // avisa al servidor
-
-    // Registramos el Log
-    await registrarLog({
-      usuario: user?.usuario || "Desconocido",
-      nombre: user?.nombre || "Desconocido",
-      modulo: "auth",
-      accion: "logout",
-      detalle: "Cierre de sesión"
-    })
-
-    storeLogout()                          // limpia el store y localStorage
+    await logoutService()
+    storeLogout()
   }
 
   return {
     user,
-    token,
     isAuthenticated,
-    role: user?.role ?? null,  // ← acceso directo al rol, útil en varios lugares
+    cargando,
+    role: user?.role ?? null,
     login,
     logout,
   }

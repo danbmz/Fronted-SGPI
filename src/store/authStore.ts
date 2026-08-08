@@ -1,32 +1,34 @@
 import { create } from 'zustand'
-import { persist } from 'zustand/middleware'
-import type { User } from '@/types/usuario'
+import type { AuthUser } from '@/types/usuario'
+import { irA } from '@/lib/navigation'
 
 interface AuthState {
-  user: User | null
-  token: string | null
+  user: AuthUser | null
   isAuthenticated: boolean
-  login: (user: User, token: string) => void
+  cargando: boolean
+  login: (user: AuthUser) => void
   logout: () => void
+  setCargando: (cargando: boolean) => void
 }
 
-export const useAuthStore = create<AuthState>()(
-  persist(
-    (set) => ({
-      user: null,
-      token: null,
-      isAuthenticated: false,
+export const useAuthStore = create<AuthState>((set) => ({
+  user: null,
+  isAuthenticated: false,
+  cargando: true,
 
-      login: (user, token) => {
-        set({ user, token, isAuthenticated: true,})
-      },
+  login: (user) => {
+    set({ user, isAuthenticated: true, cargando: false })
+  },
 
-      logout: () => {
-        set({ user: null, token: null, isAuthenticated: false,})
-      },
-    }),
-    {
-      name: 'auth-storage',
-    }
-  )
-)
+  logout: () => {
+    set({ user: null, isAuthenticated: false, cargando: false })
+  },
+
+  setCargando: (cargando) => set({ cargando }),
+}))
+
+// Escucha el evento disparado por httpClient cuando el refresh falla de verdad
+window.addEventListener('sesion-expirada', () => {
+  useAuthStore.getState().logout()
+  irA('/') // usa React Router, no window.location.href
+})

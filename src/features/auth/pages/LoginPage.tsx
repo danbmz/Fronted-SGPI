@@ -3,56 +3,44 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
-import { useState } from "react";
 import { useForm }from "react-hook-form";
 import { useNavigate } from 'react-router-dom'
-import { useAuth } from '../hooks/useAuth'
+import { useState } from "react";
+import { useAuth } from "../hooks/useAuth";
 
-interface FormValues {
+interface LoginFormValues {
   usuario: string
   password: string
 }
 
-
 function LoginPage() {
-  const { login } = useAuth()
-  const navigate = useNavigate()
-  const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<FormValues>();
+  const { register, handleSubmit } = useForm<LoginFormValues>();
+  const [error, setError] = useState<string | null>(null);
+  const { login } = useAuth();
+  const navigate = useNavigate();
 
-
-  const onSubmit = async (data: FormValues) => {
-    // react-hook-form ya limpió y validó los datos aquí solo falta llamar a login() y manejar la navegación, errores, etc.
+  async function onSubmit(data: LoginFormValues) {
     setError(null);
-    setLoading(true);
-
+    setLoading(true)
     try {
-      await login(data)
+      const usuario = await login(data);
 
-      // Leemos el rol directo del localstorage que ya guardo el store con login()
-      const user = JSON.parse(localStorage.getItem("auth-storage") || "{}")
-
-      // Redirige según rol
-      if (user.state.user.role === "admin") navigate("/admin/dashboard")
-      if (user.state.user.role === "supervisor") navigate("/supervisor/ordenes")
-      if (user.state.user.role === "molino") navigate("/molino/pendientes")
-      if (user.state.user.role === "pigmentos") navigate("/pigmentos/ordenes")
-
-    } catch (err) {
-      if (err instanceof Error) {
-        setError(err.message)
-      } else {
-        setError("Error de conexión")
+      // Redirección según rol
+      switch (usuario?.role) {
+        case "ADMIN": navigate("/admin/dashboard"); break;
+        case "SUPERVISOR": navigate("/supervisor/ordenes"); break;
+        case "MOLINO": navigate("/molino/pendientes"); break;
+        case "PIGMENTOS": navigate("/pigmentos/ordenes"); break;
       }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Error desconocido");
     } finally {
       setLoading(false)
     }
   }
+
+
 
 
   return (
@@ -86,7 +74,7 @@ function LoginPage() {
                                     })}
                                     className="rounded-lg bg-slate-200"
                                 />
-                                {errors.usuario && <p className="text-xs text-red-500">{errors.usuario.message}</p>}
+                                {/* {error && <p className="text-xs text-red-500">{error}</p>} */}
                             </div>
                             <div className="grid gap-2">
                                 <Label htmlFor="password">CONTRASEÑA</Label>
@@ -102,7 +90,7 @@ function LoginPage() {
                                   })}
                                   className="rounded-lg bg-slate-200"
                                 />
-                                {errors.password && <p className="text-xs text-red-500">{errors.password.message}</p>}
+                                {error && <p className="text-xs text-red-500">{error}</p>}
                             </div>
                             <Button type="submit" disabled={loading} className="w-full rounded-lg bg-slate-800 hover:bg-slate-700 cursor-pointer">
                             {loading ? 'Entrando...' : 'Iniciar sesión'}

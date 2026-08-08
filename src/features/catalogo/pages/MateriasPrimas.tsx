@@ -1,52 +1,16 @@
-import { useState, useEffect } from "react"
-import { getMateriasPrimas } from "../services/materiasPrimasService"
-import type { MateriaPrima } from "@/types/materiaPrima"
+import { useState } from "react"
+import { useMateriasPrimas } from "../hooks/useMateriasPrimas"
 import { Button } from "@/components/ui/button"
 import { Plus } from "lucide-react"
 import TablaMateriasPrimas from "../components/materiaPrima/TablaMateriasPrimas"
 import DialogCrearMateriaPrima from "../components/materiaPrima/DialogCrearMateriaPrima"
 
 export default function MateriasPrimas() {
-  const [materiasPrimas, setMateriasPrimas] = useState<MateriaPrima[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-  const [dialogCrearAbierto, setDialogCrearAbierto] = useState(false)
+  const [dialogCrearAbierto, setDialogCrearAbierto] = useState(false);
+  const { data: materiasPrimas, isLoading, error } = useMateriasPrimas();
 
-  useEffect(() => {
-    const fetchMateriasPrimas = async () => {
-      try {
-        const data = await getMateriasPrimas()
-        setMateriasPrimas(data)
-      } catch {
-        setError("Error al cargar materias primas")
-      } finally {
-        setLoading(false)
-      }
-    }
-    fetchMateriasPrimas()
-  }, [])
-
-  const handleMateriaPrimaCreada = (nuevaMateriaPrima: MateriaPrima) => {
-    setMateriasPrimas(prev => [...prev, nuevaMateriaPrima])
-  }
-
-  const handleMateriaPrimaEditada = (materiaPrimaEditada: MateriaPrima) => {
-    setMateriasPrimas(prev =>
-      prev.map(m => m.id === materiaPrimaEditada.id ? materiaPrimaEditada : m)
-    )
-  }
-
-  const handleMateriaPrimaDesactivada = (materiaPrimaDesactivada: MateriaPrima) => {
-    setMateriasPrimas(prev =>
-      prev.map(m => m.id === materiaPrimaDesactivada.id ? { ...m, activo: false } : m)
-    )
-  }
-
-  const handleMateriaPrimaReactivada = (materiaPrimaReactivada: MateriaPrima) => {
-    setMateriasPrimas(prev =>
-      prev.map(m => m.id === materiaPrimaReactivada.id ? { ...m, activo: true } : m)
-    )
-  }
+  if (isLoading) return <div>Cargando...</div>;
+  if (error) return <div>Error al cargar materias primas: {error.message}</div>;
 
   return (
     <div className="flex flex-col gap-4 h-screen p-6">
@@ -62,22 +26,14 @@ export default function MateriasPrimas() {
         </Button>
       </div>
 
-      {loading && <p className="text-muted-foreground">Cargando materias primas...</p>}
-      {error && <p className="text-red-500">{error}</p>}
-
-      {!loading && !error && (
         <TablaMateriasPrimas
-          materiasPrimas={materiasPrimas}
-          onMateriaPrimaEditada={handleMateriaPrimaEditada}
-          onMateriaPrimaDesactivada={handleMateriaPrimaDesactivada}
-          onMateriaPrimaReactivada={handleMateriaPrimaReactivada}
+          materiasPrimas={materiasPrimas ?? []}
         />
-      )}
 
       <DialogCrearMateriaPrima
         open={dialogCrearAbierto}
         onClose={() => { setDialogCrearAbierto(false)}}
-        onSuccess={handleMateriaPrimaCreada}
+        onSuccess={() => setDialogCrearAbierto(false)}
       />
 
     </div>
