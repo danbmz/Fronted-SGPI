@@ -1,10 +1,9 @@
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { crearMaquinaSchema, type CrearMaquinaForm } from "@/validations/catalogo/maquinaValidations"
-import { crearMaquina } from "../../services/maquinasService"
-import type { Maquina } from "@/types/maquinasCatalogo"
-import { useAuth } from "@/features/auth/hooks/useAuth"
-import { toast } from "sonner"
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { toast } from "sonner";
+import { crearMaquinaSchema, type CrearMaquinaInput } from "../../schemas/maquina";
+import { useCrearMaquina } from "../../hooks/useMaquina";
+import { TIPO_PROCESO } from "@/types/enums";
 import {
   Dialog, DialogContent, DialogHeader,
   DialogTitle, DialogDescription
@@ -20,28 +19,26 @@ import {
 interface Props {
   open: boolean
   onClose: () => void
-  onSuccess: (maquina: Maquina) => void
 }
 
-export default function DialogCrearMaquina({ open, onClose, onSuccess }: Props) {
-  const { user } = useAuth()
+export default function DialogCrearMaquina({ open, onClose }: Props) {
   const {
     register, handleSubmit, reset, setValue, watch,
     formState: { errors, isSubmitting }
-  } = useForm<CrearMaquinaForm>({
+  } = useForm<CrearMaquinaInput>({
     resolver: zodResolver(crearMaquinaSchema)
   })
 
-  const onSubmit = async (data: CrearMaquinaForm) => {
-    if (!user) return
+  const crearMutation = useCrearMaquina();
+
+  const onSubmit = async (data: CrearMaquinaInput) => {
     try {
-      const nuevaMaquina = await crearMaquina(data, user)
+      await crearMutation.mutateAsync(data)
       toast.success("Máquina registrada correctamente.")
-      onSuccess(nuevaMaquina)
       reset()
       onClose()
-    } catch {
-      toast.error("Error al registrar la máquina.")
+    } catch(error) {
+      toast.error(error instanceof Error ? error.message : "Error al registrar la máquina.");
     }
   }
 
@@ -87,21 +84,24 @@ export default function DialogCrearMaquina({ open, onClose, onSuccess }: Props) 
             <Label>Tipo de proceso</Label>
             <Select
               value={watch("tipoProceso") ?? ""}
-              onValueChange={val => setValue("tipoProceso", val as "Inyección" | "Soplado", { shouldValidate: true })}
+              onValueChange={(val) =>
+                setValue("tipoProceso", val as (typeof TIPO_PROCESO)[number], { shouldValidate: true })
+              }
             >
               <SelectTrigger>
                 <SelectValue placeholder="Selecciona un proceso" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="Inyección">Inyección</SelectItem>
-                <SelectItem value="Soplado">Soplado</SelectItem>
+                {TIPO_PROCESO.map((t) => (
+                  <SelectItem key={t} value={t}>{t}</SelectItem>
+                ))}
               </SelectContent>
             </Select>
             {errors.tipoProceso && <p className="text-xs text-red-500">{errors.tipoProceso.message}</p>}
           </div>
 
           <div className="flex flex-col gap-1">
-            <Label>Capacidad (Ton) — opcional</Label>
+            <Label>Capacidad (Ton)</Label>
             <Input
               type="number"
               {...register("capacidadTon", { valueAsNumber: true })}
@@ -112,7 +112,9 @@ export default function DialogCrearMaquina({ open, onClose, onSuccess }: Props) 
 
           <div className="flex justify-end gap-2 mt-2">
             <Button type="button" variant="outline" onClick={handleClose}>Cancelar</Button>
-            <Button type="submit" disabled={isSubmitting}>{isSubmitting ? "Registrando" : "Registrar"}</Button>
+            <Button type="submit" disabled={isSubmitting || crearMutation.isPending}>
+              {isSubmitting || crearMutation.isPending ? "Registrando..." : "Registrar"}
+            </Button>
           </div>
         </form>
       </DialogContent>

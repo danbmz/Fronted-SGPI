@@ -1,40 +1,32 @@
-import { desactivarMotivoParo } from "../../services/motivosService"
-import type { MotivoParo } from "@/types/motivosCatalogo"
-import { useAuth } from "@/features/auth/hooks/useAuth"
-import { toast } from "sonner"
+import { useDesactivarMotivoParo } from "../../hooks/useMotivosParo";
+import type { MotivoParo } from "../../schemas/motivosParo";
+import { toast } from "sonner";
 import {
   Dialog, DialogContent, DialogHeader,
   DialogTitle, DialogDescription
-} from "@/components/ui/dialog"
-import { Button } from "@/components/ui/button"
-import { useState } from "react"
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 
 interface Props {
-  open: boolean
-  motivo: MotivoParo | null
-  onClose: () => void
-  onSuccess: (motivo: MotivoParo) => void
+  open: boolean;
+  motivo: MotivoParo | null;
+  onClose: () => void;
 }
 
-export default function DialogDesactivarMotivoParo({ open, motivo, onClose, onSuccess }: Props) {
-  const [isLoading, setIsLoading] = useState(false)
-  const { user } = useAuth()
+export default function DialogDesactivarMotivoParo({ open, motivo, onClose }: Props) {
+  const desactivarMutation = useDesactivarMotivoParo();
 
   const handleConfirmar = async () => {
-    if (!user || !motivo) return
-    setIsLoading(true)
+    if (!motivo) return;
 
     try {
-      const motivoDesactivado = await desactivarMotivoParo(motivo, user)
-      toast.success("Motivo de paro desactivado.")
-      onSuccess(motivoDesactivado)
-      onClose()
-    } catch {
-      toast.error("Error al desactivar el motivo de paro.")
-    } finally{
-      setIsLoading(false)
+      await desactivarMutation.mutateAsync(motivo.id);
+      toast.success("Motivo de paro desactivado.");
+      onClose();
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Error al desactivar el motivo de paro.");
     }
-  }
+  };
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
@@ -52,9 +44,11 @@ export default function DialogDesactivarMotivoParo({ open, motivo, onClose, onSu
 
         <div className="flex justify-end gap-2 mt-4">
           <Button variant="outline" onClick={onClose}>Cancelar</Button>
-          <Button variant="destructive" onClick={handleConfirmar} disabled={isLoading}>{isLoading ? "Desactivando" : "Desactivar"}</Button>
+          <Button variant="destructive" onClick={handleConfirmar} disabled={desactivarMutation.isPending}>
+            {desactivarMutation.isPending ? "Desactivando..." : "Desactivar"}
+          </Button>
         </div>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

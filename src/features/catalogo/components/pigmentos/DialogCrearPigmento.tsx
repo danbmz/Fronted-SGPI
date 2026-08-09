@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
-import { crearPigmentoSchema, type CrearPigmentoInput, type Pigmento } from "../../schemas/pigmento";
+import { crearPigmentoSchema, type CrearPigmentoInput } from "../../schemas/pigmento";
 import { useCrearPigmento } from "../../hooks/usePigmentos";
 import { TIPO_MATERIAL, TIPO_PIGMENTO, CATEGORIA_COLOR } from "@/types/enums";
 import {
@@ -20,10 +20,9 @@ import { useColorSolido } from "../../hooks/useColorSolido";
 interface Props {
   open: boolean;
   onClose: () => void;
-  onSuccess: (pigmento: Pigmento) => void;
 }
 
-export default function DialogCrearPigmento({ open, onClose, onSuccess }: Props) {
+export default function DialogCrearPigmento({ open, onClose }: Props) {
   const { data: coloresSolidos } = useColorSolido();
   const {
     register, handleSubmit, reset, setValue, watch,
@@ -36,9 +35,8 @@ export default function DialogCrearPigmento({ open, onClose, onSuccess }: Props)
 
   const onSubmit = async (data: CrearPigmentoInput) => {
     try {
-      const nuevoPigmento = await crearMutation.mutateAsync(data);
+      await crearMutation.mutateAsync(data);
       toast.success("Pigmento creado correctamente.");
-      onSuccess(nuevoPigmento);
       reset();
       onClose();
     } catch (error) {

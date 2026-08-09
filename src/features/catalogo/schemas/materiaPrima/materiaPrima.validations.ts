@@ -10,8 +10,7 @@ export const crearMateriaPrimaSchema = z.object({
     .min(3, "El nombre debe tener al menos 3 caracteres"),
   codigoInterno: z
     .string()
-    .min(1, "El código interno es requerido")
-    .regex(/^[A-Z]{2}-[A-Z0-9]{4}$/, "Formato inválido, ejemplo: JU-PVL1"),
+    .min(1, "El código interno es requerido"),
   tipo: z.enum(TIPO_MATERIAL, {
     message: "Selecciona un tipo válido",
   }),

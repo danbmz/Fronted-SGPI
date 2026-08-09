@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
-import { crearMateriaPrimaSchema, type CrearMateriaPrimaInput, type MateriaPrima } from "../../schemas/materiaPrima";
+import { crearMateriaPrimaSchema, type CrearMateriaPrimaInput } from "../../schemas/materiaPrima";
 import { useCrearMateriaPrima } from "../../hooks/useMateriasPrimas";
 import { TIPO_MATERIAL, UNIDAD_MEDIDA } from "@/types/enums";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -13,10 +13,9 @@ import { Button } from "@/components/ui/button";
 interface Props {
   open: boolean;
   onClose: () => void;
-  onSuccess: (materiaPrima: MateriaPrima) => void;
 }
 
-export default function DialogCrearMateriaPrima({ open, onClose, onSuccess }: Props) {
+export default function DialogCrearMateriaPrima({ open, onClose }: Props) {
   const {
     register,
     handleSubmit,
@@ -32,9 +31,8 @@ export default function DialogCrearMateriaPrima({ open, onClose, onSuccess }: Pr
 
   const onSubmit = async (data: CrearMateriaPrimaInput) => {
     try {
-      const nuevaMateriaPrima = await crearMutation.mutateAsync(data);
+      await crearMutation.mutateAsync(data);
       toast.success("Materia prima creada correctamente.");
-      onSuccess(nuevaMateriaPrima);
       reset();
       onClose();
     } catch (error) {

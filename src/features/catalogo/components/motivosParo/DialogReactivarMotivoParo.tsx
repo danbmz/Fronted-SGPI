@@ -1,40 +1,32 @@
-import { reactivarMotivoParo } from "../../services/motivosService"
-import type { MotivoParo } from "@/types/motivosCatalogo"
-import { useAuth } from "@/features/auth/hooks/useAuth"
-import { toast } from "sonner"
+import { useReactivarMotivoParo } from "../../hooks/useMotivosParo";
+import type { MotivoParo } from "../../schemas/motivosParo";
+import { toast } from "sonner";
 import {
   Dialog, DialogContent, DialogHeader,
   DialogTitle, DialogDescription
-} from "@/components/ui/dialog"
-import { Button } from "@/components/ui/button"
-import { useState } from "react"
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 
 interface Props {
-  open: boolean
-  motivo: MotivoParo | null
-  onClose: () => void
-  onSuccess: (motivo: MotivoParo) => void
+  open: boolean;
+  motivo: MotivoParo | null;
+  onClose: () => void;
 }
 
-export default function DialogReactivarMotivoParo({ open, motivo, onClose, onSuccess }: Props) {
-  const [isLoading, setIsLoading] = useState(false)
-  const { user } = useAuth()
+export default function DialogReactivarMotivoParo({ open, motivo, onClose }: Props) {
+  const reactivarMutation = useReactivarMotivoParo();
 
   const handleConfirmar = async () => {
-    if (!user || !motivo) return
-    setIsLoading(true)
+    if (!motivo) return;
 
     try {
-      const motivoReactivado = await reactivarMotivoParo(motivo, user)
-      toast.success("Motivo de paro reactivado.")
-      onSuccess(motivoReactivado)
-      onClose()
-    } catch {
-      toast.error("Error al reactivar el motivo de paro.")
-    } finally {
-      setIsLoading(false)
+      await reactivarMutation.mutateAsync(motivo.id);
+      toast.success("Motivo de paro reactivado.");
+      onClose();
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Error al reactivar el motivo de paro.");
     }
-  }
+  };
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
@@ -52,9 +44,11 @@ export default function DialogReactivarMotivoParo({ open, motivo, onClose, onSuc
 
         <div className="flex justify-end gap-2 mt-4">
           <Button variant="outline" onClick={onClose}>Cancelar</Button>
-          <Button onClick={handleConfirmar} disabled={isLoading}>{isLoading ? "Reactivando" : "Reactivar"}</Button>
+          <Button onClick={handleConfirmar} disabled={reactivarMutation.isPending}>
+            {reactivarMutation.isPending ? "Reactivando..." : "Reactivar"}
+          </Button>
         </div>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

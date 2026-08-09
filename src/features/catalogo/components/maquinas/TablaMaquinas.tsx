@@ -1,6 +1,5 @@
-// src/components/catalogos/maquinas/TablaMaquinas.tsx
 import { useState } from "react"
-import type { Maquina } from "@/types/maquinasCatalogo"
+import type { Maquina } from "../../schemas/maquina"
 import {
   Table, TableBody, TableCell,
   TableHead, TableHeader, TableRow
@@ -14,27 +13,18 @@ import { Button } from "@/components/ui/button"
 import { MoreHorizontal } from "lucide-react"
 import DialogEditarMaquina from "./DialogEditarMaquina"
 import DialogCambiarEstadoMaquina from "./DialogCambiarEstadoMaquina"
-// import DialogCrearMaquina from "./DialogCrearMaquina"
-// import DialogEditarMaquina from "./DialogEditarMaquina"
-// import DialogCambiarEstadoMaquina from "./DialogCambiarEstadoMaquina"
 
 interface Props {
   maquinas: Maquina[]
-  onMaquinaEditada: (maquina: Maquina) => void
-  onEstadoCambiado: (maquina: Maquina) => void
 }
 
 const colorEstado: Record<string, string> = {
-  "activa":           "bg-green-100 text-green-700",
-  "en mantenimiento": "bg-yellow-100 text-yellow-700",
-  "inactiva":         "bg-red-100 text-red-700"
+  ACTIVA:           "bg-green-100 text-green-700",
+  MANTENIMIENTO: "bg-yellow-100 text-yellow-700",
+  INACTIVA:         "bg-red-100 text-red-700"
 }
 
-export default function TablaMaquinas({
-  maquinas,
-  onMaquinaEditada,
-  onEstadoCambiado
-}: Props) {
+export default function TablaMaquinas({ maquinas }: Props) {
   const [maquinaSeleccionada, setMaquinaSeleccionada] = useState<Maquina | null>(null)
   const [dialogAbierto, setDialogAbierto] = useState<"editar" | "cambiarEstado" | null>(null)
 
@@ -113,14 +103,12 @@ export default function TablaMaquinas({
         open={dialogAbierto === "editar"}
         maquina={maquinaSeleccionada}
         onClose={cerrarDialog}
-        onSuccess={onMaquinaEditada}
       />
 
       <DialogCambiarEstadoMaquina
         open={dialogAbierto === "cambiarEstado"}
         maquina={maquinaSeleccionada}
         onClose={cerrarDialog}
-        onSuccess={onEstadoCambiado}
       />
     </>
   )

@@ -14,3 +14,12 @@ export type CategoriaColor = (typeof CATEGORIA_COLOR)[number];
 
 export const TIPO_PIGMENTO = ["MASTER", "POLVO"] as const;
 export type TipoPigmento = (typeof TIPO_PIGMENTO)[number];
+
+export const TIPO_PROCESO = ["INYECCION"] as const;
+export type TipoProceso = (typeof TIPO_PROCESO)[number];
+
+export const ESTADO_MAQUINA = ["ACTIVA", "INACTIVA", "MANTENIMIENTO"] as const;
+export type EstadoMaquina = (typeof ESTADO_MAQUINA)[number];
+
+export const CATEGORIA_MOTIVO_PARO = ["INICIO", "MATERIAL", "MOLDE", "MAQUINA", "OTROS"];
+export type CategoriaMotivoParo = (typeof CATEGORIA_MOTIVO_PARO)[number];

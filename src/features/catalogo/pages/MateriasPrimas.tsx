@@ -33,7 +33,6 @@ export default function MateriasPrimas() {
       <DialogCrearMateriaPrima
         open={dialogCrearAbierto}
         onClose={() => { setDialogCrearAbierto(false)}}
-        onSuccess={() => setDialogCrearAbierto(false)}
       />
 
     </div>

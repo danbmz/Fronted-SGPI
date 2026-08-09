@@ -1,72 +1,65 @@
-import { useEffect } from "react"
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { cambiarEstadoSchema, type CambiarEstadoForm } from "@/validations/catalogo/maquinaValidations"
-import { cambiarEstadoMaquina } from "../../services/maquinasService"
-import type { Maquina, EstadoMaquina } from "@/types/maquinasCatalogo"
-import { useAuth } from "@/features/auth/hooks/useAuth"
-import { toast } from "sonner"
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { cambiarEstadoMaquinaSchema, type CambiarEstadoMaquinaInput, type Maquina } from "../../schemas/maquina";
+import { useCambiarEstadoMaquina } from "../../hooks/useMaquina";
+import { ESTADO_MAQUINA } from "@/types/enums";
+import { toast } from "sonner";
 import {
   Dialog, DialogContent, DialogHeader,
   DialogTitle, DialogDescription
-} from "@/components/ui/dialog"
-import { Button } from "@/components/ui/button"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import {
   Select, SelectContent, SelectItem,
   SelectTrigger, SelectValue
-} from "@/components/ui/select"
+} from "@/components/ui/select";
 
 interface Props {
-  open: boolean
-  maquina: Maquina | null
-  onClose: () => void
-  onSuccess: (maquina: Maquina) => void
+  open: boolean;
+  maquina: Maquina | null;
+  onClose: () => void;
 }
 
-const estadoColors: Record<EstadoMaquina, string> = {
-  "activa":           "text-green-600",
-  "en mantenimiento": "text-yellow-600",
-  "inactiva":         "text-red-600"
-}
+const estadoColors: Record<string, string> = {
+  ACTIVA: "text-green-600",
+  MANTENIMIENTO: "text-yellow-600",
+  INACTIVA: "text-red-600",
+};
 
-export default function DialogCambiarEstadoMaquina({ open, maquina, onClose, onSuccess }: Props) {
-  const { user } = useAuth()
+export default function DialogCambiarEstadoMaquina({ open, maquina, onClose }: Props) {
   const {
     register, handleSubmit, reset, setValue, watch,
     formState: { errors, isSubmitting, isDirty }
-  } = useForm<CambiarEstadoForm>({
-    resolver: zodResolver(cambiarEstadoSchema)
-  })
+  } = useForm<CambiarEstadoMaquinaInput>({
+    resolver: zodResolver(cambiarEstadoMaquinaSchema),
+  });
 
-  // Rellena el form cuando se abre con los datos de la maquina seleccionada
+  const cambiarEstadoMutation = useCambiarEstadoMaquina();
+
   useEffect(() => {
     if (maquina) {
-      reset({
-        estado: maquina.estado,
-        motivo: "", // Baseline explícito para que isDirty lo considere
-      })
+      reset({ estado: maquina.estado, motivo: "" });
     }
-  }, [maquina])
+  }, [maquina]);
 
-  const onSubmit = async (data: CambiarEstadoForm) => {
-    if (!user || !maquina) return
+  const onSubmit = async (data: CambiarEstadoMaquinaInput) => {
+    if (!maquina) return;
     try {
-      const maquinaActualizada = await cambiarEstadoMaquina(maquina, data, user)
-      toast.success("Estado actualizado correctamente.")
-      onSuccess(maquinaActualizada)
-      reset()
-      onClose()
-    } catch {
-      toast.error("Error al cambiar el estado.")
+      await cambiarEstadoMutation.mutateAsync({ id: maquina.id, data });
+      toast.success("Estado actualizado correctamente.");
+      onClose();
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Error al cambiar el estado.");
     }
-  }
+  };
 
   const handleClose = () => {
-    reset()
-    onClose()
-  }
+    reset();
+    onClose();
+  };
 
   return (
     <Dialog open={open} onOpenChange={handleClose}>
@@ -93,15 +86,17 @@ export default function DialogCambiarEstadoMaquina({ open, maquina, onClose, onS
             <Label>Nuevo estado</Label>
             <Select
               value={watch("estado") ?? ""}
-              onValueChange={val => setValue("estado", val as EstadoMaquina, { shouldValidate: true, shouldDirty: true })}
+              onValueChange={(val) =>
+                setValue("estado", val as (typeof ESTADO_MAQUINA)[number], { shouldValidate: true, shouldDirty: true })
+              }
             >
               <SelectTrigger>
                 <SelectValue placeholder="Selecciona un estado" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="activa">Activa</SelectItem>
-                <SelectItem value="en mantenimiento">En mantenimiento</SelectItem>
-                <SelectItem value="inactiva">Inactiva</SelectItem>
+                {ESTADO_MAQUINA.map((e) => (
+                  <SelectItem key={e} value={e}>{e}</SelectItem>
+                ))}
               </SelectContent>
             </Select>
             {errors.estado && <p className="text-xs text-red-500">{errors.estado.message}</p>}
@@ -119,12 +114,12 @@ export default function DialogCambiarEstadoMaquina({ open, maquina, onClose, onS
 
           <div className="flex justify-end gap-2 mt-2">
             <Button type="button" variant="outline" onClick={handleClose}>Cancelar</Button>
-            <Button type="submit" disabled={isSubmitting || !isDirty}>
-                {isSubmitting ? "Guardando" : "Guardar cambio"}    
+            <Button type="submit" disabled={isSubmitting || !isDirty || cambiarEstadoMutation.isPending}>
+              {isSubmitting || cambiarEstadoMutation.isPending ? "Guardando..." : "Guardar cambio"}
             </Button>
           </div>
         </form>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

@@ -1,81 +1,32 @@
-import type { Maquina, CrearMaquinaDTO, EditarMaquinaDTO, CambiarEstadoMaquinaDTO } from "@/types/maquinasCatalogo"
-import type { AuthUser } from "@/types/usuario"
-import { registrarLog } from "@/lib/auditService"
+import { httpClient } from "@/lib/httpClient"
+import { maquinaSchema, listaMaquinaSchema, type CrearMaquinaInput, type EditarMaquinaInput, type CambiarEstadoMaquina } from "../schemas/maquina"
+import { parseOrThrow } from "@/lib/parseOrThrow"
 
-export const getMaquinas = async (): Promise<Maquina[]> => {
-  await new Promise(resolve => setTimeout(resolve, 800))
-  const response = await fetch("/mocks/catalogo/maquinas.json")
-  const data = await response.json()
-  return data.map((m: any) => ({
-    ...m,
-    id: String(m.id),
-    capacidadTon: m.capacidadTon ?? null
-  }))
+export async function listarMaquinas(){
+  const response = await httpClient('/maquinas');
+  return parseOrThrow(response, listaMaquinaSchema);
 }
 
-export const crearMaquina = async (
-  data: CrearMaquinaDTO,
-  usuarioActivo: AuthUser
-): Promise<Maquina> => {
-  await new Promise(resolve => setTimeout(resolve, 800))
-
-  const nuevaMaquina: Maquina = {
-    ...data,
-    id: String(Date.now()),
-    estado: "activa",
-    createdAt: new Date().toISOString()
-  }
-
-  await registrarLog({
-    usuario: usuarioActivo.usuario,
-    nombre: usuarioActivo.nombre,
-    modulo: "catalogos",
-    accion: "crear",
-    entidad: "Maquina",
-    entidadId: nuevaMaquina.id,
-    detalle: `Máquina '${nuevaMaquina.nombre}' registrada`
+export async function crearMaquina(data: CrearMaquinaInput) {
+  const response = await httpClient('/maquinas', {
+    method: 'POST',
+    body: JSON.stringify(data),
   })
-
-  return nuevaMaquina
+  return parseOrThrow(response, maquinaSchema)
 }
 
-export const editarMaquina = async (
-  id: string,
-  data: EditarMaquinaDTO,
-  maquinaOriginal: Maquina,
-  usuarioActivo: AuthUser
-): Promise<Maquina> => {
-  await new Promise(resolve => setTimeout(resolve, 800))
-
-  await registrarLog({
-    usuario: usuarioActivo.usuario,
-    nombre: usuarioActivo.nombre,
-    modulo: "catalogos",
-    accion: "editar",
-    entidad: "Maquina",
-    entidadId: id,
-    detalle: `Máquina '${data.nombre}' editada`
+export async function editarMaquina(id: string, data: EditarMaquinaInput) {
+  const response = await httpClient(`/maquinas/${id}`, {
+    method: 'PATCH',
+    body: JSON.stringify(data),
   })
-
-  return { ...maquinaOriginal, ...data, id }
+  return parseOrThrow(response, maquinaSchema)
 }
 
-export const cambiarEstadoMaquina = async (
-  maquina: Maquina,
-  data: CambiarEstadoMaquinaDTO,
-  usuarioActivo: AuthUser
-): Promise<Maquina> => {
-  await new Promise(resolve => setTimeout(resolve, 800))
-
-  await registrarLog({
-    usuario: usuarioActivo.usuario,
-    nombre: usuarioActivo.nombre,
-    modulo: "catalogos",
-    accion: "cambiar_estado",
-    entidad: "Maquina",
-    entidadId: maquina.id,
-    detalle: `Máquina '${maquina.nombre}' cambió de estado: ${maquina.estado} → ${data.estado}. Motivo: ${data.motivo}`
+export async function cambiarEstadoMaquina(id: string, data: CambiarEstadoMaquina) {
+  const response = await httpClient(`/maquinas/${id}/estado`, {
+    method: 'PATCH',
+    body: JSON.stringify(data),
   })
-
-  return { ...maquina, estado: data.estado }
+  return parseOrThrow(response, maquinaSchema)
 }

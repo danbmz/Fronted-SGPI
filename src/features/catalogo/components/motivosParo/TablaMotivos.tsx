@@ -1,5 +1,5 @@
 import { useState } from "react"
-import type { MotivoParo } from "@/types/motivosCatalogo"
+import type { MotivoParo } from "../../schemas/motivosParo"
 import {
   Table, TableBody, TableCell,
   TableHead, TableHeader, TableRow
@@ -17,17 +17,9 @@ import DialogReactivarMotivoParo from "./DialogReactivarMotivoParo"
 
 interface Props {
   motivosParo: MotivoParo[]
-  onMotivoEditado: (motivo: MotivoParo) => void
-  onMotivoDesactivado: (motivo: MotivoParo) => void
-  onMotivoReactivado: (motivo: MotivoParo) => void
 }
 
-export default function TablaMotivosParo({
-  motivosParo,
-  onMotivoEditado,
-  onMotivoDesactivado,
-  onMotivoReactivado
-}: Props) {
+export default function TablaMotivosParo({ motivosParo }: Props) {
   const [motivoSeleccionado, setMotivoSeleccionado] = useState<MotivoParo | null>(null)
   const [dialogAbierto, setDialogAbierto] = useState<"editar" | "desactivar" | "reactivar" | null>(null)
 
@@ -111,21 +103,18 @@ export default function TablaMotivosParo({
         open={dialogAbierto === "editar"}
         motivo={motivoSeleccionado}
         onClose={cerrarDialog}
-        onSuccess={onMotivoEditado}
       />
 
       <DialogDesactivarMotivoParo
         open={dialogAbierto === "desactivar"}
         motivo={motivoSeleccionado}
         onClose={cerrarDialog}
-        onSuccess={onMotivoDesactivado}
       />
 
       <DialogReactivarMotivoParo
         open={dialogAbierto === "reactivar"}
         motivo={motivoSeleccionado}
         onClose={cerrarDialog}
-        onSuccess={onMotivoReactivado}
       />
     </>
   )

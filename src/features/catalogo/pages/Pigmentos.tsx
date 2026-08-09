@@ -33,7 +33,6 @@ export default function Pigmentos() {
         <DialogCrearPigmento
             open={dialogCrearAbierto}
             onClose={() => setDialogCrearAbierto(false)}
-            onSuccess={() => setDialogCrearAbierto(false)}
         />
 
     </div>
