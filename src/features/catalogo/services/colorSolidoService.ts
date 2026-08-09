@@ -1,14 +1,14 @@
 import { httpClient } from "@/lib/httpClient"
-import { colorSolidoSchema, listaColorSolido, type CrearColorSolidoInput, type EditarColorSolidoInput } from "../schemas/colorSolido";
+import { colorSolidoSchema, listaColorSolido, type ColorSolido, type CrearColorSolidoInput, type EditarColorSolidoInput } from "../schemas/colorSolido";
 import { parseOrThrow } from "@/lib/parseOrThrow";
 import { okResponseSchema } from "@/lib/commonSchemas";
 
-export async function listarColorSolido() {
+export async function listarColorSolido(): Promise<ColorSolido[]> {
   const response = await httpClient('/colores-solidos');
   return parseOrThrow(response, listaColorSolido)
 }
 
-export async function crearColorSolido(data: CrearColorSolidoInput) {
+export async function crearColorSolido(data: CrearColorSolidoInput): Promise <ColorSolido> {
   const response = await httpClient('/colores-solidos',{
     method: 'POST',
     body: JSON.stringify(data),
@@ -16,7 +16,7 @@ export async function crearColorSolido(data: CrearColorSolidoInput) {
   return parseOrThrow(response, colorSolidoSchema)
 }
 
-export async function editarColorSolido(id: string, data: EditarColorSolidoInput){
+export async function editarColorSolido(id: string, data: EditarColorSolidoInput): Promise <ColorSolido>{
   const response = await httpClient(`/colores-solidos/${id}`, {
     method: 'PATCH',
     body: JSON.stringify(data),
@@ -24,12 +24,12 @@ export async function editarColorSolido(id: string, data: EditarColorSolidoInput
   return parseOrThrow(response, colorSolidoSchema)
 } 
 
-export async function desactivarColorSolido(id: string) {
+export async function desactivarColorSolido(id: string): Promise <void> {
   const response = await httpClient(`/colores-solidos/${id}`,{ method: 'DELETE' });
-  return parseOrThrow(response, okResponseSchema)
+  await parseOrThrow(response, okResponseSchema)
 }
 
-export async function reactivarColorSolido(id: string) {
+export async function reactivarColorSolido(id: string): Promise <void> {
   const response = await httpClient(`/colores-solidos/${id}/reactivar`, { method: 'PATCH'});
-  return parseOrThrow(response, colorSolidoSchema)
+  await parseOrThrow(response, colorSolidoSchema)
 }

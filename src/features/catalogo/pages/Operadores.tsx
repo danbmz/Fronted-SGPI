@@ -6,7 +6,7 @@ import DialogCrearOperador from "../components/operadores/DialogCrearOperador"
 import { useOperador } from "../hooks/useOperador"
 
 
-function Operadores() {
+export default function Operadores() {
     const [dialogCrearAbierto, setDialogCrearAbierto] = useState(false)
     const { data: operadores, isLoading, error } = useOperador()
 
@@ -36,5 +36,3 @@ function Operadores() {
         </div>
     )
 }
-
-export default Operadores

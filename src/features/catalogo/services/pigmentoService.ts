@@ -3,16 +3,17 @@ import {
   pigmentoSchema,
   listaPigmentoSchema,
   type CrearPigmentoInput,
-  type EditarPigmentoInput } from "../schemas/pigmento"
+  type EditarPigmentoInput, 
+  type Pigmento} from "../schemas/pigmento"
 import { parseOrThrow } from "@/lib/parseOrThrow";
 import { okResponseSchema } from "@/lib/commonSchemas";
 
-export async function listarPigmentos() {
+export async function listarPigmentos(): Promise <Pigmento[]> {
   const response = await httpClient('/pigmentos');
   return parseOrThrow(response, listaPigmentoSchema)
 }
 
-export async function crearPigmento(data: CrearPigmentoInput) {
+export async function crearPigmento(data: CrearPigmentoInput): Promise <Pigmento>  {
   const response = await httpClient('/pigmentos',{
     method: 'POST',
     body: JSON.stringify(data),
@@ -20,7 +21,7 @@ export async function crearPigmento(data: CrearPigmentoInput) {
   return parseOrThrow(response, pigmentoSchema)
 }
 
-export async function editarPigmento(id: string, data: EditarPigmentoInput){
+export async function editarPigmento(id: string, data: EditarPigmentoInput): Promise <Pigmento>{
   const response = await httpClient(`/pigmentos/${id}`, {
     method: 'PATCH',
     body: JSON.stringify(data),
@@ -28,12 +29,12 @@ export async function editarPigmento(id: string, data: EditarPigmentoInput){
   return parseOrThrow(response, pigmentoSchema)
 } 
 
-export async function desactivarPigmento(id: string) {
+export async function desactivarPigmento(id: string): Promise <void> {
   const response = await httpClient(`/pigmentos/${id}`,{ method: 'DELETE' });
-  return parseOrThrow(response, okResponseSchema)
+  await parseOrThrow(response, okResponseSchema)
 }
 
-export async function reactivarPigmento(id: string) {
+export async function reactivarPigmento(id: string): Promise <void> {
   const response = await httpClient(`/pigmentos/${id}/reactivar`, { method: 'PATCH'});
-  return parseOrThrow(response, pigmentoSchema)
+  await parseOrThrow(response, pigmentoSchema)
 }
