@@ -1,5 +1,5 @@
 import { useState } from "react"
-import type { Pigmento, CategoriaColor } from "@/validations/catalogo/pigmentosValidations"
+import type { Pigmento } from "../../schemas/pigmento"
 import {
   Table, TableBody, TableCell,
   TableHead, TableHeader, TableRow
@@ -17,44 +17,22 @@ import DialogReactivarPigmento from "./DialogReactivarPigmento"
 
 interface Props {
   pigmentos: Pigmento[]
-  onPigmentoEditado: (pigmento: Pigmento) => void
-  onPigmentoDesactivado: (pigmento: Pigmento) => void
-  onPigmentoReactivado: (pigmento: Pigmento) => void
 }
 
-export const colorCategoria: Record<CategoriaColor, string> = {
-  "Sólidos":           "bg-blue-100 text-blue-700",
-  "Sólidos Pasteles":  "bg-pink-100 text-pink-700",
-  "Neón Traslucidos":  "bg-green-100 text-green-700",
-  "Jarra Neón Pastel": "bg-orange-100 text-orange-700"
+export const colorCategoria: Record<string, string> = {
+  SOLIDO:           "bg-blue-100 text-blue-700",
+  SOLIDO_PASTEL:  "bg-pink-100 text-pink-700",
+  NEON_TRASLUCIDO:  "bg-green-100 text-green-700",
+  JARRA_NEON_PASTEL: "bg-orange-100 text-orange-700",
+  NATURAL: "bg-gray-100 text-gray-700"
 }
 
 export const colorTipo: Record<string, string> = {
-  master: "bg-purple-100 text-purple-700",
-  polvo:  "bg-yellow-100 text-yellow-700"
+  MASTER: "bg-purple-100 text-purple-700",
+  POLVO:  "bg-yellow-100 text-yellow-700"
 }
 
-export const categoriaColores: Record<string, string> = {
-    natural: "bg-stone-100 text-stone-700",
-    amarillo: "bg-yellow-100 text-yellow-700",
-    verde: "bg-green-100 text-green-700",
-    naranja: "bg-orange-100 text-orange-700",
-    azul: "bg-blue-100 text-blue-700",
-    "azul pastel": "bg-blue-100 text-blue-700",
-    rojo: "bg-red-100 text-red-700",
-    morado: "bg-purple-100 text-purple-700",
-    blanco: "bg-gray-100 text-gray-500",
-    rosa: "bg-pink-100 text-pink-700",
-    beige: "bg-amber-100 text-amber-700",
-    crema: "bg-yellow-50 text-yellow-600",
-}
-
-export default function TablaPigmentos({
-  pigmentos,
-  onPigmentoEditado,
-  onPigmentoDesactivado,
-  onPigmentoReactivado
-}: Props) {
+export default function TablaPigmentos({ pigmentos }: Props) {
   const [pigmentoSeleccionado, setPigmentoSeleccionado] = useState<Pigmento | null>(null)
   const [dialogAbierto, setDialogAbierto] = useState<"editar" | "desactivar" | "reactivar" | null>(null)
 
@@ -76,7 +54,8 @@ export default function TablaPigmentos({
             <TableHead>Color</TableHead>
             <TableHead>Categoría</TableHead>
             <TableHead>Tipo</TableHead>
-            <TableHead>Aplicación</TableHead>
+            <TableHead>Color Sólido </TableHead>
+            <TableHead>dosisGrPorKg</TableHead>
             <TableHead>Estado</TableHead>
             <TableHead>Acciones</TableHead>
           </TableRow>
@@ -97,7 +76,7 @@ export default function TablaPigmentos({
                   {pigmento.tipo}
                 </span>
               </TableCell>
-              <TableCell>{pigmento.aplicacion}</TableCell>
+              <TableCell>{pigmento.colorSolidoNombre}</TableCell>
               <TableCell>
                 <span className={`text-xs px-2 py-1 rounded-full font-medium ${
                   pigmento.activo
@@ -107,6 +86,7 @@ export default function TablaPigmentos({
                   {pigmento.activo ? "Activo" : "Inactivo"}
                 </span>
               </TableCell>
+              <TableCell>{pigmento.dosisGrPorKg}g</TableCell>
               <TableCell>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
@@ -153,21 +133,18 @@ export default function TablaPigmentos({
         open={dialogAbierto === "editar"}
         pigmento={pigmentoSeleccionado}
         onClose={cerrarDialog}
-        onSuccess={onPigmentoEditado}
       />
 
       <DialogDesactivarPigmento
         open={dialogAbierto === "desactivar"}
         pigmento={pigmentoSeleccionado}
         onClose={cerrarDialog}
-        onSuccess={onPigmentoDesactivado}
       />
 
       <DialogReactivarPigmento
         open={dialogAbierto === "reactivar"}
         pigmento={pigmentoSeleccionado}
         onClose={cerrarDialog}
-        onSuccess={onPigmentoReactivado}
       />
     </>
   )

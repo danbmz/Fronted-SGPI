@@ -1,34 +1,32 @@
-import { desactivarPigmento } from "../../services/pigmentoService"
-import type { Pigmento } from "@/validations/catalogo/pigmentosValidations"
-import { useAuth } from "@/features/auth/hooks/useAuth"
-import { toast } from "sonner"
+import { useDesactivarPigmento } from "../../hooks/usePigmentos";
+import type { Pigmento } from "../../schemas/pigmento";
+import { toast } from "sonner";
 import {
   Dialog, DialogContent, DialogHeader,
   DialogTitle, DialogDescription
-} from "@/components/ui/dialog"
-import { Button } from "@/components/ui/button"
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 
 interface Props {
-  open: boolean
-  pigmento: Pigmento | null
-  onClose: () => void
-  onSuccess: (pigmento: Pigmento) => void
+  open: boolean;
+  pigmento: Pigmento | null;
+  onClose: () => void;
 }
 
-export default function DialogDesactivarPigmento({ open, pigmento, onClose, onSuccess }: Props) {
-  const { user } = useAuth()
+export default function DialogDesactivarPigmento({ open, pigmento, onClose }: Props) {
+  const desactivarMutation = useDesactivarPigmento();
 
   const handleConfirmar = async () => {
-    if (!user || !pigmento) return
+    if (!pigmento) return;
+
     try {
-      const pigmentoDesactivado = await desactivarPigmento(pigmento, user)
-      toast.success("Pigmento desactivado.")
-      onSuccess(pigmentoDesactivado)
-      onClose()
-    } catch {
-      toast.error("Error al desactivar el pigmento.")
+      await desactivarMutation.mutateAsync(pigmento.id);
+      toast.success("Pigmento desactivado.");
+      onClose();
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Error al desactivar el pigmento.");
     }
-  }
+  };
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
@@ -50,9 +48,11 @@ export default function DialogDesactivarPigmento({ open, pigmento, onClose, onSu
 
         <div className="flex justify-end gap-2 mt-4">
           <Button variant="outline" onClick={onClose}>Cancelar</Button>
-          <Button variant="destructive" onClick={handleConfirmar}>Desactivar</Button>
+          <Button variant="destructive" onClick={handleConfirmar} disabled={desactivarMutation.isPending}>
+            {desactivarMutation.isPending ? "Desactivando..." : "Desactivar"}
+          </Button>
         </div>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

@@ -1,34 +1,32 @@
-import { reactivarPigmento } from "../../services/pigmentoService"
-import type { Pigmento } from "@/validations/catalogo/pigmentosValidations"
-import { useAuth } from "@/features/auth/hooks/useAuth"
-import { toast } from "sonner"
+import { useReactivarPigmento } from "../../hooks/usePigmentos";
+import type { Pigmento } from "../../schemas/pigmento";
+import { toast } from "sonner";
 import {
   Dialog, DialogContent, DialogHeader,
   DialogTitle, DialogDescription
-} from "@/components/ui/dialog"
-import { Button } from "@/components/ui/button"
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 
 interface Props {
-  open: boolean
-  pigmento: Pigmento | null
-  onClose: () => void
-  onSuccess: (pigmento: Pigmento) => void
+  open: boolean;
+  pigmento: Pigmento | null;
+  onClose: () => void;
 }
 
-export default function DialogReactivarPigmento({ open, pigmento, onClose, onSuccess }: Props) {
-  const { user } = useAuth()
+export default function DialogReactivarPigmento({ open, pigmento, onClose }: Props) {
+  const reactivarMutation = useReactivarPigmento();
 
   const handleConfirmar = async () => {
-    if (!user || !pigmento) return
+    if (!pigmento) return;
+
     try {
-      const pigmentoReactivado = await reactivarPigmento(pigmento, user)
-      toast.success("Pigmento reactivado.")
-      onSuccess(pigmentoReactivado)
-      onClose()
-    } catch {
-      toast.error("Error al reactivar el pigmento.")
+      await reactivarMutation.mutateAsync(pigmento.id);
+      toast.success("Pigmento reactivado.");
+      onClose();
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Error al reactivar el pigmento.");
     }
-  }
+  };
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
@@ -50,9 +48,11 @@ export default function DialogReactivarPigmento({ open, pigmento, onClose, onSuc
 
         <div className="flex justify-end gap-2 mt-4">
           <Button variant="outline" onClick={onClose}>Cancelar</Button>
-          <Button onClick={handleConfirmar}>Reactivar</Button>
+          <Button onClick={handleConfirmar} disabled={reactivarMutation.isPending}>
+            {reactivarMutation.isPending ? "Reactivando..." : "Reactivar"}
+          </Button>
         </div>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

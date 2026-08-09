@@ -1,86 +1,63 @@
-import { useEffect, useState } from "react"
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { editarPigmentoSchema, type EditarPigmento, type CategoriaColor, type TipoPigmento, type Pigmento } from "@/validations/catalogo/pigmentosValidations"
-import { editarPigmento } from "../../services/pigmentoService"
-import type { MateriaPrima } from "@/types/materiaPrima"
-import { getMateriasPrimas } from "../../services/materiasPrimasService"
-import { useAuth } from "@/features/auth/hooks/useAuth"
-import { toast } from "sonner"
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { editarPigmentoSchema, type EditarPigmentoInput, type Pigmento } from "../../schemas/pigmento";
+import { useEditarPigmento } from "../../hooks/usePigmentos";
+import { toast } from "sonner";
 import {
   Dialog, DialogContent, DialogHeader,
   DialogTitle, DialogDescription
-} from "@/components/ui/dialog"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import {
-  Select, SelectContent, SelectItem,
-  SelectTrigger, SelectValue
-} from "@/components/ui/select"
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useColorSolido } from "../../hooks/useColorSolido";
 
 interface Props {
-  open: boolean
-  pigmento: Pigmento | null
-  onClose: () => void
-  onSuccess: (pigmento: Pigmento) => void
+  open: boolean;
+  pigmento: Pigmento | null;
+  onClose: () => void;
 }
 
-const categoriasColor: CategoriaColor[] = [
-  "Sólidos",
-  "Sólidos Pasteles",
-  "Neón Traslucidos",
-  "Jarra Neón Pastel"
-]
-
-const tiposPigmento: TipoPigmento[] = ["master", "polvo"]
-
-export default function DialogEditarPigmento({ open, pigmento, onClose, onSuccess }: Props) {
-  const { user } = useAuth()
-  const [materiasPrimas, setMateriasPrimas] = useState<MateriaPrima[]>([])
-
+export default function DialogEditarPigmento({ open, pigmento, onClose }: Props) {
+  const { data: coloresSolidos } = useColorSolido();
   const {
     register, handleSubmit, reset, setValue, watch,
     formState: { errors, isSubmitting, isDirty }
-  } = useForm<EditarPigmento>({
-    resolver: zodResolver(editarPigmentoSchema)
-  })
+  } = useForm<EditarPigmentoInput>({
+    resolver: zodResolver(editarPigmentoSchema),
+  });
 
-  useEffect(() => {
-    const fetchMateriales = async () => {
-      try {
-        const data = await getMateriasPrimas()
-        setMateriasPrimas(data.filter(m => m.activo))
-      } catch {
-        toast.error("Error al cargar materias primas.")
-      }
-    }
-    fetchMateriales()
-  }, [])
+  const editarMutation = useEditarPigmento();
 
   useEffect(() => {
     if (pigmento) {
-      reset(pigmento)
+      reset({
+        color: pigmento.color,
+        dosisGrPorKg: pigmento.dosisGrPorKg,
+        costoUnitario: pigmento.costoUnitario ?? undefined,
+        stockMinimo: pigmento.stockMinimo,
+        colorSolidoId: pigmento.colorSolidoId ?? undefined, 
+      });
     }
-  }, [pigmento, setValue])
+  }, [pigmento]);
 
-  const onSubmit = async (data: EditarPigmento) => {
-    if (!user || !pigmento) return
+  const onSubmit = async (data: EditarPigmentoInput) => {
+    if (!pigmento) return;
     try {
-      const pigmentoEditado = await editarPigmento(pigmento.id, data, pigmento, user)
-      toast.success("Pigmento actualizado correctamente.")
-      onSuccess(pigmentoEditado)
-      reset()
-      onClose()
-    } catch {
-      toast.error("Error al actualizar el pigmento.")
+      await editarMutation.mutateAsync({ id: pigmento.id, data });
+      toast.success("Pigmento actualizado correctamente.");
+      onClose();
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Error al actualizar el pigmento.");
     }
-  }
+  };
 
   const handleClose = () => {
-    reset()
-    onClose()
-  }
+    reset();
+    onClose();
+  };
 
   return (
     <Dialog open={open} onOpenChange={handleClose}>
@@ -93,28 +70,13 @@ export default function DialogEditarPigmento({ open, pigmento, onClose, onSucces
         </DialogHeader>
 
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4 mt-2">
-
-          <div className="flex flex-col gap-1">
-            <Label>Material base</Label>
-            <Select
-              value={watch("materiaPrimaId") ?? ""}
-              onValueChange={val => {
-                setValue("materiaPrimaId", val, { shouldValidate: true, shouldDirty: true })
-                const material = materiasPrimas.find(m => m.id === val)
-                if (material) setValue("aplicacion", material.nombre, { shouldValidate: true, shouldDirty: true })
-              }}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Selecciona un material" />
-              </SelectTrigger>
-              <SelectContent>
-                {materiasPrimas.map(m => (
-                  <SelectItem key={m.id} value={m.id}>{m.nombre}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            {errors.materiaPrimaId && <p className="text-xs text-red-500">{errors.materiaPrimaId.message}</p>}
-          </div>
+          {pigmento && (
+            <div className="flex flex-col gap-1">
+              <Label>Material base</Label>
+              <Input value={pigmento.tipoMaterial} disabled />
+              <p className="text-xs text-muted-foreground">El material base no se puede modificar.</p>
+            </div>
+          )}
 
           <div className="flex flex-col gap-1">
             <Label>Color</Label>
@@ -123,49 +85,83 @@ export default function DialogEditarPigmento({ open, pigmento, onClose, onSucces
           </div>
 
           <div className="grid grid-cols-2 gap-3">
+            {pigmento && (
+              <div className="flex flex-col gap-1">
+                <Label>Categoría</Label>
+                <Input value={pigmento.categoriaColor} disabled />
+                <p className="text-xs text-muted-foreground">No se puede modificar.</p>
+              </div>
+            )}
+
+            {pigmento && (
+              <div className="flex flex-col gap-1">
+                <Label>Tipo</Label>
+                <Input value={pigmento.tipo} disabled />
+                <p className="text-xs text-muted-foreground">No se puede modificar.</p>
+              </div>
+            )}
+          </div>
+
+          {pigmento?.categoriaColor === "SOLIDO" && (
             <div className="flex flex-col gap-1">
-              <Label>Categoría</Label>
+              <Label>Color sólido (para uso con molido)</Label>
               <Select
-                value={watch("categoriaColor") ?? ""}
-                onValueChange={val => setValue("categoriaColor", val as CategoriaColor, { shouldValidate: true, shouldDirty: true })}
+                value={watch("colorSolidoId") ?? ""}
+                onValueChange={(val) => setValue("colorSolidoId", val, { shouldValidate: true, shouldDirty: true })}
               >
                 <SelectTrigger>
-                  <SelectValue placeholder="Selecciona" />
+                  <SelectValue placeholder="Selecciona (opcional)" />
                 </SelectTrigger>
                 <SelectContent>
-                  {categoriasColor.map(c => (
-                    <SelectItem key={c} value={c}>{c}</SelectItem>
+                  {(coloresSolidos ?? []).map((c) => (
+                    <SelectItem key={c.id} value={c.id}>{c.nombre}</SelectItem>
                   ))}
                 </SelectContent>
               </Select>
-              {errors.categoriaColor && <p className="text-xs text-red-500">{errors.categoriaColor.message}</p>}
+              {errors.colorSolidoId && <p className="text-xs text-red-500">{errors.colorSolidoId.message}</p>}
+            </div>
+          )}
+
+          <div className="grid grid-cols-2 gap-3">
+            <div className="flex flex-col gap-1">
+              <Label>Dosis (gr/kg)</Label>
+              <Input
+                type="number"
+                step="0.001"
+                {...register("dosisGrPorKg", { valueAsNumber: true })}
+              />
+              {errors.dosisGrPorKg && <p className="text-xs text-red-500">{errors.dosisGrPorKg.message}</p>}
             </div>
 
             <div className="flex flex-col gap-1">
-              <Label>Tipo</Label>
-              <Select
-                value={watch("tipo") ?? ""}
-                onValueChange={val => setValue("tipo", val as TipoPigmento, { shouldValidate: true, shouldDirty: true })}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Selecciona" />
-                </SelectTrigger>
-                <SelectContent>
-                  {tiposPigmento.map(t => (
-                    <SelectItem key={t} value={t}>{t}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              {errors.tipo && <p className="text-xs text-red-500">{errors.tipo.message}</p>}
+              <Label>Stock mínimo</Label>
+              <Input
+                type="number"
+                step="0.001"
+                {...register("stockMinimo", { valueAsNumber: true })}
+              />
+              {errors.stockMinimo && <p className="text-xs text-red-500">{errors.stockMinimo.message}</p>}
             </div>
+          </div>
+
+          <div className="flex flex-col gap-1">
+            <Label>Costo unitario</Label>
+            <Input
+              type="number"
+              step="0.01"
+              {...register("costoUnitario", { valueAsNumber: true })}
+            />
+            {errors.costoUnitario && <p className="text-xs text-red-500">{errors.costoUnitario.message}</p>}
           </div>
 
           <div className="flex justify-end gap-2 mt-2">
             <Button type="button" variant="outline" onClick={handleClose}>Cancelar</Button>
-            <Button type="submit" disabled={isSubmitting || !isDirty}>{isSubmitting ? "Guardando" : "Guardar cambios"}</Button>
+            <Button type="submit" disabled={isSubmitting || !isDirty || editarMutation.isPending}>
+              {isSubmitting || editarMutation.isPending ? "Guardando..." : "Guardar cambios"}
+            </Button>
           </div>
         </form>
       </DialogContent>
     </Dialog>
-  )
+  );
 }
