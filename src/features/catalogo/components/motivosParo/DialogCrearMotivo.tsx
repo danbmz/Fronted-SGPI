@@ -35,7 +35,7 @@ export default function DialogCrearMotivoParo({ open, onClose }: Props) {
       reset()
       onClose()
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Error al crear la motivo de paro.")
+      toast.error(error instanceof Error ? error.message : "Error al crear el motivo de paro.")
     }
   }
 

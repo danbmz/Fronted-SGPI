@@ -1,53 +1,17 @@
-import { useEffect, useState } from "react"
-import { getOperadores } from "../services/operadorService"
-import type { Operador } from "@/types/operadoresCatalogo"
+import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { UserPlus } from "lucide-react"
 import TablaOperadores from "../components/operadores/TablaOperadores"
 import DialogCrearOperador from "../components/operadores/DialogCrearOperador"
+import { useOperador } from "../hooks/useOperador"
 
 
 function Operadores() {
-    const [operadores, setOperadores] = useState<Operador[]>([])
-    const [loading, setLoading] = useState(true)
-    const [error, setError] = useState<string | null>(null)
     const [dialogCrearAbierto, setDialogCrearAbierto] = useState(false)
+    const { data: operadores, isLoading, error } = useOperador()
 
-    useEffect(() => {
-        const fetchOperadores = async () => {
-        try {
-            const data = await getOperadores()
-            setOperadores(data)
-        } catch {
-            setError("Error al cargar operadores")
-        } finally {
-            setLoading(false)
-        }
-        }
-        fetchOperadores()
-    }, [])
-
-    const handleOperadorCreado = (nuevoOperador: Operador) => {
-        setOperadores(prev => [...prev, nuevoOperador])
-    }
-
-    const handleOperadorEditado = (operadorEditado: Operador) => {
-        setOperadores(prev =>
-        prev.map(o => o.id === operadorEditado.id ? operadorEditado : o)
-        )
-    }
-
-    const handleOperadorDesactivado = (operadorDesactivado: Operador) => {
-        setOperadores(prev =>
-        prev.map(o => o.id === operadorDesactivado.id ? { ...o, activo: false } : o)
-        )
-    }
-
-    const handleOperadorReactivado = (operadorReactivado: Operador) => {
-        setOperadores(prev =>
-        prev.map(o => o.id === operadorReactivado.id ? { ...o, activo: true } : o)
-        )
-    }
+    if (isLoading) return <div>Cargando...</div>;
+    if (error) return <div>Error al cargar Operadores: {error.message}</div>;
 
     return (
         <div className="flex flex-col gap-4 h-screen p-6">
@@ -63,22 +27,11 @@ function Operadores() {
                 </Button>
             </div>
 
-            {loading && <p className="text-muted-foreground">Cargando operadores...</p>}
-            {error && <p className="text-red-500">{error}</p>}
-
-            {!loading && !error && (
-                <TablaOperadores
-                operadores={operadores}
-                onOperadorEditado={handleOperadorEditado}
-                onOperadorDesactivado={handleOperadorDesactivado}
-                onOperadorReactivado={handleOperadorReactivado}
-                />
-            )}
+            <TablaOperadores operadores={operadores ?? []} />
 
             <DialogCrearOperador
                 open={dialogCrearAbierto}
                 onClose={() => setDialogCrearAbierto(false)}
-                onSuccess={handleOperadorCreado}
             />
         </div>
     )

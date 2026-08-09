@@ -1,9 +1,8 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { crearProductoSchema,type CrearProducto } from "@/validations/catalogo/productosValidations";
-import { crearProducto } from "../../services/productosService";
-import type { Producto, TipoProducto } from "@/validations/catalogo/productosValidations";
-import { useAuth } from "@/features/auth/hooks/useAuth";
+import { crearProductoSchema, type CrearProductoInput } from "../../schemas/productos";
+import { useCrearProducto } from "../../hooks/useProducto";
+import { TIPO_MATERIAL } from "@/types/enums";
 import { toast } from "sonner";
 import {
   Dialog, DialogContent, DialogHeader,
@@ -20,28 +19,24 @@ import {
 interface Props {
     open: boolean
     onClose: () => void
-    onSuccess: (producto: Producto) => void
 }
 
-const tiposProductos: TipoProducto[] = ["Jarra", "Plato", "Vaso", "Colador", "Cubeta"]
-
-export default function DialogCrearProducto({open, onClose, onSuccess}: Props) {
-    const { user } = useAuth()
+export default function DialogCrearProducto({open, onClose}: Props) {
     const { register, handleSubmit, reset, setValue, watch, 
-        formState: {errors, isSubmitting}} = useForm<CrearProducto>({
+        formState: {errors, isSubmitting}} = useForm<CrearProductoInput>({
             resolver: zodResolver(crearProductoSchema)
         })
 
-    const onSubmit = async (data: CrearProducto) => {
-        if(!user) return
+    const crearMutation = useCrearProducto()
+
+    const onSubmit = async (data: CrearProductoInput) => {
         try {
-            const nuevoProducto = await crearProducto(data, user)
+            await crearMutation.mutateAsync(data)
             toast.success("Producto agregado exitosamente")
-            onSuccess(nuevoProducto)
             reset()
             onClose()
         } catch (error) {
-            toast.error("Error al crear el producto")
+            toast.error(error instanceof Error ? error.message : "Error al crear el producto")
         }
     }
 
@@ -54,83 +49,120 @@ export default function DialogCrearProducto({open, onClose, onSuccess}: Props) {
         <Dialog open={open} onOpenChange={handleClose}>
             <DialogContent>
                 <DialogHeader>
-                    <DialogTitle>Nuevo Producto</DialogTitle>
-                    <DialogDescription>
-                        Regista un nuevo producto en el catálogo.
-                    </DialogDescription>
+                <DialogTitle>Nuevo Producto</DialogTitle>
+                <DialogDescription>
+                    Registra un nuevo producto en el catálogo.
+                </DialogDescription>
                 </DialogHeader>
 
                 <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4 mt-2">
+                <div className="flex flex-col gap-1">
+                    <Label>Código de producto</Label>
+                    <Input {...register("codigo")} placeholder="Ej. 07503025176529" />
+                    {errors.codigo && <p className="text-xs text-red-500">{errors.codigo.message}</p>}
+                </div>
+
+                <div className="flex flex-col gap-1">
+                    <Label>Nombre</Label>
+                    <Input {...register("nombre")} placeholder="Ej. Jarra 3L" />
+                    {errors.nombre && <p className="text-xs text-red-500">{errors.nombre.message}</p>}
+                </div>
+
+                <div className="flex flex-col gap-1">
+                    <Label>Descripción</Label>
+                    <Input {...register("descripcion")} placeholder="Ej. Jarra de plástico con tapa" />
+                    {errors.descripcion && <p className="text-xs text-red-500">{errors.descripcion.message}</p>}
+                </div>
+
+                <div className="grid grid-cols-2 gap-3">
                     <div className="flex flex-col gap-1">
-                        <Label>Código de producto</Label>
-                        <Input {...register("codigo")} placeholder="Ej. JU-PVL1"/>
-                        {errors.codigo && <p className="text-xs text-red-500">{errors.codigo.message}</p>}
-                    </div>
-
-                    <div className="flex flex-col gap-1">
-                        <Label>Nombre</Label>
-                        <Input {...register("nombre")} placeholder="Ej. Jarra 3L" />
-                        {errors.nombre && <p className="text-xs text-red-500">{errors.nombre.message}</p>}
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-3">
-                        <div className="flex flex-col gap-1">
-                            <Label>Tipo</Label>
-                            <Select 
-                                value={watch("tipo") ?? ""}
-                                onValueChange={val => setValue("tipo", val as TipoProducto, { shouldValidate: true})}
-                            >
-                                <SelectTrigger>
-                                    <SelectValue placeholder="Seleccionar"/>
-                                </SelectTrigger>
-                                <SelectContent>
-                                    {tiposProductos.map(p => (
-                                        <SelectItem key={p} value={p}>{p}</SelectItem>
-                                    ))}
-                                </SelectContent>
-                            </Select>
-                            {errors.tipo && <p className="text-xs text-red-500">{errors.tipo.message}</p>}
-                        </div>
-
-                        <div className="flex flex-col gap-1">
-                            <Label>Cavidades</Label>
-                            <Input
-                              type="number"
-                              step="0.01"
-                              {...register("cavidades", {valueAsNumber: true})}
-                              placeholder="Ej. 1"
-                            />
-                            {errors.cavidades && <p className="text-xs text-red-500">{errors.cavidades.message}</p>}
-                        </div>
+                        <Label>Tipo</Label>
+                        <Input {...register("tipo")} placeholder="Ej. Jarra" />
+                        {errors.tipo && <p className="text-xs text-red-500">{errors.tipo.message}</p>}
                     </div>
 
                     <div className="flex flex-col gap-1">
-                        <Label>Ciclo estándar (seg)</Label>
-                        <Input
-                          type="number"
-                          step="0.01"
-                          {...register("ciclo", { valueAsNumber: true})}
-                        />
-                        {errors.ciclo && <p className="text-xs text-red-500">{errors.ciclo.message}</p>}
+                    <Label>Material</Label>
+                    <Select
+                        value={watch("tipoMaterial") ?? ""}
+                        onValueChange={(val) =>
+                        setValue("tipoMaterial", val as (typeof TIPO_MATERIAL)[number], { shouldValidate: true })
+                        }
+                    >
+                        <SelectTrigger>
+                        <SelectValue placeholder="Seleccionar" />
+                        </SelectTrigger>
+                        <SelectContent>
+                        {TIPO_MATERIAL.map((t) => (
+                            <SelectItem key={t} value={t}>{t}</SelectItem>
+                        ))}
+                        </SelectContent>
+                    </Select>
+                    {errors.tipoMaterial && <p className="text-xs text-red-500">{errors.tipoMaterial.message}</p>}
+                    </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-3">
+                    <div className="flex flex-col gap-1">
+                    <Label>Cavidades</Label>
+                    <Input
+                        type="number"
+                        {...register("cavidades", { valueAsNumber: true })}
+                        placeholder="Ej. 1"
+                    />
+                    {errors.cavidades && <p className="text-xs text-red-500">{errors.cavidades.message}</p>}
                     </div>
 
                     <div className="flex flex-col gap-1">
-                        <Label>Peso unitario (gr)</Label>
-                        <Input
-                          type="number"
-                          step="0.01"
-                          {...register("peso", { valueAsNumber: true})}
-                          placeholder="100gr"
-                        />
-                        {errors.peso && <p className="text-xs text-red-500">{errors.peso.message}</p>}
+                    <Label>Ciclo estándar (seg)</Label>
+                    <Input
+                        type="number"
+                        {...register("ciclo", { valueAsNumber: true })}
+                    />
+                    {errors.ciclo && <p className="text-xs text-red-500">{errors.ciclo.message}</p>}
+                    </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-3">
+                    <div className="flex flex-col gap-1">
+                    <Label>Peso unitario (gr)</Label>
+                    <Input
+                        type="number"
+                        step="0.01"
+                        {...register("peso", { valueAsNumber: true })}
+                        placeholder="100"
+                    />
+                    {errors.peso && <p className="text-xs text-red-500">{errors.peso.message}</p>}
                     </div>
 
-                    <div className="flex justify-end gap-2 mt-2">
-                        <Button type="button" variant="outline" onClick={handleClose}>Cancelar</Button>
-                        <Button type="submit" disabled={isSubmitting}>
-                            {isSubmitting ? "Creando" : "Crear producto"}
-                        </Button>
+                    <div className="flex flex-col gap-1">
+                    <Label>Piezas por empaque</Label>
+                    <Input
+                        type="number"
+                        {...register("piezasPorEmpaque", { valueAsNumber: true })}
+                        placeholder="Ej. 12"
+                    />
+                    {errors.piezasPorEmpaque && <p className="text-xs text-red-500">{errors.piezasPorEmpaque.message}</p>}
                     </div>
+                </div>
+
+                <div className="flex flex-col gap-1">
+                    <Label>Precio</Label>
+                    <Input
+                    type="number"
+                    step="0.01"
+                    {...register("precio", { valueAsNumber: true })}
+                    placeholder="0.00"
+                    />
+                    {errors.precio && <p className="text-xs text-red-500">{errors.precio.message}</p>}
+                </div>
+
+                <div className="flex justify-end gap-2 mt-2">
+                    <Button type="button" variant="outline" onClick={handleClose}>Cancelar</Button>
+                    <Button type="submit" disabled={isSubmitting}>
+                    {isSubmitting ? "Creando..." : "Crear producto"}
+                    </Button>
+                </div>
                 </form>
             </DialogContent>
         </Dialog>

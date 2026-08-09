@@ -1,128 +1,80 @@
-import { useEffect } from "react"
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { type EditarOperadorForm, editarOperadorSchema } from "@/validations/catalogo/operadorValidations"
-import type { Operador } from "@/types/operadoresCatalogo"
-import { editarOperador } from "../../services/operadorService"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { useAuth } from "@/features/auth/hooks/useAuth"
-import { toast } from "sonner"
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { editarOperadorSchema, type EditarOperadorInput, type Operador } from "../../schemas/operadores";
+import { useEditarOperador } from "../../hooks/useOperador";
+import { toast } from "sonner";
+import {
+  Dialog, DialogContent, DialogHeader,
+  DialogTitle, DialogDescription
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
-
-interface Props{
-    open: boolean
-    operador: Operador | null
-    onClose: () => void
-    onSuccess: (operador: Operador) => void
+interface Props {
+  open: boolean;
+  operador: Operador | null;
+  onClose: () => void;
 }
 
-export default function DialogEditarOperador({open, operador,  onClose, onSuccess}: Props) {
-    const { register, handleSubmit, reset, setValue, formState: { errors, isSubmitting, isDirty } } = useForm<EditarOperadorForm>({
-    resolver: zodResolver(editarOperadorSchema)
-    })
-    const { user } = useAuth()
+export default function DialogEditarOperador({ open, operador, onClose }: Props) {
+  const {
+    register, handleSubmit, reset,
+    formState: { errors, isSubmitting, isDirty }
+  } = useForm<EditarOperadorInput>({
+    resolver: zodResolver(editarOperadorSchema),
+  });
 
-    // Rellena el form cuando se abre con los datos del usuario seleccionado
-    useEffect(() => {
+  const editarMutation = useEditarOperador();
+
+  useEffect(() => {
     if (operador) {
-        setValue("nombre", operador.nombre)
-        setValue("numeroEmpleado", operador.numeroEmpleado)
-        setValue("area", operador.area)
-        setValue("turnoHabitual", operador.turnoHabitual)
-        reset(operador) // seteamos los valores de operador como los originales, isDirty se vuelve true cuando algun valor del form cambia respecto a los originales
-        // password lo dejamos vacío, solo se actualiza si el admin escribe algo nuevo
+      reset({ nombre: operador.nombre });
     }
-    }, [operador, setValue])
+  }, [operador]);
 
-
-    const onSubmit = async (data: EditarOperadorForm) => {
-        if(!user || !operador) return
-        
-        try {
-            const nuevoOperador = await editarOperador( String(operador?.id), data, operador, user)
-            toast.success("Operador editado exitosamente.")
-            onSuccess(nuevoOperador)
-            reset()
-            onClose()
-        } catch (error) {
-            toast.error("Error al intentar editar Operador.")
-        }
+  const onSubmit = async (data: EditarOperadorInput) => {
+    if (!operador) return;
+    try {
+      await editarMutation.mutateAsync({ id: operador.id, data });
+      toast.success("Operador actualizado correctamente.");
+      onClose();
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Error al actualizar el operador.");
     }
+  };
 
-    const handleClose = () => {
-        reset() // limpia el form al cerrar
-        onClose()
-    }
+  const handleClose = () => {
+    reset();
+    onClose();
+  };
 
-    return (
-        <Dialog open={open} onOpenChange={handleClose}>
-            <DialogContent>
-            <DialogHeader>
-                <DialogTitle>Editar operador</DialogTitle>
-                <DialogDescription>
-                    Actualiza la información del operador
-                </DialogDescription>
-            </DialogHeader>
-    
-            <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4 mt-2">
-                <div className="flex flex-col gap-1">
-                <Label>Nombre completo</Label>
-                <Input {...register("nombre")} placeholder="Juan Pérez" />
-                {errors.nombre && (
-                    <p className="text-xs text-red-500">{errors.nombre.message}</p>
-                )}
-                </div>
-    
-                <div className="flex flex-col gap-1">
-                <Label>Número de empleado</Label>
-                <Input {...register("numeroEmpleado")} placeholder="295-R" />
-                    {errors.numeroEmpleado && (
-                    <p className="text-xs text-red-500">{errors.numeroEmpleado.message}</p>
-                    )}
-                </div>
-    
-                <div className="flex flex-col gap-1">
-                <Label>Área</Label>
-                <Input {...register("area")} placeholder="Soplado" />
-                {errors.area && (
-                    <p className="text-xs text-red-500">{errors.area.message}</p>
-                )}
-                </div>
-    
-                <div className="flex flex-col gap-1">
-                <Label>Turno</Label>
-                <Select
-                    value={operador?.turnoHabitual ?? ""} 
-                    onValueChange={(val) => setValue("turnoHabitual", val as "Mañana" | "Tarde" | "Noche", {shouldValidate: true, shouldDirty: true})}
-                >
-                    <SelectTrigger>
-                    <SelectValue placeholder="Selecciona un turno" />
-                    </SelectTrigger>
-                    <SelectContent>
-                    <SelectItem value="Mañana">Mañana</SelectItem>
-                    <SelectItem value="Tarde">Tarde</SelectItem>
-                    <SelectItem value="Noche">Noche</SelectItem>
-                    </SelectContent>
-                </Select>
-                {errors.turnoHabitual && (
-                    <p className="text-xs text-red-500">{errors.turnoHabitual.message}</p>
-                )}
-                </div>
-    
-                <div className="flex justify-end gap-2 mt-2">
-                <Button type="button" variant="outline" onClick={handleClose}>
-                    Cancelar
-                </Button>
-                <Button type="submit" disabled={isSubmitting || !isDirty}>
-                    {isSubmitting ? "Guardando" : "Guardar cambios"}
-                </Button>
-                </div>
-            </form>
-            </DialogContent>
-        </Dialog>
-    )
+  return (
+    <Dialog open={open} onOpenChange={handleClose}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Editar operador</DialogTitle>
+          <DialogDescription>
+            Actualiza la información del operador.
+          </DialogDescription>
+        </DialogHeader>
+
+        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4 mt-2">
+          <div className="flex flex-col gap-1">
+            <Label>Nombre completo</Label>
+            <Input {...register("nombre")} placeholder="Juan Pérez" />
+            {errors.nombre && <p className="text-xs text-red-500">{errors.nombre.message}</p>}
+          </div>
+
+          <div className="flex justify-end gap-2 mt-2">
+            <Button type="button" variant="outline" onClick={handleClose}>Cancelar</Button>
+            <Button type="submit" disabled={isSubmitting || !isDirty || editarMutation.isPending}>
+              {isSubmitting || editarMutation.isPending ? "Guardando..." : "Guardar cambios"}
+            </Button>
+          </div>
+        </form>
+      </DialogContent>
+    </Dialog>
+  );
 }

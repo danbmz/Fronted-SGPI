@@ -1,6 +1,5 @@
-// src/components/catalogos/operadores/TablaOperadores.tsx
 import { useState } from "react"
-import type { Operador } from "@/types/operadoresCatalogo"
+import type { Operador } from "../../schemas/operadores"
 import {
   Table, TableBody, TableCell,
   TableHead, TableHeader, TableRow
@@ -18,12 +17,9 @@ import DialogReactivarOperador from "./DialogReactivarOperador"
 
 interface Props {
   operadores: Operador[]
-  onOperadorEditado: (operador: Operador) => void
-  onOperadorDesactivado: (operador: Operador) => void
-  onOperadorReactivado: (operador: Operador) => void
 }
 
-export default function TablaOperadores({operadores, onOperadorEditado, onOperadorDesactivado, onOperadorReactivado }: Props) {
+export default function TablaOperadores({ operadores }: Props) {
   const [operadorSeleccionado, setOperadorSeleccionado] = useState<Operador | null>(null)
   const [dialogAbierto, setDialogAbierto] = useState<"editar" | "desactivar" | "reactivar" | null>(null)
 
@@ -43,9 +39,6 @@ export default function TablaOperadores({operadores, onOperadorEditado, onOperad
         <TableHeader>
           <TableRow>
             <TableHead>Nombre</TableHead>
-            <TableHead>N° Empleado</TableHead>
-            <TableHead>Turno</TableHead>
-            <TableHead>Área</TableHead>
             <TableHead>Estado</TableHead>
             <TableHead>Acciones</TableHead>
           </TableRow>
@@ -54,9 +47,6 @@ export default function TablaOperadores({operadores, onOperadorEditado, onOperad
           {operadores.map((operador) => (
             <TableRow key={operador.id}>
               <TableCell className="font-medium">{operador.nombre}</TableCell>
-              <TableCell>{operador.numeroEmpleado}</TableCell>
-              <TableCell>{operador.turnoHabitual}</TableCell>
-              <TableCell>{operador.area}</TableCell>
               <TableCell>
                 <span className={`text-xs px-2 py-1 rounded-full font-medium ${
                   operador.activo
@@ -100,7 +90,7 @@ export default function TablaOperadores({operadores, onOperadorEditado, onOperad
           ))}
           {operadores.length === 0 && (
             <TableRow>
-              <TableCell colSpan={6} className="text-center text-muted-foreground py-8">
+              <TableCell colSpan={3} className="text-center text-muted-foreground py-8">
                 No hay operadores registrados.
               </TableCell>
             </TableRow>
@@ -108,27 +98,22 @@ export default function TablaOperadores({operadores, onOperadorEditado, onOperad
         </TableBody>
       </Table>
 
-
-
       <DialogEditarOperador
         open={dialogAbierto === "editar"}
         operador={operadorSeleccionado}
         onClose={cerrarDialog}
-        onSuccess={onOperadorEditado}
       />
 
       <DialogDesactivarOperador
         open={dialogAbierto === "desactivar"}
         operador={operadorSeleccionado}
         onClose={cerrarDialog}
-        onSuccess={onOperadorDesactivado}
       />
 
       <DialogReactivarOperador
         open={dialogAbierto === "reactivar"}
         operador={operadorSeleccionado}
         onClose={cerrarDialog}
-        onSuccess={onOperadorReactivado}
       />
     </>
   )

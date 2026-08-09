@@ -1,94 +1,35 @@
-import type { Producto, CrearProducto, EditarProducto } from "@/validations/catalogo/productosValidations";
-import type { AuthUser } from "@/types/usuario";
-import { registrarLog } from "@/lib/auditService";
+import { httpClient } from "@/lib/httpClient";
+import { listaProductoSchema, productoSchema, type CrearProductoInput, type EditarProductoInput } from "../schemas/productos";
+import { parseOrThrow } from "@/lib/parseOrThrow";
+import { okResponseSchema } from "@/lib/commonSchemas";
 
-export const getProductos = async (): Promise<Producto[]> => {
-    await new Promise(resolve => setTimeout(resolve, 500))
-    const response = await fetch("/mocks/catalogo/productos.json")
-    const data = await response.json()
-    return data
+export async function listarProductos(){
+  const response = await httpClient('/productos');
+  return parseOrThrow(response,listaProductoSchema)
 }
 
-export const crearProducto = async (
-    data: CrearProducto,
-    usuarioActivo: AuthUser
-): Promise<Producto> => {
-    await new Promise(resolve => setTimeout(resolve, 500))
-
-    const nuevoProducto: Producto = {
-        ...data,
-        id: String(Date.now()),
-        activo:true
-    }
-
-    await registrarLog({
-        usuario: usuarioActivo.usuario,
-        nombre: usuarioActivo.nombre,
-        modulo: "catalogos",
-        entidad: "Productos",
-        accion: "crear",
-        entidadId: nuevoProducto.id,
-        detalle: `Producto: ${nuevoProducto.nombre}`
-    })
-
-    return nuevoProducto
+export async function crearProducto(data: CrearProductoInput){
+  const response = await httpClient('/productos', {
+    method: 'POST',
+    body: JSON.stringify(data),
+  });
+  return parseOrThrow(response,productoSchema)
 }
 
-export const editarProducto = async(
-    id: string,
-    data: EditarProducto,
-    productoOriginal: Producto,
-    usuarioActivo: AuthUser
-): Promise<Producto> => {
-    await new Promise(resolve => setTimeout(resolve, 500))
-
-    await registrarLog({
-        usuario: usuarioActivo.usuario,
-        nombre: usuarioActivo.nombre,
-        modulo: "catalogos",
-        entidad: "Productos",
-        accion: "editar",
-        entidadId: id,
-        detalle: `Producto: ${productoOriginal.nombre} - ${productoOriginal.codigo} modificado`
-    })
-
-    return {...productoOriginal, ...data, id}
+export async function editarProducto(id: string, data: EditarProductoInput){
+  const response = await httpClient(`/productos/${id}`, {
+    method: 'PATCH',
+    body: JSON.stringify(data),
+  });
+  return parseOrThrow(response,productoSchema)
 }
 
-export const desactivarProducto = async (
-  producto: Producto,
-  usuarioActivo: AuthUser
-): Promise<Producto> => {
-  await new Promise(resolve => setTimeout(resolve, 500))
-
-  await registrarLog({
-    usuario: usuarioActivo.usuario,
-    nombre: usuarioActivo.nombre,
-    modulo: "catalogos",
-    entidad: "Productos",
-    accion: "desactivar",
-    entidadId: producto.id,
-    detalle: `Producto: '${producto.nombre}' - ${producto.codigo} desactivada`
-  })
-
-  return { ...producto, activo: false }
+export async function desactivarProducto(id: string){
+  const response = await httpClient(`/productos/${id}`, { method: 'DELETE' });
+  return parseOrThrow(response,okResponseSchema)
 }
 
-export const reactivarProducto = async (
-  producto: Producto,
-  usuarioActivo: AuthUser
-): Promise<Producto> => {
-  await new Promise(resolve => setTimeout(resolve, 500))
-
-  await registrarLog({
-    usuario: usuarioActivo.usuario,
-    nombre: usuarioActivo.nombre,
-    modulo: "catalogos",
-    entidad: "Productos",
-    accion: "reactivar",
-    entidadId: producto.id,
-    detalle: `Materia prima '${producto.nombre}' - ${producto.codigo} reactivada`
-  })
-
-  return { ...producto, activo: true }
+export async function reactivarProducto(id: string){
+  const response = await httpClient(`/productos/${id}`, { method: 'PATCH' });
+  return parseOrThrow(response,okResponseSchema)
 }

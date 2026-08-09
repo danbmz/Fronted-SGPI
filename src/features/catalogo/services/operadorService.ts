@@ -1,102 +1,40 @@
-import type { Operador, CrearOperadorDTO, EditarOperadorDTO } from '@/types/operadoresCatalogo'
-import { registrarLog } from "@/lib/auditService"
-import type { AuthUser } from "@/types/usuario"
+import { httpClient } from "@/lib/httpClient"
+import { 
+  operadorSchema,
+  listaOperadorSchema,
+  type CrearOperadorInput,
+  type EditarOperadorInput } from "../schemas/operadores"
+import { parseOrThrow } from "@/lib/parseOrThrow"
+import { okResponseSchema } from "@/lib/commonSchemas"
 
-// NOS QUEDAMOS AQUI
-export const getOperadores = async (): Promise<Operador[]> => {
-  await new Promise(resolve => setTimeout(resolve, 800))
-  
-  const response = await fetch("/mocks/catalogo/operadores.json")
-  const data = await response.json()
-  
-  return data.map((o: any) => ({
-    ...o,
-    id: String(o.id),
-    turnoHabitual: o.turnoHabitual as "Mañana" | "Tarde" | "Noche"
-  }))
-}
 
-export const crearOperador = async (
-  data: CrearOperadorDTO,
-  usuarioActivo: AuthUser
-): Promise<Operador> => {
-  await new Promise(resolve => setTimeout(resolve, 800))
+export async function listarOperadores(){
+  const response = await httpClient('/operadores');
+  return parseOrThrow(response, listaOperadorSchema)
+};
 
-  const nuevoOperador: Operador = {
-    ...data,
-    id: String(Date.now()),
-    activo: true,
-    createdAt: new Date().toISOString()
-  }
+export async function crearOperador(data: CrearOperadorInput){
+  const response = await httpClient('/operadores', {
+    method: 'POST',
+    body: JSON.stringify(data),
+  });
+  return parseOrThrow(response,operadorSchema)
+};
 
-  await registrarLog({
-    usuario: usuarioActivo.usuario,
-    nombre: usuarioActivo.nombre,
-    modulo: "catalogos",
-    accion: "crear",
-    entidad: "Operador",
-    entidadId: nuevoOperador.id,
-    detalle: `Operador '${nuevoOperador.nombre}' creado`
-  })
+export async function editarOperador(id: string, data: EditarOperadorInput){
+  const response = await httpClient(`/operadores/${id}`, {
+    method: 'PATCH',
+    body: JSON.stringify(data),
+  });
+  return parseOrThrow(response,operadorSchema)
+};
 
-  return nuevoOperador
-}
+export async function desactivarOperador(id: string){
+  const response = await httpClient(`/operadores/${id}`, { method: 'DELETE'});
+  return parseOrThrow(response, okResponseSchema)
+};
 
-export const editarOperador = async (
-  id: string,
-  data: EditarOperadorDTO,
-  operadorOriginal: Operador,
-  usuarioActivo: AuthUser
-): Promise<Operador> => {
-  await new Promise(resolve => setTimeout(resolve, 800))
-
-  await registrarLog({
-    usuario: usuarioActivo.usuario,
-    nombre: usuarioActivo.nombre,
-    modulo: "catalogos",
-    accion: "editar",
-    entidad: "Operador",
-    entidadId: id,
-    detalle: `Operador '${operadorOriginal.nombre}' editado`
-  })
-
-  return { ...operadorOriginal, ...data, id }
-}
-
-export const desactivarOperador = async (
-  operador: Operador,
-  usuarioActivo: AuthUser
-): Promise<Operador> => {
-  await new Promise(resolve => setTimeout(resolve, 800))
-
-  await registrarLog({
-    usuario: usuarioActivo.usuario,
-    nombre: usuarioActivo.nombre,
-    modulo: "catalogos",
-    accion: "desactivar",
-    entidad: "Operador",
-    entidadId: operador.id,
-    detalle: `Operador '${operador.nombre}' desactivado`
-  })
-
-  return { ...operador, activo: false }
-}
-
-export const reactivarOperador = async (
-  operador: Operador,
-  usuarioActivo: AuthUser
-): Promise<Operador> => {
-  await new Promise(resolve => setTimeout(resolve, 800))
-
-  await registrarLog({
-    usuario: usuarioActivo.usuario,
-    nombre: usuarioActivo.nombre,
-    modulo: "catalogos",
-    accion: "reactivar",
-    entidad: "Operador",
-    entidadId: operador.id,
-    detalle: `Operador '${operador.nombre}' reactivado`
-  })
-
-  return { ...operador, activo: true }
-}
+export async function reactivarOperador(id: string){
+  const response = await httpClient(`/operadores/${id}/reactivar`, { method: 'PATCH'});
+  return parseOrThrow(response,okResponseSchema)
+};

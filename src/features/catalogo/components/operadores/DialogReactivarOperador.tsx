@@ -1,36 +1,27 @@
-import { useAuth } from "@/features/auth/hooks/useAuth"
-import type { Operador } from "@/types/operadoresCatalogo"
-import { reactivarOperador } from "../../services/operadorService"
+import { useReactivarOperador } from "../../hooks/useOperador"
+import type { Operador } from "../../schemas/operadores"
 import { toast } from "sonner"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
-import { useState } from "react"
 
 interface Props{
     open: boolean
     operador: Operador | null
     onClose: () => void
-    onSuccess: (operador: Operador) => void
 }
 
-export default function DialogReactivarOperador ({open, operador, onClose, onSuccess}: Props) {
-    const [isLoading, setIsLoading] = useState(false)
-    const { user } = useAuth()
+export default function DialogReactivarOperador ({open, operador, onClose}: Props) {
+    const reactivarMutation = useReactivarOperador()
 
     const handleConfirmar = async () => {
-        if(!operador || !user) return
-        setIsLoading(true)
+        if(!operador) return
 
         try {
-            const operadorReactivado = await reactivarOperador(operador, user);
-            onSuccess(operadorReactivado)
+            await reactivarMutation.mutateAsync(operador.id);
             toast.success(`Operador ${operador.nombre} Activado.`)
             onClose()
         } catch (error) {
-            onClose()
-            toast.error("Error al intentar activar Operador.")
-        } finally{
-            setIsLoading(false)
+            toast.error(error instanceof Error ? error.message : "Error al reactivar operador.")
         }
     }
 
@@ -45,8 +36,10 @@ export default function DialogReactivarOperador ({open, operador, onClose, onSuc
                 </DialogHeader>
                 <p>¿Estás seguro que deseas reactivar a <strong>{operador?.nombre}</strong>?</p>
                 <div className="flex justify-end gap-2 mt-4">
-                <Button variant="outline" onClick={onClose}>Cancelar</Button>
-                <Button onClick={handleConfirmar} disabled={isLoading}>{isLoading ? "Reactivando" : "Reactivar"}</Button>
+                  <Button variant="outline" onClick={onClose}>Cancelar</Button>
+                  <Button onClick={handleConfirmar} disabled={reactivarMutation.isPending}>
+                    {reactivarMutation.isPending ? "Reactivando..." : "Reactivar"}
+                  </Button>
                 </div>
             </DialogContent>
         </Dialog>
