@@ -1,67 +1,63 @@
-// DialogEditarUsuario.tsx
-import { useEffect } from "react"
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { editarUsuarioSchema, type EditarUsuarioForm } from "@/validations/usuarioValidations"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import type { Role, User } from "@/types/usuario"
-import { editarUsuario } from "../usuariosServices"
-import { useAuth } from "@/features/auth/hooks/useAuth"
-import { toast } from "sonner"
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { editarUsuarioSchema, type EditarUsuarioInput } from "../../usuarios/schemas/usuario.validation";
+import type { Usuario } from "../../usuarios/schemas/usuario.schema";
+import { useEditarUsuario } from "../../usuarios/hook/useUsuario";
+import { ROL_USUARIO } from "@/types/enums";
+import { toast } from "sonner";
+import {
+  Dialog, DialogContent, DialogHeader,
+  DialogTitle, DialogDescription
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select, SelectContent, SelectItem,
+  SelectTrigger, SelectValue
+} from "@/components/ui/select";
 
 interface Props {
-  open: boolean
-  usuario: User | null
-  onClose: () => void
-  onSuccess: (usuario: User) => void
+  open: boolean;
+  usuario: Usuario | null;
+  onClose: () => void;
 }
 
-export default function DialogEditarUsuario({ open, usuario, onClose, onSuccess }: Props) {
-  const { register, handleSubmit, reset, setValue, formState: {errors, isSubmitting, isDirty} } = useForm<EditarUsuarioForm>({
-    resolver: zodResolver(editarUsuarioSchema)
-  })
-  const { user } = useAuth()
+export default function DialogEditarUsuario({ open, usuario, onClose }: Props) {
+  const {
+    register, handleSubmit, reset, setValue, watch,
+    formState: { errors, isSubmitting, isDirty }
+  } = useForm<EditarUsuarioInput>({
+    resolver: zodResolver(editarUsuarioSchema),
+  });
 
-  // Rellena el form cuando se abre con los datos del usuario seleccionado
+  const editarMutation = useEditarUsuario();
+
   useEffect(() => {
     if (usuario) {
       reset({
-      nombre: usuario.nombre,
-      usuario: usuario.usuario,
-      role: usuario.role,
-      password: "", // Baseline explícito para que isDirty lo considere
-    });
+        nombre: usuario.nombre,
+        role: usuario.role,
+      });
     }
-  }, [usuario])
+  }, [usuario]);
 
-  
-const onSubmit = async (data: EditarUsuarioForm) => {
-  if (!user || !usuario) return
-
-  try {
-    const usuarioEditado = await editarUsuario(
-      String(usuario.id), // ← el id del usuario a editar
-      data, // Los neuvos datos
-      usuario, // El objeto del usuario a editar
-      user // El objeto del usuario que esta editando
-    )
-    toast.success("Usuario editado.")
-    onSuccess(usuarioEditado) // ← igual que en crear, para actualizar la tabla
-    reset()
-    onClose()
-  } catch {
-    toast.error("No se pudo editar el usuario.")
-  }
-}
+  const onSubmit = async (data: EditarUsuarioInput) => {
+    if (!usuario) return;
+    try {
+      await editarMutation.mutateAsync({ id: usuario.id, data });
+      toast.success("Usuario actualizado correctamente.");
+      onClose();
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Error al actualizar el usuario.");
+    }
+  };
 
   const handleClose = () => {
-    reset()
-    onClose()
-  }
+    reset();
+    onClose();
+  };
 
   return (
     <Dialog open={open} onOpenChange={handleClose}>
@@ -69,67 +65,53 @@ const onSubmit = async (data: EditarUsuarioForm) => {
         <DialogHeader>
           <DialogTitle>Editar usuario</DialogTitle>
           <DialogDescription>
-            Actualiza la información del usuario
+            Modifica los datos del usuario seleccionado.
           </DialogDescription>
         </DialogHeader>
 
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4 mt-2">
+          {usuario && (
+            <div className="flex flex-col gap-1">
+              <Label>Usuario (login)</Label>
+              <Input value={usuario.usuario} disabled />
+              <p className="text-xs text-muted-foreground">El usuario de acceso no se puede modificar.</p>
+            </div>
+          )}
+
           <div className="flex flex-col gap-1">
             <Label>Nombre completo</Label>
             <Input {...register("nombre")} placeholder="Juan Pérez" />
-            {errors.nombre && (
-              <p className="text-xs text-red-500">{errors.nombre.message}</p>
-            )}
-          </div>
-
-          <div className="flex flex-col gap-1">
-            <Label>Usuario</Label>
-            <Input {...register("usuario")} placeholder="admin01" />
-            {errors.usuario && (
-              <p className="text-xs text-red-500">{errors.usuario.message}</p>
-            )}
-          </div>
-
-          <div className="flex flex-col gap-1">
-            <Label>Nueva contraseña</Label>
-            <Input {...register("password")} type="password" placeholder="Dejar vacío para no cambiar"/>
-            {errors.password && (
-              <p className="text-xs text-red-500">{errors.password.message}</p>
-            )}
-            <p className="text-xs text-muted-foreground">
-              Solo llena este campo si deseas cambiar la contraseña.
-            </p>
+            {errors.nombre && <p className="text-xs text-red-500">{errors.nombre.message}</p>}
           </div>
 
           <div className="flex flex-col gap-1">
             <Label>Rol</Label>
             <Select
-              value={usuario?.role ?? ""}
-              onValueChange={(val) => setValue("role", val as Role, {shouldValidate: true, shouldDirty: true})}
+              value={watch("role") ?? ""}
+              onValueChange={(val) =>
+                setValue("role", val as (typeof ROL_USUARIO)[number], { shouldValidate: true, shouldDirty: true })
+              }
             >
               <SelectTrigger>
                 <SelectValue placeholder="Selecciona un rol" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="admin">Administrador</SelectItem>
-                <SelectItem value="supervisor">Supervisor</SelectItem>
+                {ROL_USUARIO.map((r) => (
+                  <SelectItem key={r} value={r}>{r}</SelectItem>
+                ))}
               </SelectContent>
             </Select>
-            {errors.role && (
-              <p className="text-xs text-red-500">{errors.role.message}</p>
-            )}
+            {errors.role && <p className="text-xs text-red-500">{errors.role.message}</p>}
           </div>
 
           <div className="flex justify-end gap-2 mt-2">
-            <Button type="button" variant="outline" onClick={handleClose}>
-              Cancelar
-            </Button>
-            <Button type="submit" disabled={isSubmitting || !isDirty}>
-              {isSubmitting ? "Guardando" : "Guardar cambios"}
+            <Button type="button" variant="outline" onClick={handleClose}>Cancelar</Button>
+            <Button type="submit" disabled={isSubmitting || !isDirty || editarMutation.isPending}>
+              {isSubmitting || editarMutation.isPending ? "Guardando..." : "Guardar cambios"}
             </Button>
           </div>
         </form>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

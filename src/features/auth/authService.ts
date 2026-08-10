@@ -1,10 +1,11 @@
 import { httpClient } from "@/lib/httpClient";
+import type { Role } from "@/types/enums";
 
 interface LoginResponse {
   usuario: {
     id: string;
     nombre: string;
-    role: "ADMIN" | "SUPERVISOR" | "MOLINO" | "PIGMENTOS";
+    role: Role;
   };
 }
 

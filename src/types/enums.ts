@@ -1,7 +1,8 @@
 // Enums espejo de los que existen en el backend (Prisma).
 // Centralizados aquí para que cualquier schema de Zod los importe sin redefinirlos por su cuenta.
 
-export type Role = "ADMIN" | "SUPERVISOR" | "MOLINO" | "PIGMENTOS"
+export const ROL_USUARIO = ["ADMIN", "SUPERVISOR", "MOLINO", "PIGMENTOS"] as const;
+export type Role = (typeof ROL_USUARIO)[number]
 
 export const TIPO_MATERIAL = ["POLIPROPILENO", "POLIESTIRENO", "POLIETILENO"] as const;
 export type TipoMaterial = (typeof TIPO_MATERIAL)[number];

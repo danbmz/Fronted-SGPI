@@ -1,6 +1,7 @@
 import { useAuthStore } from '@/store/authStore'
 import { login as loginService, logout as logoutService } from '@/features/auth/authService'
-import type { AuthUser, Role } from '@/types/usuario'
+import type { AuthUser } from '@/features/usuarios/schemas/usuario.schema';
+import type { Role } from '@/types/enums';
 
 interface LoginCredentials {
   usuario: string

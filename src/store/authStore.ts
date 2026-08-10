@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import type { AuthUser } from '@/types/usuario'
+import type { AuthUser } from '@/features/usuarios/schemas/usuario.schema'
 import { irA } from '@/lib/navigation'
 
 interface AuthState {
