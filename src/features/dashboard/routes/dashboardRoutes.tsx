@@ -7,14 +7,13 @@ import Usuarios from '@/features/usuarios/pages/Usuarios'
 import AuditLog from '@/features/auditLogs/pages/AuditLog'
 import Operadores from '@/features/catalogo/pages/Operadores'
 import Maquinas from '@/features/catalogo/pages/Maquinas'
-import FormulaPigmentos from '@/features/catalogo/pages/FormulasPigmento'
 import MotivosParo from '@/features/catalogo/pages/MotivosParo'
 import Productos from '@/features/catalogo/pages/Productos'
 import Pigmentos from '@/features/catalogo/pages/Pigmentos'
 import MateriasPrimas from '@/features/catalogo/pages/MateriasPrimas'
 import MateriasPrimasInventario from '@/features/inventory/pages/MateriasPrimasInventario'
 import PigmentosInventario from '@/features/inventory/pages/PigmentosInventario'
-import ProductoInventario from '@/features/inventory/pages/ProductoTerminado'
+import ProductoInventario from '@/features/inventory/pages/ProductoInventario'
 import AvancesTurno from '@/features/avancesTurno/pages/supervisor/AvancesTurno'
 import SeguimientoOrdenes from '@/features/avancesTurno/pages/admin/SeguimientoOrdenes'
 import MolinoAdmin from '@/features/molino/Pages/admin/MolinoAdmin'
@@ -46,7 +45,6 @@ export const dashboardRoutes: RouteObject[] = [
           { path: 'productos', element: <Productos /> },
           { path: 'maquinas', element: <Maquinas /> },
           { path: 'operadores', element: <Operadores /> },
-          { path: 'formulas-pigmentos', element: <FormulaPigmentos /> },
           { path: 'materia-prima-catalogo', element: <MateriasPrimas /> },
           { path: 'pigmentos-catalogo', element: <Pigmentos /> },
           { path: 'motivos-paro', element: <MotivosParo /> },

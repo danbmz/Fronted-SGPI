@@ -1,102 +1,59 @@
-import { useState } from "react"
-import type { InventarioMateriaPrima } from "@/validations/inventario/inventarioValidations"
+import { Button } from "@/components/ui/button";
+import type { InventarioMateriaPrimaItem } from "../../schemas/inventario.schema";
 import {
   Table, TableBody, TableCell,
   TableHead, TableHeader, TableRow
-} from "@/components/ui/table"
-import {
-  DropdownMenu, DropdownMenuContent,
-  DropdownMenuItem, DropdownMenuTrigger
-} from "@/components/ui/dropdown-menu"
-import { Button } from "@/components/ui/button"
-import { MoreHorizontal, AlertTriangle } from "lucide-react"
-import DialogAjusteManualMateriaPrima from "./DialogAjusteManualMateriaPrima"
-import { colorSubtipo } from "@/features/catalogo/components/materiaPrima/TablaMateriasPrimas"
-import DialogHistorialMovimientos from "../movimientos/DialogHistorialMovimientos"
-
+} from "@/components/ui/table";
+import { AlertTriangle, History } from "lucide-react";
+import { useState } from "react";
+import DialogHistorialMovimientos from "../movimientos/DialogHistorialMovimientos";
 
 interface Props {
-  materiasPrimas: InventarioMateriaPrima[]
-  onActualizada: (actualizada: InventarioMateriaPrima) => void
+  materiasPrimas: InventarioMateriaPrimaItem[];
 }
 
-export default function TablaInventarioMateriasPrimas({ materiasPrimas, onActualizada }: Props) {
-  const [seleccionada, setSeleccionada] = useState<InventarioMateriaPrima | null>(null)
-  const [dialogAbierto, setDialogAbierto] = useState<"ajustar" | "historial" | null>(null)
-
-  const abrirDialog = (tipo: "ajustar" | "historial",materiaPrima: InventarioMateriaPrima) => {
-    setSeleccionada(materiaPrima)
-    setDialogAbierto(tipo)
-  }
-
-  const cerrarDialog = () => {
-    setSeleccionada(null)
-    setDialogAbierto(null)
-  }
+export default function TablaInventarioMateriasPrimas({ materiasPrimas }: Props) {
+  const [materiaSeleccionada, setMateriaSeleccionada] = useState<InventarioMateriaPrimaItem | null>(null);
 
   return (
     <>
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Material</TableHead>
             <TableHead>Código</TableHead>
-            <TableHead>Tipo</TableHead>
-            <TableHead>Subtipo</TableHead>
+            <TableHead>Nombre</TableHead>
+            <TableHead>Unidad</TableHead>
             <TableHead>Stock actual</TableHead>
             <TableHead>Stock mínimo</TableHead>
-            <TableHead>Último movimiento</TableHead>
-            <TableHead>Acciones</TableHead>
+            <TableHead>Movimientos</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {materiasPrimas.map((m) => {
-            const stockBajo = m.stockActual < m.stockMinimo
+          {materiasPrimas.map((item) => {
+            const stockBajo = item.cantidadActual < item.stockMinimo;
             return (
-              <TableRow key={m.id} className={stockBajo ? "bg-red-50 dark:bg-red-950/20" : ""}>
-                <TableCell className="font-medium">{m.nombre}</TableCell>
-                <TableCell className="font-mono text-sm">{m.codigoInterno}</TableCell>
-                <TableCell>{m.tipo}</TableCell>
-                <TableCell>
-                  <span className={`text-xs px-2 py-1 rounded-full font-medium ${colorSubtipo[m.subtipo]}`}>
-                    {m.subtipo}
-                  </span>
-                </TableCell>
-                <TableCell>
-                  <div className="flex items-center gap-2">
-                    <span className={stockBajo ? "text-red-600 font-medium" : ""}>
-                      {m.stockActual} kg
-                    </span>
-                    {stockBajo && (
-                      <AlertTriangle size={14} className="text-red-600" />
-                    )}
+              <TableRow key={item.materiaPrimaId} className={stockBajo ? "bg-red-50" : ""}>
+                <TableCell className="font-mono text-sm">{item.codigoInterno}</TableCell>
+                <TableCell className="font-medium">{item.nombre}</TableCell>
+                <TableCell className="text-sm">{item.unidadMedida}</TableCell>
+                <TableCell className={`font-medium ${stockBajo ? "text-red-600" : ""}`}>
+                  <div className="flex items-center gap-1">
+                    {stockBajo && <AlertTriangle size={14} className="text-red-600" />}
+                    {item.cantidadActual}
                   </div>
                 </TableCell>
-                <TableCell>{m.stockMinimo} kg</TableCell>
-                <TableCell className="text-muted-foreground text-sm">{m.ultimoMovimiento}</TableCell>
+                <TableCell className="text-sm text-muted-foreground">{item.stockMinimo}</TableCell>
                 <TableCell>
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" size="icon">
-                        <MoreHorizontal size={16} />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                      <DropdownMenuItem onClick={() => abrirDialog("ajustar", m)}>
-                        Ajuste manual
-                      </DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => abrirDialog("historial", m)}>
-                        Historial de ajustes
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
+                    <Button variant="ghost" size="icon" onClick={() => setMateriaSeleccionada(item)}>
+                      <History size={16} />
+                    </Button>
                 </TableCell>
               </TableRow>
-            )
+            );
           })}
           {materiasPrimas.length === 0 && (
             <TableRow>
-              <TableCell colSpan={8} className="text-center text-muted-foreground py-8">
+              <TableCell colSpan={5} className="text-center text-muted-foreground py-8">
                 No hay materias primas registradas.
               </TableCell>
             </TableRow>
@@ -104,21 +61,13 @@ export default function TablaInventarioMateriasPrimas({ materiasPrimas, onActual
         </TableBody>
       </Table>
 
-      <DialogAjusteManualMateriaPrima
-        open={dialogAbierto === "ajustar"}
-        materiaPrima={seleccionada}
-        onClose={cerrarDialog}
-        onSuccess={onActualizada}
-      />
-
       <DialogHistorialMovimientos
-        open={dialogAbierto === "historial"}
-        onClose={cerrarDialog}
-        inventarioId={seleccionada?.id ?? ""}
-        tipoInventario="materias_primas"
-        titulo={seleccionada?.nombre ?? ""}
-        subtitulo={seleccionada?.codigoInterno}
+        open={materiaSeleccionada !== null}
+        onClose={() => setMateriaSeleccionada(null)}
+        tipoInventario="MATERIA_PRIMA"
+        materiaPrimaId={materiaSeleccionada?.materiaPrimaId}
+        titulo={`Historial — ${materiaSeleccionada?.nombre ?? ""}`}
       />
     </>
-  )
+  );
 }

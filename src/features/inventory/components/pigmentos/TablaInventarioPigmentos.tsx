@@ -1,121 +1,75 @@
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { colorCategoria, colorTipo } from "@/features/catalogo/components/pigmentos/TablaPigmentos"
-import type { InventarioPigmento } from "@/validations/inventario/inventarioValidations"
-import { AlertTriangle, MoreHorizontal } from "lucide-react"
-import { useState } from "react"
-import DialogAjusteManualPigmento from "./DialogAjusteManualPigmento"
-import DialogHistorialMovimientos from "../movimientos/DialogHistorialMovimientos"
+import { Button } from "@/components/ui/button";
+import type { InventarioPigmentoItem } from "../../schemas/inventario.schema";
+import {
+  Table, TableBody, TableCell,
+  TableHead, TableHeader, TableRow
+} from "@/components/ui/table";
+import { AlertTriangle, History } from "lucide-react";
+import { useState } from "react";
+import DialogHistorialMovimientos from "../movimientos/DialogHistorialMovimientos";
 
-interface Props{
-    pigmentos: InventarioPigmento[]
-    onActualizado: (pigmento: InventarioPigmento) => void
+interface Props {
+  pigmentos: InventarioPigmentoItem[];
 }
 
-export default function TablaInventarioPigmentos({pigmentos, onActualizado}: Props){
-    const [pigmentoSeleccionado, setPigmentoSeleccionado] = useState<InventarioPigmento | null>(null)
-    const [dialogAbierto, setDialogAbierto] = useState<"ajustar" | "historial" | null>(null)
+export default function TablaInventarioPigmentos({ pigmentos }: Props) {
+  const [materiaSeleccionada, setMateriaSeleccionada] = useState<InventarioPigmentoItem | null>(null);
 
-    const abrirDialog = (tipo: "ajustar" | "historial",pigmento: InventarioPigmento) => {
-        setPigmentoSeleccionado(pigmento)
-        setDialogAbierto(tipo)
-    }
+  return (
+    <>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Color</TableHead>
+            <TableHead>Categoría</TableHead>
+            <TableHead>Tipo</TableHead>
+            <TableHead>Material</TableHead>
+            <TableHead>Stock actual</TableHead>
+            <TableHead>Stock mínimo</TableHead>
+            <TableHead>Movimientos</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {pigmentos.map((item) => {
+            const stockBajo = item.cantidadActual < item.stockMinimo;
+            return (
+              <TableRow key={item.pigmentoId} className={stockBajo ? "bg-red-50" : ""}>
+                <TableCell className="font-medium">{item.color}</TableCell>
+                <TableCell className="text-sm text-muted-foreground">{item.categoriaColor}</TableCell>
+                <TableCell className="text-sm text-muted-foreground">{item.tipo}</TableCell>
+                <TableCell className="text-sm">{item.materiaPrimaNombre}</TableCell>
+                <TableCell className={`font-medium ${stockBajo ? "text-red-600" : ""}`}>
+                  <div className="flex items-center gap-1">
+                    {stockBajo && <AlertTriangle size={14} className="text-red-600" />}
+                    {item.cantidadActual}
+                  </div>
+                </TableCell>
+                <TableCell className="text-sm text-muted-foreground">{item.stockMinimo}</TableCell>
+                <TableCell>
+                  <Button variant="ghost" size="icon" onClick={() => setMateriaSeleccionada(item)}>
+                    <History size={16} />
+                  </Button>
+                </TableCell>
+              </TableRow>
+            );
+          })}
+          {pigmentos.length === 0 && (
+            <TableRow>
+              <TableCell colSpan={6} className="text-center text-muted-foreground py-8">
+                No hay pigmentos registrados.
+              </TableCell>
+            </TableRow>
+          )}
+        </TableBody>
+      </Table>
 
-    const cerrarDialog = () => {
-        setPigmentoSeleccionado(null)
-        setDialogAbierto(null)
-    }
-
-    return(
-        <>
-            <Table>
-                <TableHeader>
-                    <TableRow>
-                        <TableHead>Color</TableHead>
-                        <TableHead>Categoria</TableHead>
-                        <TableHead>Tipo</TableHead>
-                        <TableHead>Stock actual</TableHead>
-                        <TableHead>Stock mínimo</TableHead>
-                        <TableHead>Último movimiento</TableHead>
-                        <TableHead>Acciones</TableHead>
-                    </TableRow>
-                </TableHeader>
-
-                <TableBody>
-                    {pigmentos.map((pigmento) => {
-                        const stockBajo = pigmento.stockActual < pigmento.stockMinimo
-                        return(
-                            <TableRow key={pigmento.id} className={stockBajo ? "bg-red-50 dark:bg-red-950/20" : ""}>
-                                <TableCell>
-                                    {pigmento.color}
-                                </TableCell>
-                                <TableCell>
-                                    <Badge className={colorCategoria[pigmento.categoriaColor]}>{pigmento.categoriaColor}</Badge>
-                                </TableCell>
-                                <TableCell>
-                                    <Badge className={colorTipo[pigmento.tipo]}>{pigmento.tipo}</Badge>
-                                </TableCell>
-                                <TableCell>
-                                    <div className="flex items-center gap-2">
-                                        <span className={stockBajo ? "text-red-600 font-medium" : ""}>
-                                        {pigmento.stockActual} kg
-                                        </span>
-                                        {stockBajo && (
-                                        <AlertTriangle size={14} className="text-red-600" />
-                                        )}
-                                    </div>
-                                </TableCell>
-                                <TableCell>{pigmento.stockMinimo} Kg</TableCell>
-                                <TableCell className="text-muted-foreground text-sm">{pigmento.ultimoMovimiento}</TableCell>
-                                <TableCell>
-                                    <DropdownMenu>
-                                        <DropdownMenuTrigger asChild>
-                                        <Button variant="ghost" size="icon">
-                                            <MoreHorizontal size={16} />
-                                        </Button>
-                                        </DropdownMenuTrigger>
-                                        <DropdownMenuContent align="end">
-                                        <DropdownMenuItem onClick={() => abrirDialog("ajustar", pigmento)}>
-                                            Ajuste manual
-                                        </DropdownMenuItem>
-                                        <DropdownMenuItem onClick={() => abrirDialog("historial", pigmento)}>
-                                            Historial de ajustes
-                                        </DropdownMenuItem>
-                                        </DropdownMenuContent>
-                                    </DropdownMenu>
-                                </TableCell>
-                            </TableRow>
-                        )
-                    })}
-
-                    {pigmentos.length === 0 && (
-                        <TableRow>
-                            <TableCell colSpan={8} className="text-center text-muted-foreground py-8">
-                                No hay Pigmentos registrados.
-                            </TableCell>
-                        </TableRow>
-                    )}
-                </TableBody>
-
-            </Table>
-
-            <DialogAjusteManualPigmento
-               open={dialogAbierto === "ajustar"}
-               pigmento={pigmentoSeleccionado}
-               onClose={cerrarDialog}
-               onSuccess={onActualizado} 
-            />
-
-            <DialogHistorialMovimientos
-                open={dialogAbierto === "historial"}
-                onClose={cerrarDialog}
-                inventarioId={pigmentoSeleccionado?.id ?? ""}
-                tipoInventario="pigmentos"
-                titulo={pigmentoSeleccionado?.color ?? ""}
-                subtitulo={pigmentoSeleccionado?.categoriaColor}
-            />
-        </>
-    )
+      <DialogHistorialMovimientos
+        open={materiaSeleccionada !== null}
+        onClose={() => setMateriaSeleccionada(null)}
+        tipoInventario="PIGMENTO"
+        pigmentoId={materiaSeleccionada?.pigmentoId}
+        titulo={`Historial — ${materiaSeleccionada?.color ?? ""} ${materiaSeleccionada?.categoriaColor ?? ""} ${materiaSeleccionada?.tipo}`}
+      />
+    </>
+  );
 }

@@ -1,185 +1,112 @@
-import { useState, useEffect } from "react"
-import type { MovimientoInventario } from "@/validations/inventario/inventarioValidations"
-import { getHistorialMovimientos } from "../../services/movimientos/historialMovimientosService"
+import { useHistorialInventario } from "../../hook/useInventario";
 import {
   Dialog, DialogContent, DialogHeader,
   DialogTitle, DialogDescription
-} from "@/components/ui/dialog"
+} from "@/components/ui/dialog";
 import {
   Table, TableBody, TableCell,
   TableHead, TableHeader, TableRow
-} from "@/components/ui/table"
-import { ArrowUpCircle, ArrowDownCircle, SlidersHorizontal } from "lucide-react"
-import { Label } from "@/components/ui/label"
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
+} from "@/components/ui/table";
+import { Badge } from "@/components/ui/badge";
+import type { OrigenMolido, TipoInventario } from "@/types/enums";
 
 interface Props {
-  open: boolean
-  onClose: () => void
-  inventarioId: string
-  tipoInventario: MovimientoInventario["tipoInventario"]
-  titulo: string
-  subtitulo?: string
+  open: boolean;
+  onClose: () => void;
+  tipoInventario: TipoInventario;
+  materiaPrimaId?: string;
+  pigmentoId?: string;
+  productoId?: string;
+  colorSolidoId?: string;
+  origen?: OrigenMolido;
+  combinacionId?: string;   
+  titulo: string; // ej. "Historial — Polipropileno Virgen"
 }
 
-const colorMovimiento: Record<string, string> = {
-  entrada:       "text-green-600",
-  consumo:       "text-red-600",
-  ajuste_manual: "text-yellow-600"
-}
-
-const iconoMovimiento = (tipo: string) => {
-  if (tipo === "entrada")       return <ArrowUpCircle size={14} className="text-green-600" />
-  if (tipo === "consumo")       return <ArrowDownCircle size={14} className="text-red-600" />
-  if (tipo === "ajuste_manual") return <SlidersHorizontal size={14} className="text-yellow-600" />
-}
-
-const etiquetaMovimiento: Record<string, string> = {
-  entrada:       "Entrada",
-  consumo:       "Consumo",
-  ajuste_manual: "Ajuste manual"
-}
+const colorTipoMovimiento: Record<string, string> = {
+  ENTRADA: "bg-green-100 text-green-700",
+  SALIDA: "bg-red-100 text-red-700",
+  AJUSTE: "bg-blue-100 text-blue-700",
+};
 
 export default function DialogHistorialMovimientos({
-  open, onClose, inventarioId, tipoInventario, titulo, subtitulo
+  open,
+  onClose,
+  tipoInventario,
+  materiaPrimaId,
+  pigmentoId,
+  productoId,
+  colorSolidoId,
+  origen,
+  combinacionId,
+  titulo,
 }: Props) {
-  const [movimientos, setMovimientos] = useState<MovimientoInventario[]>([])
-  const [loading, setLoading] = useState(true)
-  const [fechaInicio, setFechaInicio] = useState("")
-  const [fechaFin, setFechaFin] = useState("")
-
-  useEffect(() => {
-    if (!open) return
-    const fetchHistorial = async () => {
-      setLoading(true)
-      try {
-        const data = await getHistorialMovimientos(inventarioId, tipoInventario)
-        setMovimientos(data)
-      } finally {
-        setLoading(false)
-      }
-    }
-    fetchHistorial()
-
-    // Limpia filtros al abrir
-    setFechaInicio("")
-    setFechaFin("")
-  }, [open, inventarioId, tipoInventario])
-
-  const handleLimpiarFiltros = () => {
-    setFechaInicio("")
-    setFechaFin("")
-  }
-
-  const movimientosFiltrados = movimientos.filter(m => {
-    const fecha = new Date(m.fecha)
-    const inicio = fechaInicio ? new Date(fechaInicio) : null
-    const fin = fechaFin ? new Date(`${fechaFin}T23:59:59`) : null
-
-    if (inicio && fecha < inicio) return false
-    if (fin && fecha > fin) return false
-    return true
-  })
-
-
-  const formatFecha = (fecha: string) => {
-    return new Date(fecha).toLocaleString("es-MX", {
-      day: "2-digit", month: "2-digit", year: "numeric",
-      hour: "2-digit", minute: "2-digit"
-    })
-  }
+  const { data: movimientos, isLoading, error } = useHistorialInventario({
+    tipoInventario,
+    materiaPrimaId,
+    pigmentoId,
+    productoId,
+    colorSolidoId,
+    origen,
+    combinacionId,
+    limite: 50,
+  });
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-7xl">
+      <DialogContent className="max-w-3xl max-h-[80vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Historial de movimientos</DialogTitle>
+          <DialogTitle>{titulo}</DialogTitle>
           <DialogDescription>
-            {titulo}{subtitulo ? ` — ${subtitulo}` : ""}
+            Últimos movimientos registrados para este material.
           </DialogDescription>
         </DialogHeader>
 
-                {/* Filtros de fecha */}
-        <div className="flex items-end gap-3 flex-wrap">
-          <div className="flex flex-col gap-1">
-            <Label className="text-xs">Desde</Label>
-            <Input
-              type="date"
-              value={fechaInicio}
-              onChange={e => setFechaInicio(e.target.value)}
-              className="w-40"
-            />
-          </div>
-          <div className="flex flex-col gap-1">
-            <Label className="text-xs">Hasta</Label>
-            <Input
-              type="date"
-              value={fechaFin}
-              onChange={e => setFechaFin(e.target.value)}
-              className="w-40"
-            />
-          </div>
-          {(fechaInicio || fechaFin) && (
-            <Button variant="ghost" size="sm" onClick={handleLimpiarFiltros}>
-              Limpiar filtros
-            </Button>
-          )}
-          <span className="text-xs text-muted-foreground ml-auto">
-            {movimientosFiltrados.length} de {movimientos.length} registros
-          </span>
-        </div>
+        {isLoading && <p className="text-muted-foreground py-4">Cargando movimientos...</p>}
+        {error && <p className="text-red-500">Error al cargar el historial: {error.message}</p>}
 
-        {loading ? (
-          <p className="text-muted-foreground py-4 text-sm">Cargando historial...</p>
-        ) : movimientosFiltrados.length === 0 ? (
-          <p className="text-muted-foreground py-4 text-sm text-center">
-            No hay movimientos registrados.
-          </p>
-        ) : (
+        {!isLoading && !error && (
           <Table>
             <TableHeader>
               <TableRow>
                 <TableHead>Fecha</TableHead>
                 <TableHead>Tipo</TableHead>
-                <TableHead>Anterior</TableHead>
-                <TableHead>Diferencia</TableHead>
-                <TableHead>Nuevo</TableHead>
                 <TableHead>Motivo</TableHead>
-                <TableHead>Responsable</TableHead>
+                <TableHead>Anterior</TableHead>
+                <TableHead>Movimiento</TableHead>
+                <TableHead>Nueva</TableHead>
+                <TableHead>Usuario</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {movimientosFiltrados.map((m) => (
-                <TableRow key={m.id}>
-                  <TableCell className="text-sm text-muted-foreground whitespace-nowrap">
-                    {formatFecha(m.fecha)}
-                  </TableCell>
+              {(movimientos ?? []).map((mov) => (
+                <TableRow key={mov.id}>
+                  <TableCell className="text-sm">{new Date(mov.createdAt).toLocaleString()}</TableCell>
                   <TableCell>
-                    <div className="flex items-center gap-1">
-                      {iconoMovimiento(m.tipoMovimiento)}
-                      <span className={`text-xs font-medium ${colorMovimiento[m.tipoMovimiento]}`}>
-                        {etiquetaMovimiento[m.tipoMovimiento]}
-                      </span>
-                    </div>
+                    <Badge className={`text-xs px-2 py-1 rounded-full font-medium ${colorTipoMovimiento[mov.tipoMovimiento]}`}>
+                      {mov.tipoMovimiento}
+                    </Badge>
                   </TableCell>
-                  <TableCell className="text-sm">{m.cantidadAnterior}</TableCell>
-                  <TableCell>
-                    <span className={`text-sm font-medium ${m.diferencia > 0 ? "text-green-600" : "text-red-600"}`}>
-                      {m.diferencia > 0 ? `+${m.diferencia}` : m.diferencia}
-                    </span>
+                  <TableCell className="text-sm">{mov.motivo}</TableCell>
+                  <TableCell className="text-sm">{mov.cantidadAnterior}</TableCell>
+                  <TableCell className={`text-sm font-medium ${mov.cantidadMovimiento > 0 ? "text-green-600" : "text-red-600"}`}>
+                    {mov.cantidadMovimiento > 0 ? "+" : ""}{mov.cantidadMovimiento}
                   </TableCell>
-                  <TableCell className="text-sm">{m.cantidadNueva}</TableCell>
-                  <TableCell className="text-sm max-w-48 truncate" title={m.motivo}>
-                    {m.motivo}
-                  </TableCell>
-                  <TableCell className="text-sm">{m.creadoPor}</TableCell>
+                  <TableCell className="text-sm font-medium">{mov.cantidadNueva}</TableCell>
+                  <TableCell className="text-sm text-muted-foreground">{mov.usuarioNombre}</TableCell>
                 </TableRow>
               ))}
+              {(movimientos ?? []).length === 0 && (
+                <TableRow>
+                  <TableCell colSpan={7} className="text-center text-muted-foreground py-8">
+                    No hay movimientos registrados.
+                  </TableCell>
+                </TableRow>
+              )}
             </TableBody>
           </Table>
         )}
       </DialogContent>
     </Dialog>
-  )
+  );
 }

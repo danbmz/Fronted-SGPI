@@ -11,6 +11,7 @@ const roleDashboard = {
   SUPERVISOR: "/supervisor/ordenes",
   MOLINO: "/molino/pendientes",
   PIGMENTOS: "/pigmentos/ordenes",
+  PROGRAMADOR: "/programador/ordenes"
 }
 
 export default function ProtectedRoute({ allowedRoles }: ProtectedRouteProps) {
