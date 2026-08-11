@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react"
 import { getAvancesTurno } from "../../../avancesTurno/services/avancesTurnoService"
 import { confirmarSobrante, confirmarMaterialPreparado, confirmarMaterialSiguiente } from "../../services/pigmentosOrdenesService"
-import { getOrdenesProduccion } from "@/features/ordenes/services/ordenesProduccionService"
+import { getOrdenesProduccion } from "@/features/ordenes/services/ordenService"
 import { getInfoMaquinas, type InfoMaquina } from "../../services/pigmentosOrdenesService"
 import type { AvanceTurno } from "@/validations/avancesTurno/avanceTurnoValidations"
 import type { OrdenProduccion } from "@/validations/ordenes/ordenProduccionValidations"

@@ -15,7 +15,7 @@ import DialogCerrarAvance from "./DialogCerrarAvance"
 import DialogRegistrarParo from "./DialogRegistrarParo"
 import DialogSolicitarMaterial from "./DialogSolicitarMaterial"
 import type { OrdenProduccion } from "@/validations/ordenes/ordenProduccionValidations"
-import { getOrdenesProduccion } from "@/features/ordenes/services/ordenesProduccionService"
+import { getOrdenesProduccion } from "@/features/ordenes/services/ordenService"
 import { toast } from "sonner"
 import { useAuth } from "@/features/auth/hooks/useAuth"
 

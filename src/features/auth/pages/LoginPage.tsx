@@ -32,6 +32,7 @@ function LoginPage() {
         case "SUPERVISOR": navigate("/supervisor/ordenes"); break;
         case "MOLINO": navigate("/molino/pendientes"); break;
         case "PIGMENTOS": navigate("/pigmentos/ordenes"); break;
+        case "PROGRAMADOR": navigate("/programador/pedidos"); break;
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : "Error desconocido");

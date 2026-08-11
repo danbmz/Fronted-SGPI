@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
 import { getDashboardData, type ResumenDashboard } from "../../services/dashboardService"
-import { getOrdenesProduccion } from "@/features/ordenes/services/ordenesProduccionService"
+import { getOrdenesProduccion } from "@/features/ordenes/services/ordenService"
 import type { OrdenProduccion } from "@/validations/ordenes/ordenProduccionValidations"
 import {
   Package, TrendingUp, Clock, AlertTriangle

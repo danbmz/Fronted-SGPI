@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import TablaOrdenesActivas from "../../components/supervisor/TablaOrdenesActivas";
 import type { OrdenProduccion } from "@/validations/ordenes/ordenProduccionValidations";
 import type { AvanceTurno } from "@/validations/avancesTurno/avanceTurnoValidations";
-import { getOrdenesProduccion } from "@/features/ordenes/services/ordenesProduccionService";
+import { getOrdenesProduccion } from "@/features/ordenes/services/ordenService";
 import { detectarTurnoActual, getAvancesTurno } from "../../services/avancesTurnoService";
 import { Clock } from "lucide-react";
 

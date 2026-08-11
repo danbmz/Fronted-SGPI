@@ -36,6 +36,7 @@ export type InventarioProductoItem = z.infer<typeof inventarioProductoItemSchema
 export const listaInventarioProductoSchema = z.array(inventarioProductoItemSchema);
 
 export const inventarioMolidoItemSchema = z.object({
+  id: z.string(),
   materiaPrimaId: z.string(),
   materiaPrimaNombre: z.string(),
   origen: z.enum(ORIGEN_MOLIDO),

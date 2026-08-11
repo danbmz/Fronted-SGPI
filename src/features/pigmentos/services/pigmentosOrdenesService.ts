@@ -1,4 +1,4 @@
-import { getOrdenesProduccion } from "@/features/ordenes/services/ordenesProduccionService"
+import { getOrdenesProduccion } from "@/features/ordenes/services/ordenService"
 import { getMaquinas } from "@/features/catalogo/services/maquinasService"
 import { getAvancesTurno } from "@/features/avancesTurno/services/avancesTurnoService"
 import { getFormulasPigmento } from "@/features/catalogo/services/formulasPigmentosService"

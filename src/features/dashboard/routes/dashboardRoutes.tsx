@@ -2,7 +2,7 @@ import { Navigate, type RouteObject } from 'react-router-dom'
 import ProtectedRoute from '../../../shared/components/ProtectedRoute'
 import DashboardLayout from '../pages/DashboardLayout'
 import AdminDashboard from '../pages/admin/AdminDashboard'
-import OrdenesProduccion from '@/features/ordenes/pages/OrdenesProduccion'
+import OrdenesPage from '@/features/ordenes/pages/OrdenesPage'
 import Usuarios from '@/features/usuarios/pages/Usuarios'
 import AuditLog from '@/features/auditLogs/pages/AuditLog'
 import Operadores from '@/features/catalogo/pages/Operadores'
@@ -23,7 +23,12 @@ import PigmentosOrdenes from '@/features/pigmentos/pages/pigmentos/PigmentosOrde
 import Ordenes from '@/features/avancesTurno/pages/supervisor/Ordenes'
 import MolinoRegistrar from '@/features/molino/Pages/molino/MolinoRegistrar'
 import PigmentosAlertas from '@/features/pigmentos/pages/pigmentos/PigmentosAlertas'
-import PigmentosFormulas from '@/features/pigmentos/pages/pigmentos/PigmentosFormulas'
+import PedidosPage from '@/features/pedidos/pages/PedidosPage'
+import PedidoDetallePage from '@/features/pedidos/pages/PedidoDetallePage'
+import OrdenDetallePage from '@/features/ordenes/pages/OrdenDetallePage'
+import MolidoInventario from '@/features/inventory/pages/MolidoInventario'
+import DefectosProducto from '@/features/catalogo/pages/DefectosProductos'
+import ColoresSolidosPage from '@/features/catalogo/pages/ColoresSolidosPage'
 
 export const dashboardRoutes: RouteObject[] = [
   // ── Admin ──────────────────────────────────
@@ -36,24 +41,47 @@ export const dashboardRoutes: RouteObject[] = [
         children: [
           { index: true, element: <Navigate to="inicio" replace /> },
           { path: 'dashboard', element: <AdminDashboard /> },
-          { path: 'ordenes', element: <OrdenesProduccion /> },
+          { path: 'pedidos', element: <PedidosPage /> },
+          { path: 'pedidos/:id', element: <PedidoDetallePage /> },
+          { path: 'ordenes', element: <OrdenesPage /> },
+          { path: 'ordenes/:id', element: <OrdenDetallePage /> },
           { path: 'avances-turno', element: <SeguimientoOrdenes /> },
           { path: 'molino', element: <MolinoAdmin /> },
           { path: 'materias-primas', element: <MateriasPrimasInventario /> },
+          { path: 'molido', element: <MolidoInventario /> },
           { path: 'pigmentos', element: <PigmentosInventario /> },
           { path: 'producto-terminado', element: <ProductoInventario /> },
           { path: 'productos', element: <Productos /> },
-          { path: 'maquinas', element: <Maquinas /> },
-          { path: 'operadores', element: <Operadores /> },
           { path: 'materia-prima-catalogo', element: <MateriasPrimas /> },
           { path: 'pigmentos-catalogo', element: <Pigmentos /> },
+          { path: 'operadores', element: <Operadores /> },
+          { path: 'maquinas', element: <Maquinas /> },
           { path: 'motivos-paro', element: <MotivosParo /> },
+          { path: 'colores-solidos', element: <ColoresSolidosPage /> },
+          { path: 'defectos-productos', element: <DefectosProducto /> },
           { path: 'reportes', element: <Reportes /> },
           { path: 'usuarios', element: <Usuarios /> },
           { path: 'auditoria', element: <AuditLog /> }, 
         ],
       },
     ],
+  },
+
+  {
+    path: '/programador',
+    element: <ProtectedRoute allowedRoles={['PROGRAMADOR']} />,
+    children: [
+      {
+        element: <DashboardLayout />,
+        children: [
+          { index: true, element: <Navigate to="inicio" replace /> },
+          { path: 'pedidos', element: <PedidosPage /> },
+          { path: 'pedidos/:id', element: <PedidoDetallePage /> },
+          { path: 'ordenes', element: <OrdenesPage /> },
+          { path: 'ordenes/:id', element: <OrdenDetallePage /> },
+        ]
+      }
+    ]
   },
 
   // ── Supervisor ─────────────────────────────
@@ -99,7 +127,6 @@ export const dashboardRoutes: RouteObject[] = [
           { index: true, element: <Navigate to="inicio" replace /> },
           { path: 'ordenes', element: <PigmentosOrdenes /> },
           { path: 'alertas', element: <PigmentosAlertas /> },
-          { path: 'formulas', element: <PigmentosFormulas /> },
         ],
       },
     ],

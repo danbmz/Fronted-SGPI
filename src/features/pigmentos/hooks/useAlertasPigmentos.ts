@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
 import { getAvancesTurno } from "@/features/avancesTurno/services/avancesTurnoService"
-import { getOrdenesProduccion } from "@/features/ordenes/services/ordenesProduccionService"
+import { getOrdenesProduccion } from "@/features/ordenes/services/ordenService"
 import { getInfoMaquinas } from "../services/pigmentosOrdenesService"
 
 export const useAlertasPigmentos = () => {

@@ -1,5 +1,5 @@
 import { abrirAvance } from "../../services/avancesTurnoService"
-import { activarOrden } from "@/features/ordenes/services/ordenesProduccionService"
+import { activarOrden } from "@/features/ordenes/services/ordenService"
 import type { OrdenProduccion } from "@/validations/ordenes/ordenProduccionValidations"
 import type { AvanceTurno, Turno } from "@/validations/avancesTurno/avanceTurnoValidations"
 import { useAuth } from "@/features/auth/hooks/useAuth"
