@@ -30,3 +30,6 @@ export type TipoInventario = (typeof TIPO_INVENTARIO)[number];
 
 export const ORIGEN_MOLIDO = ["INTERNO", "COMPRADO"] as const;
 export type OrigenMolido = (typeof ORIGEN_MOLIDO)[number];
+
+export const ESTADO_PEDIDO = ["PENDIENTE", "EN_PROCESO", "COMPLETADO","CANCELADO"] as const;
+export type EstadoPedido = (typeof ESTADO_PEDIDO)[number];
