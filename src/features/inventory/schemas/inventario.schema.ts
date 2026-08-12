@@ -49,7 +49,9 @@ export const listaInventarioMolidoSchema = z.array(inventarioMolidoItemSchema);
 
 export const inventarioMaterialPigmentadoItemSchema = z.object({
   combinacionId: z.string(),
+  materiaPrimaId: z.string(),
   materiaPrimaNombre: z.string(),
+  pigmentoId: z.string(),
   pigmentoColor: z.string(),
   pigmentoCategoria: z.string(),
   cantidadActual: z.number(),

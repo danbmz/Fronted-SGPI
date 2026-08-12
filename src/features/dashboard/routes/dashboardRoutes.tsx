@@ -18,8 +18,6 @@ import AvancesTurnoPage from '@/features/avancesTurno/pages/supervisor/AvancesTu
 import SeguimientoOrdenes from '@/features/avancesTurno/pages/admin/SeguimientoOrdenes'
 import MolinoAdmin from '@/features/molino/Pages/admin/MolinoAdmin'
 import Reportes from '@/features/reportes/pages/Reportes'
-import PigmentosOrdenes from '@/features/pigmentos/pages/pigmentos/PigmentosOrdenes'
-import PigmentosAlertas from '@/features/pigmentos/pages/pigmentos/PigmentosAlertas'
 import PedidosPage from '@/features/pedidos/pages/PedidosPage'
 import PedidoDetallePage from '@/features/pedidos/pages/PedidoDetallePage'
 import OrdenDetallePage from '@/features/ordenes/pages/OrdenDetallePage'
@@ -31,6 +29,8 @@ import AvanceTurnoDetallePage from '@/features/avancesTurno/pages/supervisor/Ava
 import PendientesConfirmacionPage from '@/features/molino/Pages/molino/PendientesConfirmacionPage'
 import PendientesMolerPage from '@/features/molino/Pages/molino/PendientesMolerPage'
 import MoliendasPage from '@/features/molino/Pages/molino/MoliendasPage'
+import OrdenesPigmentosPage from '@/features/pigmentos/pages/pigmentos/OrdenesPigmentosPage'
+import SolicitudesEIncidenciasPage from '@/features/pigmentos/pages/pigmentos/SolicitudesEIncidenciasPage'
 
 export const dashboardRoutes: RouteObject[] = [
   // ── Admin ──────────────────────────────────
@@ -130,8 +130,8 @@ export const dashboardRoutes: RouteObject[] = [
         element: <DashboardLayout />,
         children: [
           { index: true, element: <Navigate to="inicio" replace /> },
-          { path: 'ordenes', element: <PigmentosOrdenes /> },
-          { path: 'alertas', element: <PigmentosAlertas /> },
+          { path: 'ordenes', element: <OrdenesPigmentosPage /> },
+          { path: 'alertas', element: <SolicitudesEIncidenciasPage /> },
         ],
       },
     ],

@@ -19,6 +19,7 @@ export async function listarIncidencias(filtro?: FiltroIncidencias): Promise<Inc
   const params = new URLSearchParams();
   if (filtro?.resuelto !== undefined) params.set("resuelto", String(filtro.resuelto));
   if (filtro?.destino !== undefined) params.set("destino", filtro.destino);
+  if (filtro?.avanceTurnoId !== undefined) params.set("avanceTurnoId", filtro.avanceTurnoId);
 
   const query = params.toString();
   const response = await httpClient(`/incidencias-mal-pigmentado${query ? `?${query}` : ""}`);

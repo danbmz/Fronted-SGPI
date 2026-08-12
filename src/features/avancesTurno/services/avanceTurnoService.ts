@@ -13,6 +13,7 @@ import type {
 export interface FiltroAvances {
   estado?: "ABIERTO" | "CERRADO";
   confirmacionMolinoConfirmado?: boolean;
+  sobranteConfirmado?: boolean;
 }
 
 export async function listarAvancesTurno(filtro?: FiltroAvances): Promise<AvanceTurno[]> {
@@ -21,6 +22,10 @@ export async function listarAvancesTurno(filtro?: FiltroAvances): Promise<Avance
   if (filtro?.confirmacionMolinoConfirmado !== undefined) {
     params.set("confirmacionMolinoConfirmado", String(filtro.confirmacionMolinoConfirmado));
   }
+  if (filtro?.sobranteConfirmado !== undefined) {
+    params.set("sobranteConfirmado", String(filtro.sobranteConfirmado));
+  }
+  
   const query = params.toString();
   const response = await httpClient(`/avances-turno${query ? `?${query}` : ""}`);
   return parseOrThrow(response, listaAvanceTurnoSchema);

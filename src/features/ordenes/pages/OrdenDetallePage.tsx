@@ -3,9 +3,12 @@ import { useState } from "react";
 import { useOrden, useCambiarEstadoOrden } from "../hooks/useOrdenes";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, Play, Pause, RotateCcw, Ban } from "lucide-react";
+import { ArrowLeft, Play, Pause, RotateCcw, Ban, CheckCircle2, Repeat } from "lucide-react";
 import { toast } from "sonner";
+import { useAuth } from "@/features/auth/hooks/useAuth";
 import DialogCancelarOrden from "../components/DialogCancelarOrden";
+import DialogConfirmarMaterialOrden from "@/features/pigmentos/components/pigmentos/DialogConfirmarMaterialOrden";
+import DialogSustituirMaterialPigmentado from "@/features/pigmentos/components/pigmentos/DialogSustituirMaterialPigmentado";
 
 const estadoColor: Record<string, string> = {
   BORRADOR: "bg-gray-100 text-gray-700",
@@ -17,11 +20,16 @@ const estadoColor: Record<string, string> = {
 };
 
 export default function OrdenDetallePage() {
+  const { role } = useAuth();
+  const esPigmentos = role === "PIGMENTOS" || role === "ADMIN";
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { data: orden, isLoading, error } = useOrden(id);
 
   const [dialogCancelarAbierto, setDialogCancelarAbierto] = useState(false);
+  const [dialogConfirmarMaterialAbierto, setDialogConfirmarMaterialAbierto] = useState(false);
+  const [dialogSustituirAbierto, setDialogSustituirAbierto] = useState(false);
+
   const cambiarEstadoMutation = useCambiarEstadoOrden();
 
   if (isLoading) return <div className="p-6">Cargando orden...</div>;
@@ -90,13 +98,32 @@ export default function OrdenDetallePage() {
       </div>
 
       {orden.estado === "ACTIVA" && (
-        <div className="border rounded-md p-4 bg-muted/30">
-          <p className="text-sm font-medium">Material para la siguiente orden</p>
-          <p className="text-xs text-muted-foreground">
-            {orden.materialSiguienteConfirmado
-              ? `Confirmado el ${new Date(orden.materialConfirmadoEn!).toLocaleString()}`
-              : "Pendiente de confirmación por Pigmentos"}
-          </p>
+        <div className="flex items-center justify-between border rounded-md p-4 bg-muted/30">
+          <div>
+            <p className="text-sm font-medium">Material para la siguiente orden</p>
+            <p className="text-xs text-muted-foreground">
+              {orden.materialSiguienteConfirmado
+                ? `Confirmado el ${new Date(orden.materialConfirmadoEn!).toLocaleString()}`
+                : "Pendiente de confirmación por Pigmentos"}
+            </p>
+          </div>
+
+          {/* Solo Pigmentos (o Admin) ve el botón de acción; los demás solo ven el estado */}
+          {esPigmentos && !orden.materialSiguienteConfirmado && (
+            <Button size="sm" variant="outline" onClick={() => setDialogConfirmarMaterialAbierto(true)}>
+              <CheckCircle2 size={16} className="mr-2" />
+              Confirmar material
+            </Button>
+          )}
+        </div>
+      )}
+
+      {esPigmentos && orden.estado === "ACTIVA" && (
+        <div className="flex justify-end">
+          <Button variant="outline" size="sm" onClick={() => setDialogSustituirAbierto(true)}>
+            <Repeat size={16} className="mr-2" />
+            Sustituir material pigmentado
+          </Button>
         </div>
       )}
 
@@ -151,6 +178,21 @@ export default function OrdenDetallePage() {
         orden={orden}
         onClose={() => setDialogCancelarAbierto(false)}
       />
+
+      {esPigmentos && (
+        <>
+          <DialogConfirmarMaterialOrden
+            open={dialogConfirmarMaterialAbierto}
+            orden={orden}
+            onClose={() => setDialogConfirmarMaterialAbierto(false)}
+          />
+          <DialogSustituirMaterialPigmentado
+            open={dialogSustituirAbierto}
+            orden={orden}
+            onClose={() => setDialogSustituirAbierto(false)}
+          />
+        </>
+      )}
     </div>
   );
 }

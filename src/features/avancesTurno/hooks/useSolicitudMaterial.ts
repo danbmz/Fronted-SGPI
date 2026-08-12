@@ -3,6 +3,7 @@ import {
   listarSolicitudesMaterial,
   crearSolicitudMaterial,
   confirmarSolicitudMaterial,
+  listarTodasSolicitudesMaterial,
 } from "../services/solicitudService";
 import type { CrearSolicitudMaterialInput } from "../schemas/solicitudMaterial";
 
@@ -13,6 +14,14 @@ export function useSolicitudesMaterial(avanceTurnoId: string | undefined) {
     queryKey: queryKeyLista(avanceTurnoId ?? ""),
     queryFn: () => listarSolicitudesMaterial(avanceTurnoId!),
     enabled: avanceTurnoId !== undefined,
+  });
+}
+
+// --- Lista todas las solicitudes, para PIGMENTOS
+export function useTodasSolicitudesMaterial(filtro?: { confirmado?: boolean }) {
+  return useQuery({
+    queryKey: ["solicitudes-material", "todas", filtro],
+    queryFn: () => listarTodasSolicitudesMaterial(filtro),
   });
 }
 

@@ -125,6 +125,7 @@ export default function AvanceTurnoDetallePage() {
             </Button>
           </AccordionContent>
         </AccordionItem>
+      </Accordion>
 
       <DialogCrearTiempoParo
         open={dialogTiempoParoAbierto}
