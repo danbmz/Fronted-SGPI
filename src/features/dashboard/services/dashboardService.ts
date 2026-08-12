@@ -1,5 +1,5 @@
 import { getOrdenesProduccion } from "@/features/ordenes/services/ordenService"
-import { getAvancesTurno } from "@/features/avancesTurno/services/avancesTurnoService"
+import { getAvancesTurno } from "@/features/avancesTurno/services/avanceTurnoService"
 import { getInventarioMateriasPrimas } from "@/features/inventory/services/materiaPrima/inventarioMateriaPrimaService"
 import { getInventarioPigmentos } from "@/features/inventory/services/pigmentos/inventarioPigmentoService"
 import { produccionSemana, parosPorMotivo } from "@/mocks/dashboard/dashboardData"

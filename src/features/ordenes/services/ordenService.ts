@@ -9,8 +9,17 @@ import type {
   SustituirMaterialPigmentadoInput,
 } from "../schemas";
 
-export async function listarOrdenes(): Promise<Orden[]> {
-  const response = await httpClient("/ordenes");
+export interface FiltroOrdenes {
+  estado?: string,
+  excluirFinalizadas?: boolean,
+}
+
+export async function listarOrdenes(filtro?: FiltroOrdenes): Promise<Orden[]> {
+  const params = new URLSearchParams();
+  if (filtro?.estado !== undefined) params.set("estado", filtro.estado);
+  if (filtro?.excluirFinalizadas !== undefined) params.set("excluirFinalizadas", String(filtro.excluirFinalizadas));
+  const query = params.toString();
+  const response = await httpClient(`/ordenes${query ? `?${query}` : ""}`);
   return parseOrThrow(response, listaOrdenSchema);
 }
 

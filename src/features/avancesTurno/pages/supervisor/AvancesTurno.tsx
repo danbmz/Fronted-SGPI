@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-import { getAvancesTurno, detectarTurnoActual, getFechaTurnoActual } from "../../services/avancesTurnoService"
+import { getAvancesTurno, detectarTurnoActual, getFechaTurnoActual } from "../../services/avanceTurnoService"
 import type { AvanceTurno } from "@/validations/avancesTurno/avanceTurnoValidations"
 import TablaAvancesTurno from "../../components/supervisor/TablaAvancesTurno"
 import { Clock } from "lucide-react"

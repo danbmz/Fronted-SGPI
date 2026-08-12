@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-import { getAvancesTurno } from "@/features/avancesTurno/services/avancesTurnoService"
+import { getAvancesTurno } from "@/features/avancesTurno/services/avanceTurnoService"
 import { getOrdenesProduccion } from "@/features/ordenes/services/ordenService"
 import { getInfoMaquinas } from "../services/pigmentosOrdenesService"
 

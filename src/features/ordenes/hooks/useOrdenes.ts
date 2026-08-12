@@ -1,4 +1,3 @@
-// src/features/ordenes/hooks/useOrdenes.ts
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   listarOrdenes,
@@ -8,6 +7,7 @@ import {
   confirmarMaterialOrden,
   sustituirMaterialPigmentado,
   cambiarEstadoOrden,
+  type FiltroOrdenes,
 } from "../services/ordenService";
 import type {
   CrearOrdenInput,
@@ -21,10 +21,10 @@ const queryKeyDetalle = (id: string) => ["ordenes", id];
 
 // ---------- LISTAR ----------
 
-export function useOrdenes() {
+export function useOrdenes(filtro?: FiltroOrdenes) {
   return useQuery({
-    queryKey: QUERY_KEY_LISTA,
-    queryFn: listarOrdenes,
+    queryKey: [QUERY_KEY_LISTA, filtro],
+    queryFn: () => listarOrdenes(filtro),
   });
 }
 

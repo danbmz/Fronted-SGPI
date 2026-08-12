@@ -11,7 +11,7 @@ import GraficaParos from "../../components/admin/GraficaParos"
 import TablaOrdenesRecientes from "../../components/admin/TablaOrdenesRecientes"
 import ListaAlertasStock from "../../components/admin/ListaAlertasStock"
 import type { AvanceTurno } from "@/validations/avancesTurno/avanceTurnoValidations"
-import { getAvancesTurno } from "@/features/avancesTurno/services/avancesTurnoService"
+import { getAvancesTurno } from "@/features/avancesTurno/services/avanceTurnoService"
 
 export default function AdminDashboard() {
   const [datos, setDatos] = useState<ResumenDashboard | null>(null)

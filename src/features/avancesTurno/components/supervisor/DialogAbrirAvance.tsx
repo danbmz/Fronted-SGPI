@@ -1,4 +1,4 @@
-import { abrirAvance } from "../../services/avancesTurnoService"
+import { abrirAvance } from "../../services/avanceTurnoService"
 import { activarOrden } from "@/features/ordenes/services/ordenService"
 import type { OrdenProduccion } from "@/validations/ordenes/ordenProduccionValidations"
 import type { AvanceTurno, Turno } from "@/validations/avancesTurno/avanceTurnoValidations"

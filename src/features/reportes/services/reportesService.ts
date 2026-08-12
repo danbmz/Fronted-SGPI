@@ -1,4 +1,4 @@
-import { getAvancesTurno } from "@/features/avancesTurno/services/avancesTurnoService"
+import { getAvancesTurno } from "@/features/avancesTurno/services/avanceTurnoService"
 import { produccionSemana, parosPorMotivo } from "@/mocks/dashboard/dashboardData"
 import { ordenesCompletadas } from "@/mocks/reportes/reportesData"
 

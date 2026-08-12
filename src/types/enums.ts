@@ -39,3 +39,15 @@ export type TipoMaterialOrden = (typeof TIPO_MATERIAL_ORDEN)[number];
 
 export const ESTADO_ORDEN = ["BORRADOR", "ACTIVA", "EN_PROGRESO", "PAUSADA", "COMPLETADA", "CANCELADA"]as const;
 export type EstadoOrden = (typeof ESTADO_ORDEN)[number];
+
+export const ESTADO_AVANCE_TURNO = ["ABIERTO", "CERRADO"] as const;
+export type EstadoAvanceTurno = (typeof ESTADO_AVANCE_TURNO)[number];
+
+export const TURNO_TRABAJO = ["MANANA", "TARDE", "NOCHE"]as const;
+export type TurnoTrabajo = (typeof TURNO_TRABAJO)[number];
+
+export const TIPO_MATERIAL_SOLICITUD = ["VIRGEN", "MOLIDO"]as const; 
+export type TipoMaterialSolicitud = (typeof TIPO_MATERIAL_SOLICITUD)[number];
+
+export const DESTINO_PIEZAS = ["STOCK", "MOLINO"]as const;
+export type DestinoPiezas = (typeof DESTINO_PIEZAS)[number];

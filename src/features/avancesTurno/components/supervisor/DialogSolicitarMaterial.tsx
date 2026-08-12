@@ -3,7 +3,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import {
   solicitarMaterialSchema, type SolicitarMaterialForm, type AvanceTurno
 } from "@/validations/avancesTurno/avanceTurnoValidations"
-import { solicitarMaterial } from "../../services/avancesTurnoService"
+import { solicitarMaterial } from "../../services/avanceTurnoService"
 import { useAuth } from "@/features/auth/hooks/useAuth"
 import { toast } from "sonner"
 import {

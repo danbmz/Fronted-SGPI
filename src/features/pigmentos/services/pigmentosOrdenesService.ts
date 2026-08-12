@@ -1,6 +1,6 @@
 import { getOrdenesProduccion } from "@/features/ordenes/services/ordenService"
 import { getMaquinas } from "@/features/catalogo/services/maquinasService"
-import { getAvancesTurno } from "@/features/avancesTurno/services/avancesTurnoService"
+import { getAvancesTurno } from "@/features/avancesTurno/services/avanceTurnoService"
 import { getFormulasPigmento } from "@/features/catalogo/services/formulasPigmentosService"
 import type { OrdenProduccion } from "@/validations/ordenes/ordenProduccionValidations"
 import type { Maquina } from "@/types/maquinasCatalogo"

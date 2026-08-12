@@ -1,6 +1,6 @@
 // src/pages/pigmentos/PigmentosAlertas.tsx
 import { useState, useEffect } from "react"
-import { getAvancesTurno } from "../../../avancesTurno/services/avancesTurnoService"
+import { getAvancesTurno } from "../../../avancesTurno/services/avanceTurnoService"
 import { confirmarSobrante, confirmarMaterialPreparado, confirmarMaterialSiguiente } from "../../services/pigmentosOrdenesService"
 import { getOrdenesProduccion } from "@/features/ordenes/services/ordenService"
 import { getInfoMaquinas, type InfoMaquina } from "../../services/pigmentosOrdenesService"

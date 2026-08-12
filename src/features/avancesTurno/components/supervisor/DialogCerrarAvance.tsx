@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { type CerrarAvanceForm, type AvanceTurno, cerrarAvanceSchema } from "@/validations/avancesTurno/avanceTurnoValidations"
-import { cerrarAvance, guardarBorradorAvance } from "../../services/avancesTurnoService"
+import { cerrarAvance, guardarBorradorAvance } from "../../services/avanceTurnoService"
 import { useAuth } from "@/features/auth/hooks/useAuth"
 import { toast } from "sonner"
 import {

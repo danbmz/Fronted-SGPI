@@ -8,7 +8,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { PlayCircle } from "lucide-react"
 import DialogAbrirAvance from "./DialogAbrirAvance"
-import { getFechaTurnoActual } from "../../services/avancesTurnoService"
+import { getFechaTurnoActual } from "../../services/avanceTurnoService"
 
 interface Props {
   ordenes: OrdenProduccion[]

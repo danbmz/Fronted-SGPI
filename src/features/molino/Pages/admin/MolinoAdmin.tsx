@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
 import { getOrdenesProduccion } from "@/features/ordenes/services/ordenService"
-import { getAvancesTurno } from "@/features/avancesTurno/services/avancesTurnoService"
+import { getAvancesTurno } from "@/features/avancesTurno/services/avanceTurnoService"
 import { getMoliendas } from "../../services/moliendaService"
 import type { OrdenProduccion } from "@/validations/ordenes/ordenProduccionValidations"
 import type { AvanceTurno } from "@/validations/avancesTurno/avanceTurnoValidations"
