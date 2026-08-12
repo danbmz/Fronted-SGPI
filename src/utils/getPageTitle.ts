@@ -23,6 +23,7 @@ const pageTitles: Record<string, string> = {
   "/supervisor/avances": "Avances de turno",
   "/molino/pendientes": "Pendientes por Moler",
   "/molino/registrar": "Registrar Molienda",
+  "/molino/historial": "Moliendas",
   "/pigmentos/ordenes": "Órdenes",
   "/pigmentos/alertas": "Alertas",
 }

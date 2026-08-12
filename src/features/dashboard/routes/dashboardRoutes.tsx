@@ -18,9 +18,7 @@ import AvancesTurnoPage from '@/features/avancesTurno/pages/supervisor/AvancesTu
 import SeguimientoOrdenes from '@/features/avancesTurno/pages/admin/SeguimientoOrdenes'
 import MolinoAdmin from '@/features/molino/Pages/admin/MolinoAdmin'
 import Reportes from '@/features/reportes/pages/Reportes'
-import MolinoPendientes from '@/features/molino/Pages/molino/MolinoPendientes'
 import PigmentosOrdenes from '@/features/pigmentos/pages/pigmentos/PigmentosOrdenes'
-import MolinoRegistrar from '@/features/molino/Pages/molino/MolinoRegistrar'
 import PigmentosAlertas from '@/features/pigmentos/pages/pigmentos/PigmentosAlertas'
 import PedidosPage from '@/features/pedidos/pages/PedidosPage'
 import PedidoDetallePage from '@/features/pedidos/pages/PedidoDetallePage'
@@ -30,6 +28,9 @@ import DefectosProducto from '@/features/catalogo/pages/DefectosProductos'
 import ColoresSolidosPage from '@/features/catalogo/pages/ColoresSolidosPage'
 import OrdenesDisponiblesPage from '@/features/avancesTurno/pages/supervisor/OrdenesDisponiblesPage'
 import AvanceTurnoDetallePage from '@/features/avancesTurno/pages/supervisor/AvanceTurnoDetallePage'
+import PendientesConfirmacionPage from '@/features/molino/Pages/molino/PendientesConfirmacionPage'
+import PendientesMolerPage from '@/features/molino/Pages/molino/PendientesMolerPage'
+import MoliendasPage from '@/features/molino/Pages/molino/MoliendasPage'
 
 export const dashboardRoutes: RouteObject[] = [
   // ── Admin ──────────────────────────────────
@@ -112,8 +113,9 @@ export const dashboardRoutes: RouteObject[] = [
         element: <DashboardLayout />,
         children: [
           { index: true, element: <Navigate to="inicio" replace /> },
-          { path: 'pendientes', element: <MolinoPendientes /> },
-          { path: 'registrar', element: <MolinoRegistrar /> },
+          { path: 'pendientes', element: <PendientesConfirmacionPage /> },
+          { path: 'registrar', element: <PendientesMolerPage /> },
+          { path: 'historial', element: <MoliendasPage /> },
         ],
       },
     ],

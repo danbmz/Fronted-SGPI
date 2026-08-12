@@ -38,6 +38,7 @@ export const sidebarItems: Record<"ADMIN" | "SUPERVISOR" | "MOLINO" | "PIGMENTOS
   MOLINO: [
     { section: "OPERACIONES", label: "Pendientes", path: "/molino/pendientes", icon: Clock, exact: true },
     { section: "OPERACIONES", label: "Registrar", path: "/molino/registrar", icon: Hammer, exact: true },
+    { section: "ADMINISTRACIÓN", label: "Historial", path: "/molino/historial", icon: Hammer, exact: true },
   ],
   PIGMENTOS: [
     { section: "OPERACIONES", label: "Órdenes", path: "/pigmentos/ordenes", icon: ClipboardList, exact: true },
