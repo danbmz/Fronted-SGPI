@@ -23,7 +23,7 @@ const queryKeyDetalle = (id: string) => ["ordenes", id];
 
 export function useOrdenes(filtro?: FiltroOrdenes) {
   return useQuery({
-    queryKey: [QUERY_KEY_LISTA, filtro],
+    queryKey: [...QUERY_KEY_LISTA, filtro],
     queryFn: () => listarOrdenes(filtro),
   });
 }

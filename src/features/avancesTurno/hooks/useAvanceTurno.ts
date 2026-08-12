@@ -22,7 +22,7 @@ const queryKeyDetalle = (id: string) => ["avances-turno", id];
 
 export function useAvancesTurno(filtro?: FiltroAvances) {
   return useQuery({
-    queryKey: [QUERY_KEY_LISTA, filtro],
+    queryKey: [...QUERY_KEY_LISTA, filtro],
     queryFn: () => listarAvancesTurno(filtro),
   });
 }

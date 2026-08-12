@@ -12,6 +12,7 @@ import type {
 export interface FiltroIncidencias {
   resuelto?: boolean;
   destino?: "STOCK" | "MOLINO";
+  avanceTurnoId?: string; 
 }
 
 export async function listarIncidencias(filtro?: FiltroIncidencias): Promise<Incidencia[]> {

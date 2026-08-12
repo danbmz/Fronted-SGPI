@@ -1,86 +1,119 @@
-import { abrirAvance } from "../../services/avanceTurnoService"
-import { activarOrden } from "@/features/ordenes/services/ordenService"
-import type { OrdenProduccion } from "@/validations/ordenes/ordenProduccionValidations"
-import type { AvanceTurno, Turno } from "@/validations/avancesTurno/avanceTurnoValidations"
-import { useAuth } from "@/features/auth/hooks/useAuth"
-import { toast } from "sonner"
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { crearAvanceTurnoSchema, type CrearAvanceTurnoInput } from "../../schemas/avanceTurno";
+import { useCrearAvanceTurno } from "../../hooks/useAvanceTurno";
+import { TURNO_TRABAJO } from "@/types/enums";
+import type { Orden } from "@/features/ordenes/schemas/orden.schema";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 import {
   Dialog, DialogContent, DialogHeader,
   DialogTitle, DialogDescription
-} from "@/components/ui/dialog"
-import { Button } from "@/components/ui/button"
-import { useState } from "react"
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select, SelectContent, SelectItem,
+  SelectTrigger, SelectValue
+} from "@/components/ui/select";
 
 interface Props {
-  open: boolean
-  orden: OrdenProduccion | null
-  turnoActual: Turno
-  onClose: () => void
-  onSuccess: (avance: AvanceTurno, orden: OrdenProduccion) => void
+  open: boolean;
+  orden: Orden | null;
+  onClose: () => void;
 }
 
-export default function DialogAbrirAvance({
-  open, orden, turnoActual, onClose, onSuccess
-}: Props) {
-  const { user } = useAuth()
-  const [isLoading, setIsLoading] = useState(false)
- 
-  const handleConfirmar = async () => {
-    if (!user || !orden) return
-    setIsLoading(true)
+export default function DialogAbrirAvance({ open, orden, onClose }: Props) {
+  const {
+    register, handleSubmit, reset, setValue, watch,
+    formState: { errors, isSubmitting }
+  } = useForm<CrearAvanceTurnoInput>({
+    resolver: zodResolver(crearAvanceTurnoSchema),
+  });
 
-    try {
-      const nuevoAvance = await abrirAvance(orden, user)
+  const crearMutation = useCrearAvanceTurno();
+  const navigate = useNavigate();
 
-      // Si la orden estaba activa la pasa a en_progreso
-      let ordenActualizada = orden
-      if (orden.estado === "activa") {
-        ordenActualizada = await activarOrden({
-          ...orden,
-          estado: "en_progreso",
-          horaInicio: new Date().toISOString()
-        } as any, user)
-      }
-
-      toast.success(`Avance de turno ${turnoActual} iniciado para ${orden.folio}.`)
-      onSuccess(nuevoAvance, ordenActualizada)
-      onClose()
-    } catch {
-      toast.error("Error al abrir el avance de turno.")
-    } finally {
-        setIsLoading(false)
+  useEffect(() => {
+    if (open && orden) {
+      setValue("ordenId", orden.id);
     }
-  }
+  }, [open, orden]);
+
+  const onSubmit = async (data: CrearAvanceTurnoInput) => {
+    try {
+      const payload = {
+        ...data,
+        horaInicio: new Date(data.horaInicio).toISOString(), // Ajustamos valor al formato esperado por el back
+      };
+      const nuevoAvance = await crearMutation.mutateAsync(payload);
+      toast.success("Avance de turno iniciado.");
+      reset();
+      onClose();
+      navigate(`/supervisor/avances/${nuevoAvance.id}`);
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Error al iniciar el avance.");
+    }
+  };
+
+  const handleClose = () => {
+    reset();
+    onClose();
+  };
 
   return (
-    <Dialog open={open} onOpenChange={onClose}>
+    <Dialog open={open} onOpenChange={handleClose}>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Iniciar avance de turno</DialogTitle>
           <DialogDescription>
-            Se registrará el inicio del turno {turnoActual} para esta orden.
+            {orden ? `Orden: ${orden.folio} — ${orden.productoNombre}` : ""}
           </DialogDescription>
         </DialogHeader>
 
-        {orden && (
-          <div className="text-sm flex flex-col gap-1 bg-muted px-3 py-2 rounded-md">
-            <p><span className="font-medium">Orden:</span> {orden.folio}</p>
-            <p><span className="font-medium">Producto:</span> {orden.producto} — {orden.color}</p>
-            <p><span className="font-medium">Máquina:</span> {orden.maquina}</p>
-            <p><span className="font-medium">Turno:</span> {turnoActual}</p>
-            {orden.estado === "activa" && (
-              <p className="text-blue-600 text-xs mt-1">
-                La orden pasará a estado "En progreso" al confirmar.
-              </p>
-            )}
+        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4 mt-2">
+          <div className="flex flex-col gap-1">
+            <Label>Turno</Label>
+            <Select
+              value={watch("turno") ?? ""}
+              onValueChange={(val) =>
+                setValue("turno", val as (typeof TURNO_TRABAJO)[number], { shouldValidate: true })
+              }
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Selecciona un turno" />
+              </SelectTrigger>
+              <SelectContent>
+                {TURNO_TRABAJO.map((t) => (
+                  <SelectItem key={t} value={t}>{t}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            {errors.turno && <p className="text-xs text-red-500">{errors.turno.message}</p>}
           </div>
-        )}
 
-        <div className="flex justify-end gap-2 mt-4">
-          <Button variant="outline" onClick={onClose}>Cancelar</Button>
-          <Button onClick={handleConfirmar} disabled={isLoading}>{isLoading ? "Iniciando" : "Confirmar inicio"}</Button>
-        </div>
+          <div className="flex flex-col gap-1">
+            <Label>Fecha</Label>
+            <Input type="date" {...register("fecha")} />
+            {errors.fecha && <p className="text-xs text-red-500">{errors.fecha.message}</p>}
+          </div>
+
+          <div className="flex flex-col gap-1">
+            <Label>Hora de inicio</Label>
+            <Input type="datetime-local" {...register("horaInicio")} />
+            {errors.horaInicio && <p className="text-xs text-red-500">{errors.horaInicio.message}</p>}
+          </div>
+
+          <div className="flex justify-end gap-2 mt-2">
+            <Button type="button" variant="outline" onClick={handleClose}>Cancelar</Button>
+            <Button type="submit" disabled={isSubmitting || crearMutation.isPending}>
+              {isSubmitting || crearMutation.isPending ? "Iniciando..." : "Iniciar avance"}
+            </Button>
+          </div>
+        </form>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

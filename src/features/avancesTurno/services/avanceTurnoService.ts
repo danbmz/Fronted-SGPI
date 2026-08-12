@@ -11,12 +11,16 @@ import type {
 } from "../schemas/avanceTurno";
 
 export interface FiltroAvances {
-  estado?: "ABIERTO" | "CERRADO",
+  estado?: "ABIERTO" | "CERRADO";
+  confirmacionMolinoConfirmado?: boolean;
 }
 
 export async function listarAvancesTurno(filtro?: FiltroAvances): Promise<AvanceTurno[]> {
   const params = new URLSearchParams();
   if (filtro?.estado !== undefined) params.set("estado", filtro.estado);
+  if (filtro?.confirmacionMolinoConfirmado !== undefined) {
+    params.set("confirmacionMolinoConfirmado", String(filtro.confirmacionMolinoConfirmado));
+  }
   const query = params.toString();
   const response = await httpClient(`/avances-turno${query ? `?${query}` : ""}`);
   return parseOrThrow(response, listaAvanceTurnoSchema);

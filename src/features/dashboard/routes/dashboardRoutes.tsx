@@ -14,13 +14,12 @@ import MateriasPrimas from '@/features/catalogo/pages/MateriasPrimas'
 import MateriasPrimasInventario from '@/features/inventory/pages/MateriasPrimasInventario'
 import PigmentosInventario from '@/features/inventory/pages/PigmentosInventario'
 import ProductoInventario from '@/features/inventory/pages/ProductoInventario'
-import AvancesTurno from '@/features/avancesTurno/pages/supervisor/AvancesTurno'
+import AvancesTurnoPage from '@/features/avancesTurno/pages/supervisor/AvancesTurnoPage'
 import SeguimientoOrdenes from '@/features/avancesTurno/pages/admin/SeguimientoOrdenes'
 import MolinoAdmin from '@/features/molino/Pages/admin/MolinoAdmin'
 import Reportes from '@/features/reportes/pages/Reportes'
 import MolinoPendientes from '@/features/molino/Pages/molino/MolinoPendientes'
 import PigmentosOrdenes from '@/features/pigmentos/pages/pigmentos/PigmentosOrdenes'
-import Ordenes from '@/features/avancesTurno/pages/supervisor/Ordenes'
 import MolinoRegistrar from '@/features/molino/Pages/molino/MolinoRegistrar'
 import PigmentosAlertas from '@/features/pigmentos/pages/pigmentos/PigmentosAlertas'
 import PedidosPage from '@/features/pedidos/pages/PedidosPage'
@@ -29,6 +28,8 @@ import OrdenDetallePage from '@/features/ordenes/pages/OrdenDetallePage'
 import MolidoInventario from '@/features/inventory/pages/MolidoInventario'
 import DefectosProducto from '@/features/catalogo/pages/DefectosProductos'
 import ColoresSolidosPage from '@/features/catalogo/pages/ColoresSolidosPage'
+import OrdenesDisponiblesPage from '@/features/avancesTurno/pages/supervisor/OrdenesDisponiblesPage'
+import AvanceTurnoDetallePage from '@/features/avancesTurno/pages/supervisor/AvanceTurnoDetallePage'
 
 export const dashboardRoutes: RouteObject[] = [
   // ── Admin ──────────────────────────────────
@@ -67,6 +68,7 @@ export const dashboardRoutes: RouteObject[] = [
     ],
   },
 
+  // ── Programador ─────────────────────────────
   {
     path: '/programador',
     element: <ProtectedRoute allowedRoles={['PROGRAMADOR']} />,
@@ -93,8 +95,9 @@ export const dashboardRoutes: RouteObject[] = [
         element: <DashboardLayout />,
         children: [
           { index: true, element: <Navigate to="inicio" replace /> },
-          { path: 'avances', element: <AvancesTurno /> },
-          { path: 'ordenes', element: <Ordenes /> },
+          { path: 'ordenes', element: <OrdenesDisponiblesPage /> },
+          { path: 'avances', element: <AvancesTurnoPage /> },
+          { path: 'avances/:id', element: <AvanceTurnoDetallePage /> },
         ],
       },
     ],
