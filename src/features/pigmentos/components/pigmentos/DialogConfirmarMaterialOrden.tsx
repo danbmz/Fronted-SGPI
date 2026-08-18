@@ -23,6 +23,7 @@ export default function DialogConfirmarMaterialOrden({ open, orden, onClose }: P
       toast.success("Material confirmado correctamente.");
       onClose();
     } catch (error) {
+      onClose();
       toast.error(error instanceof Error ? error.message : "Error al confirmar el material.");
     }
   };

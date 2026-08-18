@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useState } from "react";
 import { useAvanceTurno } from "../../hooks/useAvanceTurno";
 import { useTiemposParo } from "../../hooks/useTiempoParo";
@@ -9,11 +9,12 @@ import {
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Plus } from "lucide-react";
+import { ArrowLeft, Plus } from "lucide-react";
 import FormularioAvanceTurno from "../../components/supervisor/FormularioAvanceTurno";
 import DialogCrearTiempoParo from "../../components/supervisor/DialogCrearParo";
 import DialogCrearSolicitudMaterial from "../../components/supervisor/DialogCrearSolicitudMaterial";
 import DialogCrearIncidencia from "../../components/supervisor/DialogCrearIncidencia";
+import { useAuth } from "@/features/auth/hooks/useAuth";
 
 
 export default function AvanceTurnoDetallePage() {
@@ -23,6 +24,10 @@ export default function AvanceTurnoDetallePage() {
   const { data: solicitudes } = useSolicitudesMaterial(id);
   const { data: incidencias } = useIncidencias({avanceTurnoId: id});
 
+  const { role } = useAuth();
+  const esSoloLectura = role === "ADMIN"; // el supervisor conserva control total
+
+  const navigate = useNavigate();
   const [dialogTiempoParoAbierto, setDialogTiempoParoAbierto] = useState(false);
   const [dialogSolicitudAbierto, setDialogSolicitudAbierto] = useState(false);
   const [dialogIncidenciaAbierto, setDialogIncidenciaAbierto] = useState(false);
@@ -33,14 +38,29 @@ export default function AvanceTurnoDetallePage() {
 
   return (
     <div className="flex flex-col gap-4 p-6">
+      <Button variant="ghost" size="sm" className="w-fit" onClick={() => navigate(-1)}>
+        <ArrowLeft size={16} className="mr-2" />
+        Volver
+      </Button>
+
       <div className="flex flex-col gap-1">
         <h1 className="text-xl font-semibold">{avance.ordenFolio}</h1>
         <p className="text-sm text-muted-foreground">
           Turno: {avance.turno} — Fecha: {avance.fecha}
         </p>
-      </div>
 
-      <FormularioAvanceTurno avance={avance} />
+      </div>
+        {avance && (
+          <div className="flex flex-wrap gap-4 text-sm text-muted-foreground border-b pb-3">
+            <span>Producto: <strong className="text-foreground">{avance.ordenProductoNombre}</strong></span>
+            <span>Material: <strong className="text-foreground">{avance.ordenTipoMaterial}</strong></span>
+            <span>Color: <strong className="text-foreground">{avance.ordenPigmentoColor}</strong></span>
+            <span>Máquina: <strong className="text-foreground">{avance.ordenMaquinaNombre}</strong></span>
+            <span>Meta: <strong className="text-foreground">{avance.ordenPiezasProducidas} / {avance.ordenTotalPiezas} piezas</strong></span>
+          </div>
+        )}
+
+      <FormularioAvanceTurno key={avance.id} avance={avance} />
 
       <Accordion type="multiple" className="mt-4">
         <AccordionItem value="tiempos-paro">
@@ -60,7 +80,7 @@ export default function AvanceTurnoDetallePage() {
             {(!tiemposParo || tiemposParo.length === 0) && (
               <p className="text-sm text-muted-foreground py-2">Sin tiempos de paro registrados.</p>
             )}
-            <Button size="sm" variant="outline" className="w-fit" onClick={() => setDialogTiempoParoAbierto(true)}>
+            <Button size="sm" variant="outline" className="w-fit" disabled={esSoloLectura} onClick={() => setDialogTiempoParoAbierto(true)}>
               <Plus size={14} className="mr-1" />
               Agregar tiempo de paro
             </Button>
@@ -86,7 +106,7 @@ export default function AvanceTurnoDetallePage() {
             {(!solicitudes || solicitudes.length === 0) && (
               <p className="text-sm text-muted-foreground py-2">Sin solicitudes registradas.</p>
             )}
-            <Button size="sm" variant="outline" className="w-fit" onClick={() => setDialogSolicitudAbierto(true)}>
+            <Button size="sm" variant="outline" className="w-fit"  disabled={esSoloLectura}  onClick={() => setDialogSolicitudAbierto(true)}>
               <Plus size={14} className="mr-1" />
               Solicitar material
             </Button>
@@ -119,7 +139,7 @@ export default function AvanceTurnoDetallePage() {
             {(!incidencias || incidencias.length === 0) && (
               <p className="text-sm text-muted-foreground py-2">Sin incidencias reportadas.</p>
             )}
-            <Button size="sm" variant="outline" className="w-fit" onClick={() => setDialogIncidenciaAbierto(true)}>
+            <Button size="sm" variant="outline" className="w-fit"  disabled={esSoloLectura}  onClick={() => setDialogIncidenciaAbierto(true)}>
               <Plus size={14} className="mr-1" />
               Reportar incidencia
             </Button>

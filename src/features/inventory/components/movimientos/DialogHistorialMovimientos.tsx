@@ -8,7 +8,7 @@ import {
   TableHead, TableHeader, TableRow
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import type { OrigenMolido, TipoInventario } from "@/types/enums";
+import type { OrigenMolido, TipoInventario, TipoMaterial } from "@/types/enums";
 
 interface Props {
   open: boolean;
@@ -19,6 +19,7 @@ interface Props {
   productoId?: string;
   colorSolidoId?: string;
   origen?: OrigenMolido;
+  tipoMaterial?: TipoMaterial;
   combinacionId?: string;   
   titulo: string; // ej. "Historial — Polipropileno Virgen"
 }
@@ -38,6 +39,7 @@ export default function DialogHistorialMovimientos({
   productoId,
   colorSolidoId,
   origen,
+  tipoMaterial,
   combinacionId,
   titulo,
 }: Props) {
@@ -48,13 +50,14 @@ export default function DialogHistorialMovimientos({
     productoId,
     colorSolidoId,
     origen,
+    tipoMaterial,
     combinacionId,
     limite: 50,
   });
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="max-w-3xl max-h-[80vh] overflow-y-auto">
+      <DialogContent className="min-w-4xl max-w-5xl max-h-[80vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>{titulo}</DialogTitle>
           <DialogDescription>

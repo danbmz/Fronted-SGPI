@@ -17,6 +17,7 @@ import {
   Select, SelectContent, SelectItem,
   SelectTrigger, SelectValue
 } from "@/components/ui/select";
+import { TIPO_MATERIAL_CON_MOLIDO, type MaterialConMolido } from "@/types/enums";
 
 interface Props {
   open: boolean;
@@ -49,17 +50,16 @@ export default function DialogEntradaProveedor({ open, tipoInventario, onClose }
     try {
       await entradaMutation.mutateAsync(data);
       toast.success("Entrada registrada correctamente.");
-      reset();
-      setValue("tipoInventario", tipoInventario); // Asi conservamos el valor del inventario que llama al Dialog.
-      onClose();
+      handleClose();
     } catch (error) {
+      onClose();
       toast.error(error instanceof Error ? error.message : "Error al registrar la entrada.");
     }
   };
 
   const handleClose = () => {
     reset();
-    setValue("tipoInventario", tipoInventario);
+    setValue("tipoInventario", tipoInventario); // Asi conservamos el valor del inventario que llama al Dialog.
     onClose();
   };
 
@@ -123,20 +123,20 @@ export default function DialogEntradaProveedor({ open, tipoInventario, onClose }
               <div className="flex flex-col gap-1">
                 <Label>Material</Label>
                 <Select
-                  value={watch("materiaPrimaId") ?? ""}
-                  onValueChange={(val) => setValue("materiaPrimaId", val, { shouldValidate: true })}
+                  value={watch("tipoMaterial") ?? ""}
+                  onValueChange={(val) => setValue("tipoMaterial", val as MaterialConMolido, { shouldValidate: true })}
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="Selecciona" />
                   </SelectTrigger>
                   <SelectContent>
-                    {(materiasPrimas ?? []).map((m) => (
-                      <SelectItem key={m.id} value={m.id}>{m.nombre}</SelectItem>
+                    {(TIPO_MATERIAL_CON_MOLIDO ?? []).map((m) => (
+                      <SelectItem key={m} value={m}>{m}</SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
-                {"materiaPrimaId" in errors && errors.materiaPrimaId && (
-                  <p className="text-xs text-red-500">{errors.materiaPrimaId.message}</p>
+                {"tipoMaterial" in errors && errors.tipoMaterial && (
+                  <p className="text-xs text-red-500">{errors.tipoMaterial.message}</p>
                 )}
               </div>
 

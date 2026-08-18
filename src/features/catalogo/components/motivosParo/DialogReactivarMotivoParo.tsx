@@ -24,6 +24,7 @@ export default function DialogReactivarMotivoParo({ open, motivo, onClose }: Pro
       toast.success("Motivo de paro reactivado.");
       onClose();
     } catch (error) {
+      onClose();
       toast.error(error instanceof Error ? error.message : "Error al reactivar el motivo de paro.");
     }
   };

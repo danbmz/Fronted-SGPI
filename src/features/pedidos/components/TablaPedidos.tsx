@@ -36,7 +36,7 @@ export default function TablaPedidos({ pedidos }: Props) {
           <TableRow
             key={pedido.id}
             className="cursor-pointer hover:bg-muted/50"
-            onClick={() => navigate(`/pedidos/${pedido.id}`)}
+            onClick={() => navigate(`${pedido.id}`)}
           >
             <TableCell className="font-mono font-medium">{pedido.numeroPedido}</TableCell>
             <TableCell>{pedido.cliente}</TableCell>

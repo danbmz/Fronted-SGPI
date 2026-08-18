@@ -35,8 +35,8 @@ export default function TablaInventarioMolido({ molido }: Props) {
         </TableHeader>
         <TableBody>
           {molido.map((item, index) => (
-            <TableRow key={`${item.materiaPrimaId}-${item.origen}-${item.colorSolidoId}-${index}`}>
-              <TableCell className="font-medium">{item.materiaPrimaNombre}</TableCell>
+            <TableRow key={`${item.tipoMaterial}-${item.origen}-${item.colorSolidoId}-${index}`}>
+              <TableCell className="font-medium">{item.tipoMaterial}</TableCell>
               <TableCell>
                 <Badge className={`text-xs px-2 py-1 rounded-full font-medium ${origenColor[item.origen]}`}>
                   {item.origen}
@@ -65,10 +65,10 @@ export default function TablaInventarioMolido({ molido }: Props) {
         open={materiaSeleccionada !== null}
         onClose={() => setMateriaSeleccionada(null)}
         tipoInventario="MOLIDO"
-        materiaPrimaId={materiaSeleccionada?.materiaPrimaId}
         colorSolidoId={materiaSeleccionada?.colorSolidoId}
         origen={materiaSeleccionada?.origen}
-        titulo={`Historial — Molido ${materiaSeleccionada?.materiaPrimaNombre ?? ""} ${materiaSeleccionada?.colorSolidoNombre ?? ""}`}
+        tipoMaterial={materiaSeleccionada?.tipoMaterial}
+        titulo={`Historial — Molido ${materiaSeleccionada?.tipoMaterial ?? ""} ${materiaSeleccionada?.colorSolidoNombre ?? ""}`}
       />
     </>
   );

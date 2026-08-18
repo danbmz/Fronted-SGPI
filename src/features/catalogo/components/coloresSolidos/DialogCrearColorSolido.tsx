@@ -30,9 +30,9 @@ export function DialogCrearColorSolido({ open, onClose }: Props) {
     try {
       await crearMutation.mutateAsync(data);
       toast.success("Color sólido creado correctamente.");
-      reset();
-      onClose();
+      handleClose();
     } catch (error) {
+      handleClose();
       toast.error(error instanceof Error ? error.message : "Error al crear el color sólido.");
     }
   };

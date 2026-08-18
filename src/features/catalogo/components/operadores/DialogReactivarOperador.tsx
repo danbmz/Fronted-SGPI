@@ -21,6 +21,7 @@ export default function DialogReactivarOperador ({open, operador, onClose}: Prop
             toast.success(`Operador ${operador.nombre} Activado.`)
             onClose()
         } catch (error) {
+            onClose();
             toast.error(error instanceof Error ? error.message : "Error al reactivar operador.")
         }
     }

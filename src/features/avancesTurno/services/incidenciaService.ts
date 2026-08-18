@@ -4,8 +4,8 @@ import { incidenciaSchema, listaIncidenciaSchema } from "../schemas/incidencia";
 import type {
   CrearIncidenciaInput,
   ConfirmarIncidenciaMolinoInput,
-  ResolverIncidenciaInput,
   Incidencia,
+  ResolverIncidenciaPayload,
 } from "../schemas/incidencia";
 
 
@@ -50,7 +50,7 @@ export async function confirmarIncidenciaMolino(
 
 export async function resolverIncidencia(
   id: string,
-  data: ResolverIncidenciaInput
+  data: ResolverIncidenciaPayload
 ): Promise<Incidencia> {
   const response = await httpClient(`/incidencias-mal-pigmentado/${id}/resolver`, {
     method: "PATCH",

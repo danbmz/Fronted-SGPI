@@ -11,7 +11,6 @@ export const crearPedidoSchema = z.object({
     .max(150, "El cliente no puede exceder 150 caracteres"),
   remision: z
     .string()
-    .min(1, "La remisión no puede estar vacía")
     .max(150, "La remisión no puede exceder 150 caracteres")
     .optional(),
   descripcion: z.string().max(500, "La descripción no puede exceder 500 caracteres").optional(),

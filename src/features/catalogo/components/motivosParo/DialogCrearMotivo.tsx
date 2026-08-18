@@ -32,9 +32,9 @@ export default function DialogCrearMotivoParo({ open, onClose }: Props) {
     try {
       await crearMutation.mutateAsync(data)
       toast.success("Motivo de paro creado correctamente.")
-      reset()
-      onClose()
+      handleClose();
     } catch (error) {
+      handleClose();
       toast.error(error instanceof Error ? error.message : "Error al crear el motivo de paro.")
     }
   }

@@ -24,9 +24,9 @@ export default function DialogCrearOperador({open, onClose }: Props) {
       try {
           await crearMutation.mutateAsync(data);
           toast.success("Operador creado exitosamente.");
-          reset();
-          onClose();
+          handleClose();
       } catch (error) {
+          handleClose();
           toast.error(error instanceof Error ? error.message : "Error al crear nuevo operador.")
       }
   }

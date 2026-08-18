@@ -51,9 +51,9 @@ export default function DialogSalidaProducto({ open, onClose, pedidoIdInicial }:
     try {
       await salidaMutation.mutateAsync(data);
       toast.success("Salida registrada correctamente.");
-      reset();
-      onClose();
+      handleClose();
     } catch (error) {
+      handleClose();
       toast.error(error instanceof Error ? error.message : "Error al registrar la salida.");
     }
   };
@@ -65,7 +65,7 @@ export default function DialogSalidaProducto({ open, onClose, pedidoIdInicial }:
 
   return (
     <Dialog open={open} onOpenChange={handleClose}>
-      <DialogContent className="max-w-lg">
+      <DialogContent className="max-w-lg max-h-[85vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Registrar salida de producto</DialogTitle>
           <DialogDescription>
@@ -132,7 +132,7 @@ export default function DialogSalidaProducto({ open, onClose, pedidoIdInicial }:
                     </SelectTrigger>
                     <SelectContent>
                       {(productos ?? []).map((p) => (
-                        <SelectItem key={p.id} value={p.id}>{p.nombre}</SelectItem>
+                        <SelectItem key={p.id} value={p.id}>{`${p.nombre} - ${p.tipoMaterial.toLocaleLowerCase()}`}</SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
@@ -148,7 +148,7 @@ export default function DialogSalidaProducto({ open, onClose, pedidoIdInicial }:
                     </SelectTrigger>
                     <SelectContent>
                       {(pigmentos ?? []).map((p) => (
-                        <SelectItem key={p.id} value={p.id}>{p.color}</SelectItem>
+                        <SelectItem key={p.id} value={p.id}>{`${p.color} ${p.categoriaColor.toLocaleLowerCase()} - ${p.tipoMaterial.toLocaleLowerCase()}`}</SelectItem>
                       ))}
                     </SelectContent>
                   </Select>

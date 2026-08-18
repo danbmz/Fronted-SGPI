@@ -48,9 +48,9 @@ export default function DialogCrearMolienda({ open, avanceTurnoIds, incidenciaId
     try {
       await crearMutation.mutateAsync(data);
       toast.success("Molienda registrada correctamente.");
-      reset();
-      onClose();
+      handleClose();
     } catch (error) {
+      handleClose();
       toast.error(error instanceof Error ? error.message : "Error al registrar la molienda.");
     }
   };

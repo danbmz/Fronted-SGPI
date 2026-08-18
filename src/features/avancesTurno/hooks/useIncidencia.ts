@@ -9,7 +9,7 @@ import {
 import type {
   CrearIncidenciaInput,
   ConfirmarIncidenciaMolinoInput,
-  ResolverIncidenciaInput,
+  ResolverIncidenciaPayload,
 } from "../schemas/incidencia";
 
 
@@ -46,7 +46,7 @@ export function useConfirmarIncidenciaMolino() {
 export function useResolverIncidencia() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ id, data }: { id: string; data: ResolverIncidenciaInput }) =>
+    mutationFn: ({ id, data }: { id: string; data: ResolverIncidenciaPayload }) =>
       resolverIncidencia(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["incidencias-mal-pigmentado"] });

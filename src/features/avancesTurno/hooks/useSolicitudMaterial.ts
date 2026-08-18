@@ -43,6 +43,7 @@ export function useConfirmarSolicitudMaterial() {
     mutationFn: ({ id }: { id: string; avanceTurnoId: string }) => confirmarSolicitudMaterial(id),
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: queryKeyLista(variables.avanceTurnoId) });
+      queryClient.invalidateQueries({ queryKey: ["solicitudes-material", "todas"] }); // Para refrescar la pantalla donde se listan solicitudes de diferentes avances. 
       queryClient.invalidateQueries({ queryKey: ["inventario"] });
     },
   });

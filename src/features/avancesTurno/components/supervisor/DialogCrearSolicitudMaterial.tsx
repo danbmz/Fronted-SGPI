@@ -36,9 +36,9 @@ export default function DialogCrearSolicitudMaterial({ open, avanceTurnoId, onCl
     try {
       await crearMutation.mutateAsync({ avanceTurnoId, data });
       toast.success("Solicitud de material enviada.");
-      reset();
-      onClose();
+      handleClose();
     } catch (error) {
+      handleClose();
       toast.error(error instanceof Error ? error.message : "Error al enviar la solicitud.");
     }
   };

@@ -7,6 +7,10 @@ export type Role = (typeof ROL_USUARIO)[number]
 export const TIPO_MATERIAL = ["POLIPROPILENO", "POLIESTIRENO", "POLIETILENO"] as const;
 export type TipoMaterial = (typeof TIPO_MATERIAL)[number];
 
+// Subconjunto específico: los materiales que sí tienen molido
+export const TIPO_MATERIAL_CON_MOLIDO = TIPO_MATERIAL.filter((t) => t !== "POLIETILENO");
+export type MaterialConMolido = (typeof TIPO_MATERIAL_CON_MOLIDO)[number];
+
 export const UNIDAD_MEDIDA = ["KILOGRAMO", "GRAMO", "LITRO", "MILILITRO", "PIEZA"] as const;
 export type UnidadMedida = (typeof UNIDAD_MEDIDA)[number];
 

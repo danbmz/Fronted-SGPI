@@ -1,10 +1,16 @@
 import { z } from "zod";
-import { TURNO_TRABAJO, ESTADO_AVANCE_TURNO, TIPO_MATERIAL_SOLICITUD } from "@/types/enums";
+import { TURNO_TRABAJO, ESTADO_AVANCE_TURNO, TIPO_MATERIAL_SOLICITUD, TIPO_MATERIAL } from "@/types/enums";
 
 export const avanceTurnoSchema = z.object({
   id: z.string(),
   ordenId: z.string(),
   ordenFolio: z.string(),
+  ordenProductoNombre: z.string(),
+  ordenPigmentoColor: z.string(),
+  ordenMaquinaNombre: z.string(),
+  ordenTotalPiezas: z.int(),
+  ordenPiezasProducidas: z.int(),
+  ordenTipoMaterial: z.enum(TIPO_MATERIAL),
   supervisorId: z.string(),
   supervisorNombre: z.string(),
   turno: z.enum(TURNO_TRABAJO),

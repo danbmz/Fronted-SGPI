@@ -12,7 +12,7 @@ export default function ColoresSolidosPage() {
   if (error) return <div>Error al cargar colores sólidos: {error.message}</div>;
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 p-6">
       <div className="flex justify-between items-center">
         <h1 className="text-xl font-semibold">Colores sólidos</h1>
         <Button onClick={() => setDialogCrearAbierto(true)}>Nuevo color</Button>

@@ -35,13 +35,16 @@ export default function DialogAgregarDetalle({ open, pedidoId, onClose }: Props)
   const { data: productos } = useProducto();
   const { data: pigmentos } = usePigmento();
 
+  const productosActivos = productos?.filter((p) => p.activo);
+  const pigmentosActivos = pigmentos?.filter((p) => p.activo);
+
   const onSubmit = async (data: CrearPedidoDetalleInput) => {
     try {
       await agregarMutation.mutateAsync({ pedidoId, data });
       toast.success("Línea agregada correctamente.");
-      reset();
-      onClose();
+      handleClose();
     } catch (error) {
+      handleClose();
       toast.error(error instanceof Error ? error.message : "Error al agregar la línea.");
     }
   };
@@ -72,8 +75,8 @@ export default function DialogAgregarDetalle({ open, pedidoId, onClose }: Props)
                 <SelectValue placeholder="Selecciona un producto" />
               </SelectTrigger>
               <SelectContent>
-                {(productos ?? []).map((p) => (
-                  <SelectItem key={p.id} value={p.id}>{p.nombre}</SelectItem>
+                {(productosActivos ?? []).map((p) => (
+                  <SelectItem key={p.id} value={p.id}>{`${p.nombre} - ${p.tipoMaterial.toLowerCase()}`}</SelectItem>
                 ))}
               </SelectContent>
             </Select>
@@ -90,8 +93,8 @@ export default function DialogAgregarDetalle({ open, pedidoId, onClose }: Props)
                 <SelectValue placeholder="Sin especificar" />
               </SelectTrigger>
               <SelectContent>
-                {(pigmentos ?? []).map((p) => (
-                  <SelectItem key={p.id} value={p.id}>{p.color}</SelectItem>
+                {(pigmentosActivos ?? []).map((p) => (
+                  <SelectItem key={p.id} value={p.id}>{`${p.color} ${p.categoriaColor.toLowerCase()} - ${p.tipoMaterial.toLowerCase()}`}</SelectItem>
                 ))}
               </SelectContent>
             </Select>

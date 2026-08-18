@@ -11,8 +11,18 @@ export const incidenciaSchema = z.object({
   tipoMaterialAgregado: z.enum(TIPO_MATERIAL_SOLICITUD).nullable(),
   kgMaterialAgregado: z.number().nullable(),
   gramosPigmentoAgregado: z.number().nullable(),
+  materiaPrimaNombre: z.string(),
+  pigmentoColor: z.string(),
+  ordenFolio: z.string(),
 });
 
 export type Incidencia = z.infer<typeof incidenciaSchema>;
 
 export const listaIncidenciaSchema = z.array(incidenciaSchema);
+
+// Forma que espera recibir el Back.
+export interface ResolverIncidenciaPayload {
+  tipoMaterialAgregado?: "VIRGEN" | "MOLIDO";
+  kgMaterialAgregado?: number;
+  gramosPigmentoAgregado?: number;
+}

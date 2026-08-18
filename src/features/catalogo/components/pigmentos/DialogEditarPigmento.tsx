@@ -50,6 +50,7 @@ export default function DialogEditarPigmento({ open, pigmento, onClose }: Props)
       toast.success("Pigmento actualizado correctamente.");
       onClose();
     } catch (error) {
+      onClose();
       toast.error(error instanceof Error ? error.message : "Error al actualizar el pigmento.");
     }
   };

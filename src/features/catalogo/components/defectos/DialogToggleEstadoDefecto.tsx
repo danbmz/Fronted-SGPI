@@ -31,6 +31,7 @@ export default function DialogToggleEstadoDefecto({ open, defecto, onClose }: Pr
       }
       onClose();
     } catch (error) {
+      onClose();
       toast.error(
         error instanceof Error
           ? error.message

@@ -11,11 +11,8 @@ import {
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import {
-  Select, SelectContent, SelectItem,
-  SelectTrigger, SelectValue
-} from "@/components/ui/select"
 import { useColorSolido } from "../../hooks/useColorSolido";
+import SelectNativo from "@/components/ui/selectNativo";
 
 interface Props {
   open: boolean;
@@ -24,6 +21,8 @@ interface Props {
 
 export default function DialogCrearPigmento({ open, onClose }: Props) {
   const { data: coloresSolidos } = useColorSolido();
+  const coloresSolidosActivos = coloresSolidos?.filter((c) => c.activo);
+
   const {
     register, handleSubmit, reset, setValue, watch,
     formState: { errors, isSubmitting }
@@ -37,13 +36,14 @@ export default function DialogCrearPigmento({ open, onClose }: Props) {
     try {
       await crearMutation.mutateAsync(data);
       toast.success("Pigmento creado correctamente.");
-      reset();
-      onClose();
+      handleClose();
     } catch (error) {
+      handleClose();
       toast.error(error instanceof Error ? error.message : "Error al crear el pigmento.");
     }
   };
 
+  console.log(errors);
   const handleClose = () => {
     reset();
     onClose();
@@ -62,21 +62,14 @@ export default function DialogCrearPigmento({ open, onClose }: Props) {
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4 mt-2">
           <div className="flex flex-col gap-1">
             <Label>Material base</Label>
-            <Select
+            <SelectNativo
               value={watch("tipoMaterial") ?? ""}
-              onValueChange={(val) =>
-                setValue("tipoMaterial", val as (typeof TIPO_MATERIAL)[number], { shouldValidate: true })
-              }
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Selecciona un material" />
-              </SelectTrigger>
-              <SelectContent>
-                {TIPO_MATERIAL.map((t) => (
-                  <SelectItem key={t} value={t}>{t}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+              onValueChange={(val) => {
+                setValue("tipoMaterial", val as (typeof TIPO_MATERIAL)[number], {shouldValidate: true})
+              }}
+              opciones={TIPO_MATERIAL.map((t) => ({ value: t, label: t}))}
+              placeholder="Selecciona un material"
+            />
             {errors.tipoMaterial && <p className="text-xs text-red-500">{errors.tipoMaterial.message}</p>}
           </div>
 
@@ -89,49 +82,7 @@ export default function DialogCrearPigmento({ open, onClose }: Props) {
           <div className="grid grid-cols-2 gap-3">
             <div className="flex flex-col gap-1">
               <Label>Categoría</Label>
-              <Select
-                value={watch("categoriaColor") ?? ""}
-                onValueChange={(val) =>
-                  setValue("categoriaColor", val as (typeof CATEGORIA_COLOR)[number], { shouldValidate: true })
-                }
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Selecciona" />
-                </SelectTrigger>
-                <SelectContent>
-                  {CATEGORIA_COLOR.map((c) => (
-                    <SelectItem key={c} value={c}>{c}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              {errors.categoriaColor && <p className="text-xs text-red-500">{errors.categoriaColor.message}</p>}
-            </div>
-
-            <div className="flex flex-col gap-1">
-              <Label>Tipo</Label>
-              <Select
-                value={watch("tipo") ?? ""}
-                onValueChange={(val) =>
-                  setValue("tipo", val as (typeof TIPO_PIGMENTO)[number], { shouldValidate: true })
-                }
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Selecciona" />
-                </SelectTrigger>
-                <SelectContent>
-                  {TIPO_PIGMENTO.map((t) => (
-                    <SelectItem key={t} value={t}>{t}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              {errors.tipo && <p className="text-xs text-red-500">{errors.tipo.message}</p>}
-            </div>
-          </div>
-
-          {watch("categoriaColor") === "SOLIDO" && (
-            <div className="flex flex-col gap-1">
-              <Label>Color sólido (para uso con molido)</Label>
-              <Select
+              <SelectNativo
                 value={watch("categoriaColor") ?? ""}
                 onValueChange={(val) => {
                   setValue("categoriaColor", val as (typeof CATEGORIA_COLOR)[number], { shouldValidate: true });
@@ -139,16 +90,35 @@ export default function DialogCrearPigmento({ open, onClose }: Props) {
                     setValue("colorSolidoId", undefined);
                   }
                 }}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Selecciona (opcional)" />
-                </SelectTrigger>
-                <SelectContent>
-                  {(coloresSolidos ?? []).map((c) => (
-                    <SelectItem key={c.id} value={c.id}>{c.nombre}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+                opciones={CATEGORIA_COLOR.map((c) => ({ value: c, label: c }))}
+                placeholder="Selecciona"
+              />
+              {errors.categoriaColor && <p className="text-xs text-red-500">{errors.categoriaColor.message}</p>}
+            </div>
+
+            <div className="flex flex-col gap-1">
+              <Label>Tipo</Label>
+              <SelectNativo
+                value={watch("tipo") ?? ""}
+                onValueChange={(val) => {
+                  setValue("tipo", val as (typeof TIPO_PIGMENTO)[number], { shouldValidate: true})
+                }}
+                opciones={TIPO_PIGMENTO.map((t) => ({ value: t, label: t}))}
+                placeholder="Selecciona"
+              />
+              {errors.tipo && <p className="text-xs text-red-500">{errors.tipo.message}</p>}
+            </div>
+          </div>
+
+          {watch("categoriaColor") === "SOLIDO" && (
+            <div className="flex flex-col gap-1">
+              <Label>Color sólido (para uso con molido)</Label>
+              <SelectNativo
+                value={watch("colorSolidoId") ?? ""}
+                onValueChange={(val) => setValue("colorSolidoId", val, { shouldValidate: true })}
+                opciones={(coloresSolidosActivos ?? []).map((c) => ({ value: c.id, label: c.nombre }))}
+                placeholder="Selecciona (opcional)"
+              />
               {errors.colorSolidoId && <p className="text-xs text-red-500">{errors.colorSolidoId.message}</p>}
             </div>
           )}

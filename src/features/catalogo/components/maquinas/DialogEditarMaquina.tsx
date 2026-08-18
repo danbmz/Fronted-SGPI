@@ -42,8 +42,9 @@ export default function DialogEditarMaquina({ open, maquina, onClose }: Props) {
     try {
       await editarMutation.mutateAsync({ id: maquina.id, data });
       toast.success("Máquina actualizada correctamente.");
-      onClose();
+      handleClose();
     } catch (error) {
+      handleClose();
       toast.error(error instanceof Error ? error.message : "Error al actualizar la máquina.");
     }
   };

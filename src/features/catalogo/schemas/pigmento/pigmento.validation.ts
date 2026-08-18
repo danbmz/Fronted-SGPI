@@ -22,9 +22,6 @@ export const crearPigmentoSchema = z.object({
   stockMinimo: z
     .number({message: "El stock mínimo debe ser un valor numérico"})
     .min(0, "El stock mínimo no puede ser negativo"),
-  stockActual: z
-    .number({message: "El stock actual debe ser un valor numérico"})
-    .min(0, "El stock mínimo no puede ser negativo"),
   costoUnitario: z
     .number({message: "El costo debe ser un valor numérico"})
     .min(0, "El costo no puede ser negativo")
@@ -34,7 +31,7 @@ export const crearPigmentoSchema = z.object({
 export type CrearPigmentoInput = z.infer<typeof crearPigmentoSchema>;
 
 export const editarPigmentoSchema = crearPigmentoSchema
-    .omit({categoriaColor: true, tipo: true, tipoMaterial: true, stockActual: true})
+    .omit({categoriaColor: true, tipo: true, tipoMaterial: true})
     .partial();
 
 export type EditarPigmentoInput = z.infer<typeof editarPigmentoSchema>

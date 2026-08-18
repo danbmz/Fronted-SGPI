@@ -24,16 +24,13 @@ export const crearMateriaPrimaSchema = z.object({
     .optional(),
   stockMinimo: z
     .number({ message: "El stock mínimo debe ser un valor numérico" })
-    .min(0, "El stock mínimo no puede ser negativo"),
-  stockActual: z
-    .number({message: "El stock actual debe ser un valor numérico"})
-    .min(0, "El stock actual no puede ser negativo")
+    .min(0, "El stock mínimo no puede ser negativo")
 });
 
 export type CrearMateriaPrimaInput = z.infer<typeof crearMateriaPrimaSchema>;
 
 export const editarMateriaPrimaSchema = crearMateriaPrimaSchema
-  .omit({ tipo: true, codigoInterno: true, unidadMedida: true, stockActual: true })
+  .omit({ tipo: true, codigoInterno: true, unidadMedida: true })
   .partial();
 
 export type EditarMateriaPrimaInput = z.infer<typeof editarMateriaPrimaSchema>;

@@ -20,6 +20,7 @@ export default function DialogDesactivarOperador({open, operador, onClose}: Prop
                 toast.success("Operador desactivado.");
                 onClose();
             } catch (error) {
+                onClose();
                 toast.error(error instanceof Error ? error.message : "Error al desactivar al operador.");
             }
     }

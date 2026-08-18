@@ -45,28 +45,24 @@ export default function SolicitudesEIncidenciasPage() {
                 <TableHead>Material</TableHead>
                 <TableHead>Color</TableHead>
                 <TableHead>Kg solicitados</TableHead>
-                <TableHead>Motivo</TableHead>
+                <TableHead>Supervisor</TableHead>
+                <TableHead>Máquina</TableHead>
                 <TableHead></TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {(solicitudes ?? []).map((s) => (
                 <TableRow key={s.id}>
-                  <TableCell>
-                    <Badge variant="outline">{s.tipoMaterial}</Badge>
-                  </TableCell>
-                  <TableCell className="text-sm">{s.tipoMaterialCategoria}</TableCell>
+                  <TableCell><Badge variant="outline">{s.tipoMaterial}</Badge></TableCell>
+                  <TableCell className="text-sm font-medium">{s.materiaPrimaNombre}</TableCell>
                   <TableCell className="text-sm">
                     {s.tipoMaterial === "VIRGEN" ? s.pigmentoColor : s.colorSolidoNombre}
                   </TableCell>
                   <TableCell className="font-medium">{s.kgSolicitados} kg</TableCell>
-                  <TableCell className="text-sm text-muted-foreground">{s.motivo || "—"}</TableCell>
+                  <TableCell className="text-sm text-muted-foreground">{s.supervisorNombre}</TableCell>
+                  <TableCell className="text-sm text-muted-foreground">{s.maquinaNombre}</TableCell>
                   <TableCell>
-                    <Button
-                      size="sm"
-                      onClick={() => handleConfirmarSolicitud(s.id, s.avanceTurnoId)}
-                      disabled={confirmarSolicitudMutation.isPending}
-                    >
+                    <Button size="sm" onClick={() => handleConfirmarSolicitud(s.id, s.avanceTurnoId)}>
                       Confirmar salida
                     </Button>
                   </TableCell>
@@ -91,28 +87,18 @@ export default function SolicitudesEIncidenciasPage() {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Piezas afectadas</TableHead>
-                <TableHead>Destino</TableHead>
-                <TableHead>Estado molino</TableHead>
+                <TableHead>Orden</TableHead>
+                <TableHead>Materia prima</TableHead>
+                <TableHead>Pigmento</TableHead>
                 <TableHead></TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {(incidencias ?? []).map((inc) => (
                 <TableRow key={inc.id}>
-                  <TableCell className="text-sm">{inc.piezasAfectadas}</TableCell>
-                  <TableCell>
-                    <Badge variant="outline">{inc.destino}</Badge>
-                  </TableCell>
-                  <TableCell className="text-sm text-muted-foreground">
-                    {inc.destino === "STOCK"
-                      ? "N/A"
-                      : inc.confirmadoMolino === null
-                      ? "Sin confirmar"
-                      : inc.confirmadoMolino
-                      ? "Confirmado"
-                      : "Con diferencia"}
-                  </TableCell>
+                  <TableCell className="font-mono text-sm">{inc.ordenFolio}</TableCell>
+                  <TableCell className="text-sm font-medium">{inc.materiaPrimaNombre}</TableCell>
+                  <TableCell className="text-sm">{inc.pigmentoColor}</TableCell>
                   <TableCell>
                     <Button size="sm" onClick={() => setIncidenciaSeleccionada(inc)}>
                       Resolver

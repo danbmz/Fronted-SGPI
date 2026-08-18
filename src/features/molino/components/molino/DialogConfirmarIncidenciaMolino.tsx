@@ -23,6 +23,7 @@ export default function DialogConfirmarIncidenciaMolino({ open, incidencia, onCl
       toast.success(confirmado ? "Recepción confirmada." : "Diferencia registrada.");
       onClose();
     } catch (error) {
+      onClose();
       toast.error(error instanceof Error ? error.message : "Error al confirmar.");
     }
   };

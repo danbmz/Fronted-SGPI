@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { TIPO_MATERIAL_SOLICITUD, TIPO_MATERIAL } from "@/types/enums";
+import { TIPO_MATERIAL_SOLICITUD } from "@/types/enums";
 
 export const solicitudMaterialSchema = z.object({
   id: z.string(),
@@ -10,9 +10,11 @@ export const solicitudMaterialSchema = z.object({
   confirmado: z.boolean(),
   confirmadoPorNombre: z.string().nullable(),
   confirmadoEn: z.string().nullable(),
-  tipoMaterialCategoria: z.enum(TIPO_MATERIAL),
+  materiaPrimaNombre: z.string(),
   pigmentoColor: z.string().nullable(),
   colorSolidoNombre: z.string().nullable(),
+  supervisorNombre: z.string(),
+  maquinaNombre: z.string(),
 });
 
 export type SolicitudMaterial = z.infer<typeof solicitudMaterialSchema>;

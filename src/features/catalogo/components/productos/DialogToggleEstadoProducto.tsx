@@ -31,6 +31,7 @@ export default function DialogToggleEstadoProducto({ open, producto, onClose }: 
       }
       onClose();
     } catch (error) {
+      onClose();
       toast.error(
         error instanceof Error
           ? error.message

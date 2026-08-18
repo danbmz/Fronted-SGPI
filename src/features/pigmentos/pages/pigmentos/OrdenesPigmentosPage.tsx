@@ -6,6 +6,7 @@ import {
 } from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
 import type { Orden } from "@/features/ordenes/schemas/orden.schema";
+import { useNavigate } from "react-router-dom";
 
 const estadoColor: Record<string, string> = {
   ACTIVA: "bg-blue-100 text-blue-700",
@@ -13,6 +14,7 @@ const estadoColor: Record<string, string> = {
 };
 
 export default function OrdenesPigmentosPage() {
+  const navigate = useNavigate();
   const { data: ordenes, isLoading, error } = useOrdenes({ excluirFinalizadas: true });
   const { data: maquinas } = useMaquina();
 
@@ -60,6 +62,7 @@ export default function OrdenesPigmentosPage() {
                   <div
                     key={orden.id}
                     className="flex items-center justify-between border rounded-md p-3"
+                    onClick={() => navigate(`${orden.id}`)}
                   >
                     <div className="flex flex-col gap-1">
                       <div className="flex items-center gap-2">

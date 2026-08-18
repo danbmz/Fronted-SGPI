@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { limpiarOpcionales } from "@/utils/limpiarOpcionales";
 
 interface Props {
   open: boolean;
@@ -31,12 +32,13 @@ export default function DialogCrearPedido({ open, onClose }: Props) {
 
   const onSubmit = async (data: CrearPedidoInput) => {
     try {
-      const nuevoPedido = await crearMutation.mutateAsync(data);
+      const payload = limpiarOpcionales(data);
+      const nuevoPedido = await crearMutation.mutateAsync(payload);
       toast.success("Pedido creado correctamente.");
-      reset();
-      onClose();
-      navigate(`/pedidos/${nuevoPedido.id}`);
+      handleClose();
+      navigate(`${nuevoPedido.id}`);
     } catch (error) {
+      handleClose();
       toast.error(error instanceof Error ? error.message : "Error al crear el pedido.");
     }
   };

@@ -19,6 +19,7 @@ export const sidebarItems: Record<"ADMIN" | "SUPERVISOR" | "MOLINO" | "PIGMENTOS
     { section: "INVENTARIO", label: "Molido", path: "/admin/molido", icon: Package },
     { section: "INVENTARIO", label: "Pigmentos", path: "/admin/pigmentos", icon: Droplets },
     { section: "INVENTARIO", label: "Producto terminado", path: "/admin/producto-terminado", icon: BoxSelect },
+    { section: "INVENTARIO", label: "Movimientos", path: "/admin/historial-inventario", icon: BoxSelect },
     { section: "CATÁLOGOS", label: "Productos", path: "/admin/productos", icon: ShoppingBag },
     { section: "CATÁLOGOS", label: "Materias Primas", path: "/admin/materia-prima-catalogo", icon: Package2Icon },
     { section: "CATÁLOGOS", label: "Pigmentos", path: "/admin/pigmentos-catalogo", icon: Droplet },
@@ -42,7 +43,12 @@ export const sidebarItems: Record<"ADMIN" | "SUPERVISOR" | "MOLINO" | "PIGMENTOS
   ],
   PIGMENTOS: [
     { section: "OPERACIONES", label: "Órdenes", path: "/pigmentos/ordenes", icon: ClipboardList, exact: true },
+    { section: "OPERACIONES", label: "Sobrante", path: "/pigmentos/sobrante", icon: Bell, exact: true },
     { section: "OPERACIONES", label: "Alertas", path: "/pigmentos/alertas", icon: Bell, exact: true },
+    { section: "INVENTARIO", label: "Materia Prima", path: "/pigmentos/materias-primas", icon: Bell, exact: true },
+    { section: "INVENTARIO", label: "Molido", path: "/pigmentos/molido", icon: Bell, exact: true },
+    { section: "INVENTARIO", label: "Pigmento", path: "/pigmentos/pigmentos", icon: Bell, exact: true },
+    { section: "INVENTARIO", label: "Historial", path: "/pigmentos/historial-inventario", icon: Bell, exact: true },
   ],
   PROGRAMADOR: [
     { section: "OPERACIONES", label: "Pedidos", path: "/programador/pedidos", icon: ClipboardList, exact: true },

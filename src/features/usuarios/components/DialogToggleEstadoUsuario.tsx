@@ -31,6 +31,7 @@ export default function DialogToggleEstadoUsuario({ open, usuario, onClose }: Pr
       }
       onClose();
     } catch (error) {
+      onClose();
       toast.error(
         error instanceof Error
           ? error.message

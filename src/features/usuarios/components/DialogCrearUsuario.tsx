@@ -35,9 +35,9 @@ export default function DialogCrearUsuario({ open, onClose }: Props) {
     try {
       await crearMutation.mutateAsync(data);
       toast.success("Usuario creado correctamente.");
-      reset();
-      onClose();
+      handleClose();
     } catch (error) {
+      handleClose();
       toast.error(error instanceof Error ? error.message : "Error al crear el usuario.");
     }
   };

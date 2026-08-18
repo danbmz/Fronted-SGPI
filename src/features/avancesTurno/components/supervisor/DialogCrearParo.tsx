@@ -32,6 +32,7 @@ export default function DialogCrearTiempoParo({ open, avanceTurnoId, onClose }: 
 
   const crearMutation = useCrearTiempoParo();
   const { data: motivosParo } = useMotivosParo();
+  const motivosActivos = motivosParo?.filter((m) => m.activo);
 
   const motivoSeleccionado = motivosParo?.find((m) => m.id === watch("motivoParoId"));
   const esOtro = motivoSeleccionado?.nombre === "Otro";
@@ -40,9 +41,9 @@ export default function DialogCrearTiempoParo({ open, avanceTurnoId, onClose }: 
     try {
       await crearMutation.mutateAsync({ avanceTurnoId, data });
       toast.success("Tiempo de paro registrado.");
-      reset();
-      onClose();
+      handleClose();
     } catch (error) {
+      handleClose();
       toast.error(error instanceof Error ? error.message : "Error al registrar el tiempo de paro.");
     }
   };
@@ -71,7 +72,7 @@ export default function DialogCrearTiempoParo({ open, avanceTurnoId, onClose }: 
             >
               <SelectTrigger><SelectValue placeholder="Selecciona un motivo" /></SelectTrigger>
               <SelectContent>
-                {(motivosParo ?? []).map((m) => (
+                {(motivosActivos ?? []).map((m) => (
                   <SelectItem key={m.id} value={m.id}>{m.nombre}</SelectItem>
                 ))}
               </SelectContent>

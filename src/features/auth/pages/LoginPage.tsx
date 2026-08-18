@@ -28,7 +28,7 @@ function LoginPage() {
 
       // Redirección según rol
       switch (usuario?.role) {
-        case "ADMIN": navigate("/admin/dashboard"); break;
+        case "ADMIN": navigate("/admin/pedidos"); break;
         case "SUPERVISOR": navigate("/supervisor/ordenes"); break;
         case "MOLINO": navigate("/molino/pendientes"); break;
         case "PIGMENTOS": navigate("/pigmentos/ordenes"); break;

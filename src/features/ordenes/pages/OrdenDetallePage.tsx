@@ -21,7 +21,9 @@ const estadoColor: Record<string, string> = {
 
 export default function OrdenDetallePage() {
   const { role } = useAuth();
-  const esPigmentos = role === "PIGMENTOS" || role === "ADMIN";
+  const esAdminOProgramador = role === "ADMIN" || role === "PROGRAMADOR";
+  const esPigmentos = role === "PIGMENTOS";
+
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { data: orden, isLoading, error } = useOrden(id);
@@ -47,9 +49,9 @@ export default function OrdenDetallePage() {
 
   return (
     <div className="flex flex-col gap-4 p-6">
-      <Button variant="ghost" size="sm" className="w-fit" onClick={() => navigate("/ordenes")}>
+      <Button variant="ghost" size="sm" className="w-fit" onClick={() => navigate(-1)}>
         <ArrowLeft size={16} className="mr-2" />
-        Volver a órdenes
+        Volver
       </Button>
 
       <div className="flex items-start justify-between">
@@ -69,38 +71,40 @@ export default function OrdenDetallePage() {
           <p className="text-sm text-muted-foreground">Máquina: {orden.maquinaNombre}</p>
         </div>
 
-        <div className="flex gap-2">
-          {orden.estado === "BORRADOR" && (
-            <Button onClick={() => handleCambiarEstado("activar")} disabled={cambiarEstadoMutation.isPending}>
-              <Play size={16} className="mr-2" />
-              Activar
-            </Button>
-          )}
-          {(orden.estado === "ACTIVA" || orden.estado === "EN_PROGRESO") && (
-            <Button variant="outline" onClick={() => handleCambiarEstado("pausar")} disabled={cambiarEstadoMutation.isPending}>
-              <Pause size={16} className="mr-2" />
-              Pausar
-            </Button>
-          )}
-          {orden.estado === "PAUSADA" && (
-            <Button onClick={() => handleCambiarEstado("reanudar")} disabled={cambiarEstadoMutation.isPending}>
-              <RotateCcw size={16} className="mr-2" />
-              Reanudar
-            </Button>
-          )}
-          {(orden.estado === "BORRADOR" || orden.estado === "ACTIVA") && (
-            <Button variant="destructive" onClick={() => setDialogCancelarAbierto(true)}>
-              <Ban size={16} className="mr-2" />
-              Cancelar
-            </Button>
-          )}
-        </div>
+        {esAdminOProgramador && (
+          <div className="flex gap-2">
+            {orden.estado === "BORRADOR" && (
+              <Button onClick={() => handleCambiarEstado("activar")} disabled={cambiarEstadoMutation.isPending}>
+                <Play size={16} className="mr-2" />
+                Activar
+              </Button>
+            )}
+            {(orden.estado === "ACTIVA" || orden.estado === "EN_PROGRESO") && (
+              <Button variant="outline" onClick={() => handleCambiarEstado("pausar")} disabled={cambiarEstadoMutation.isPending}>
+                <Pause size={16} className="mr-2" />
+                Pausar
+              </Button>
+            )}
+            {orden.estado === "PAUSADA" && (
+              <Button onClick={() => handleCambiarEstado("reanudar")} disabled={cambiarEstadoMutation.isPending}>
+                <RotateCcw size={16} className="mr-2" />
+                Reanudar
+              </Button>
+            )}
+            {(orden.estado === "BORRADOR" || orden.estado === "ACTIVA") && (
+              <Button variant="destructive" onClick={() => setDialogCancelarAbierto(true)}>
+                <Ban size={16} className="mr-2" />
+                Cancelar
+              </Button>
+            )}
+          </div>
+        )}
       </div>
 
       {orden.estado === "ACTIVA" && (
         <div className="flex items-center justify-between border rounded-md p-4 bg-muted/30">
           <div>
-            <p className="text-sm font-medium">Material para la siguiente orden</p>
+            <p className="text-sm font-medium">Material de la orden</p>
             <p className="text-xs text-muted-foreground">
               {orden.materialSiguienteConfirmado
                 ? `Confirmado el ${new Date(orden.materialConfirmadoEn!).toLocaleString()}`
@@ -108,7 +112,7 @@ export default function OrdenDetallePage() {
             </p>
           </div>
 
-          {/* Solo Pigmentos (o Admin) ve el botón de acción; los demás solo ven el estado */}
+          {/* Exclusivo de Pigmentos — ni Admin ni Programador lo accionan aquí */}
           {esPigmentos && !orden.materialSiguienteConfirmado && (
             <Button size="sm" variant="outline" onClick={() => setDialogConfirmarMaterialAbierto(true)}>
               <CheckCircle2 size={16} className="mr-2" />
@@ -173,11 +177,13 @@ export default function OrdenDetallePage() {
         </div>
       )}
 
-      <DialogCancelarOrden
-        open={dialogCancelarAbierto}
-        orden={orden}
-        onClose={() => setDialogCancelarAbierto(false)}
-      />
+      {esAdminOProgramador && (
+        <DialogCancelarOrden
+          open={dialogCancelarAbierto}
+          orden={orden}
+          onClose={() => setDialogCancelarAbierto(false)}
+        />
+      )}
 
       {esPigmentos && (
         <>

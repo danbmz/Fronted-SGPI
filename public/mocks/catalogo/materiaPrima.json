@@ -1,6 +1,0 @@
-[
-  { "id": 1, "nombre": "Polipropileno Virgen",       "codigoInterno": "JU-PVL1", "tipo": "Polipropileno",        "subtipo": "virgen", "proveedor": "Braskem",    "unidadMedida": "kg", "activo": true, "costoUnitario": "30" },
-  { "id": 2, "nombre": "Poliestireno-Cristal Virgen","codigoInterno": "JU-PSC1", "tipo": "Poliestireno-Cristal", "subtipo": "virgen", "proveedor": "INEOS",      "unidadMedida": "kg", "activo": true, "costoUnitario": "30" },
-  { "id": 3, "nombre": "Polipropileno Reciclado",    "codigoInterno": "JU-PRL1", "tipo": "Polipropileno",        "subtipo": "reciclado", "proveedor": "Local",      "unidadMedida": "kg", "activo": true, "costoUnitario": "30"},
-  { "id": 4, "nombre": "Poliestireno-C Reciclado"   ,"codigoInterno": "JU-PSC1", "tipo": "Poliestireno-Cristal", "subtipo": "reciclado", "proveedor": "INEOS",      "unidadMedida": "kg", "activo": true, "costoUnitario": "30" }
-]

@@ -24,6 +24,7 @@ export default function DialogDesactivarMateriaPrima({ open, materiaPrima, onClo
       toast.success("Materia prima desactivada.");
       onClose();
     } catch (error) {
+      onClose();
       toast.error(error instanceof Error ? error.message : "Error al desactivar la materia prima.");
     }
   };

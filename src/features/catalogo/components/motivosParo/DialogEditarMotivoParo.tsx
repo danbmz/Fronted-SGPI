@@ -39,8 +39,9 @@ export default function DialogEditarMotivoParo({ open, motivo, onClose }: Props)
     try {
       await editarMutation.mutateAsync({ id: motivo.id, data });
       toast.success("Motivo de paro actualizado correctamente.");
-      onClose();
+      handleClose();
     } catch (error) {
+      handleClose();
       toast.error(error instanceof Error ? error.message : "Error al actualizar el motivo de paro.");
     }
   };

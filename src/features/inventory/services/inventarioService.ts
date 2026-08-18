@@ -59,6 +59,7 @@ export async function consultarHistorial(query: HistorialQueryInput): Promise<Mo
   if (query.productoId !== undefined) params.set("productoId", query.productoId);
   if (query.colorSolidoId !== undefined) params.set("colorSolidoId", query.colorSolidoId);
   if (query.origen !== undefined) params.set("origen", query.origen);
+  if (query.tipoMaterial !== undefined) params.set("tipoMaterial", query.tipoMaterial);
   if (query.combinacionId !== undefined) params.set("combinacionId", query.combinacionId);
 
   if (query.limite !== undefined) params.set("limite", String(query.limite));

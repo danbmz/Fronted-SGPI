@@ -24,6 +24,7 @@ export default function DialogDesactivarMotivoParo({ open, motivo, onClose }: Pr
       toast.success("Motivo de paro desactivado.");
       onClose();
     } catch (error) {
+      onClose();
       toast.error(error instanceof Error ? error.message : "Error al desactivar el motivo de paro.");
     }
   };

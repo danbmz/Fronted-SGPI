@@ -50,6 +50,7 @@ export default function DialogEditarProducto({ open, producto, onClose }: Props)
       toast.success("Producto actualizado correctamente.");
       onClose();
     } catch (error) {
+      onClose();
       toast.error(error instanceof Error ? error.message : "Error al actualizar el producto.");
     }
   };

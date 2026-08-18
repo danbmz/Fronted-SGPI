@@ -52,6 +52,7 @@ export default function DialogCambiarEstadoMaquina({ open, maquina, onClose }: P
       toast.success("Estado actualizado correctamente.");
       onClose();
     } catch (error) {
+      onClose();
       toast.error(error instanceof Error ? error.message : "Error al cambiar el estado.");
     }
   };

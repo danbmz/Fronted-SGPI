@@ -35,9 +35,9 @@ export default function DialogCrearMaquina({ open, onClose }: Props) {
     try {
       await crearMutation.mutateAsync(data)
       toast.success("Máquina registrada correctamente.")
-      reset()
-      onClose()
+      handleClose();
     } catch(error) {
+      handleClose();
       toast.error(error instanceof Error ? error.message : "Error al registrar la máquina.");
     }
   }

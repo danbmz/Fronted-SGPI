@@ -7,7 +7,7 @@ import { useMateriasPrimas } from "@/features/catalogo/hooks/useMateriasPrimas";
 import { usePigmento } from "@/features/catalogo/hooks/usePigmentos";
 import { useColorSolido } from "@/features/catalogo/hooks/useColorSolido";
 import { useProducto } from "@/features/catalogo/hooks/useProducto";
-import { ORIGEN_MOLIDO } from "@/types/enums";
+import { ORIGEN_MOLIDO, TIPO_MATERIAL_CON_MOLIDO, type MaterialConMolido } from "@/types/enums";
 import { toast } from "sonner";
 import {
   Dialog, DialogContent, DialogHeader,
@@ -61,10 +61,9 @@ export default function DialogAjusteManual({ open, tipoInventario, onClose }: Pr
     try {
       await ajusteMutation.mutateAsync(data);
       toast.success("Ajuste registrado correctamente.");
-      reset();
-      setValue("tipoInventario", tipoInventario);
-      onClose();
+      handleClose();
     } catch (error) {
+      handleClose();
       toast.error(error instanceof Error ? error.message : "Error al registrar el ajuste.");
     }
   };
@@ -171,13 +170,13 @@ export default function DialogAjusteManual({ open, tipoInventario, onClose }: Pr
               <div className="flex flex-col gap-1">
                 <Label>Material</Label>
                 <Select
-                  value={watch("materiaPrimaId") ?? ""}
-                  onValueChange={(val) => setValue("materiaPrimaId", val, { shouldValidate: true })}
+                  value={watch("tipoMaterial") ?? ""}
+                  onValueChange={(val) => setValue("tipoMaterial", val as MaterialConMolido, { shouldValidate: true })}
                 >
                   <SelectTrigger><SelectValue placeholder="Selecciona" /></SelectTrigger>
                   <SelectContent>
-                    {(materiasPrimas ?? []).map((m) => (
-                      <SelectItem key={m.id} value={m.id}>{m.nombre}</SelectItem>
+                    {(TIPO_MATERIAL_CON_MOLIDO ?? []).map((m) => (
+                      <SelectItem key={m} value={m}>{m}</SelectItem>
                     ))}
                   </SelectContent>
                 </Select>

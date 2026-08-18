@@ -37,7 +37,7 @@ export default function TablaInventarioPigmentos({ pigmentos }: Props) {
                 <TableCell className="font-medium">{item.color}</TableCell>
                 <TableCell className="text-sm text-muted-foreground">{item.categoriaColor}</TableCell>
                 <TableCell className="text-sm text-muted-foreground">{item.tipo}</TableCell>
-                <TableCell className="text-sm">{item.materiaPrimaNombre}</TableCell>
+                <TableCell className="text-sm">{item.tipoMaterial}</TableCell>
                 <TableCell className={`font-medium ${stockBajo ? "text-red-600" : ""}`}>
                   <div className="flex items-center gap-1">
                     {stockBajo && <AlertTriangle size={14} className="text-red-600" />}

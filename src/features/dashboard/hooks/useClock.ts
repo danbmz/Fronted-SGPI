@@ -1,4 +1,3 @@
-// src/hooks/useClock.ts
 import { useState, useEffect } from "react"
 
 export function useClock() {

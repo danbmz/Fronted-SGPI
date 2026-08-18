@@ -26,13 +26,16 @@ async function intentarRefresh(): Promise<boolean> {
 export async function httpClient(path: string, options: RequestOptions = {}) {
   const { skipAuthRetry, ...fetchOptions } = options;
 
+  // Agregamos el header "application/json" solo cuando si existe un body en la peticion.
+  const headers: Record<string, string> = { ...fetchOptions.headers as Record<string, string> };
+  if (fetchOptions.body !== undefined) {
+    headers["Content-Type"] = "application/json";
+  }
+
   const response = await fetch(`${BASE_URL}${path}`, {
     ...fetchOptions,
     credentials: "include", // imprescindible: así viajan las cookies httpOnly
-    headers: {
-      "Content-Type": "application/json",
-      ...fetchOptions.headers,
-    },
+    headers,
   });
 
   // Si no es 401, o ya es un reintento (o es el propio /auth/refresh), regresamos tal cual

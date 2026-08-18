@@ -39,8 +39,9 @@ export default function DialogEditarDefectoProducto({ open, defecto, onClose }: 
     try {
       await editarMutation.mutateAsync({ id: defecto.id, data });
       toast.success("Defecto actualizado correctamente.");
-      onClose();
+      handleClose();
     } catch (error) {
+      onClose();
       toast.error(error instanceof Error ? error.message : "Error al actualizar el defecto.");
     }
   };

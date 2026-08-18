@@ -46,9 +46,9 @@ export default function DialogConfirmarMolino({ open, avance, onClose }: Props) 
     try {
       await confirmarMutation.mutateAsync({ id: avance.id, data });
       toast.success("Recepción confirmada.");
-      reset();
-      onClose();
+      handleClose();
     } catch (error) {
+      handleClose();
       toast.error(error instanceof Error ? error.message : "Error al confirmar la recepción.");
     }
   };

@@ -68,7 +68,7 @@ export default function OrdenesDisponiblesPage() {
                     {orden.estado}
                   </Badge>
                 </TableCell>
-                <TableCell className="text-sm">{orden.totalPiezas}</TableCell>
+                <TableCell className="text-sm">{orden.piezasProducidas} / {orden.totalPiezas}</TableCell>
                 <TableCell>
                   <Button size="sm" onClick={() => setOrdenSeleccionada(orden)}>
                     Iniciar avance

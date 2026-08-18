@@ -37,9 +37,9 @@ export default function DialogCambiarPassword({ open, usuario, onClose }: Props)
         data: { password: data.password },
       });
       toast.success("Contraseña actualizada correctamente.");
-      reset();
-      onClose();
+      handleClose();
     } catch (error) {
+      handleClose();
       toast.error(error instanceof Error ? error.message : "Error al cambiar la contraseña.");
     }
   };

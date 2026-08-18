@@ -36,9 +36,9 @@ export default function DialogCrearIncidencia({ open, avanceTurnoId, onClose }: 
     try {
       await crearMutation.mutateAsync({ avanceTurnoId, data });
       toast.success("Incidencia reportada.");
-      reset();
-      onClose();
+      handleClose();
     } catch (error) {
+      handleClose();
       toast.error(error instanceof Error ? error.message : "Error al reportar la incidencia.");
     }
   };

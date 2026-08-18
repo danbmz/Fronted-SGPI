@@ -39,8 +39,9 @@ export default function DialogEditarOperador({ open, operador, onClose }: Props)
     try {
       await editarMutation.mutateAsync({ id: operador.id, data });
       toast.success("Operador actualizado correctamente.");
-      onClose();
+      handleClose();
     } catch (error) {
+      handleClose();
       toast.error(error instanceof Error ? error.message : "Error al actualizar el operador.");
     }
   };

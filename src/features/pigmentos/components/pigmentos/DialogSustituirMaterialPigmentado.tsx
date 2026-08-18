@@ -48,9 +48,9 @@ export default function DialogSustituirMaterialPigmentado({ open, orden, onClose
     try {
       await sustituirMutation.mutateAsync({ id: orden.id, data });
       toast.success("Material pigmentado sustituido correctamente.");
-      reset();
-      onClose();
+      handleClose();
     } catch (error) {
+      handleClose();
       toast.error(error instanceof Error ? error.message : "Error al sustituir el material.");
     }
   };

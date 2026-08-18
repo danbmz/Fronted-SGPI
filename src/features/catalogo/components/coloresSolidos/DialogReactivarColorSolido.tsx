@@ -23,6 +23,7 @@ export function DialogReactivarColorSolido({ open, colorSolido, onClose }: Props
       toast.success("Color sólido reactivado.");
       onClose();
     } catch (error) {
+      onClose();
       toast.error(error instanceof Error ? error.message : "Error al reactivar el color sólido.");
     }
   };

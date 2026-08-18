@@ -24,6 +24,7 @@ export default function DialogReactivarPigmento({ open, pigmento, onClose }: Pro
       toast.success("Pigmento reactivado.");
       onClose();
     } catch (error) {
+      onClose();
       toast.error(error instanceof Error ? error.message : "Error al reactivar el pigmento.");
     }
   };

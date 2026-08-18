@@ -33,9 +33,9 @@ export default function DialogCrearMateriaPrima({ open, onClose }: Props) {
     try {
       await crearMutation.mutateAsync(data);
       toast.success("Materia prima creada correctamente.");
-      reset();
-      onClose();
+      handleClose();
     } catch (error) {
+      handleClose();
       toast.error(error instanceof Error ? error.message : "Error al crear la materia prima.");
     }
   };

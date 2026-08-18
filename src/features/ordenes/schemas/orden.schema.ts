@@ -12,6 +12,7 @@ export const ordenSchema = z.object({
   productoId: z.string(),
   productoNombre: z.string(),
   totalPiezas: z.int(),
+  piezasProducidas: z.int(),
   observaciones: z.string().nullable(),
   tipoMaterial: z.enum(TIPO_MATERIAL_ORDEN),
   materiaPrimaId: z.string(),

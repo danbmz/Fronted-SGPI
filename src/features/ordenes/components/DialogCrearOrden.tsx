@@ -26,7 +26,7 @@ import {
 interface Props {
   open: boolean;
   onClose: () => void;
-  pedidoDetalle: PedidoDetalle; // la línea desde la que se crea — ya trae productoId fijo
+  pedidoDetalle: PedidoDetalle | null; // la línea desde la que se crea — ya trae productoId fijo
 }
 
 export default function DialogCrearOrden({ open, onClose, pedidoDetalle }: Props) {
@@ -45,12 +45,18 @@ export default function DialogCrearOrden({ open, onClose, pedidoDetalle }: Props
   const { data: maquinas } = useMaquina();
   const { data: inventarioMolido } = useInventarioMolido();
 
+  // Filtramos catalogos activos solamente
+  const materiasPrimasActivas = materiasPrimas?.filter((m) => m.activo);
+  const pigmentosActivos = pigmentos?.filter((p) => p.activo);
+  const maquinasActivas = maquinas?.filter((m) => m.estado === "ACTIVA");
+  // const materiasPrimasActivas = materiasPrimas?.filter((m) => m.activo);
+
   const tipoMaterial = watch("tipoMaterial");
   const materiaPrimaIdSeleccionada = watch("materiaPrimaId");
 
   // El producto de la orden siempre es el de la línea de pedido — se fija al abrir.
   useEffect(() => {
-    if (open) {
+    if (open && pedidoDetalle) {
       setValue("productoId", pedidoDetalle.productoId);
       setValue("pedidoDetalleId", pedidoDetalle.id);
       // Si la línea ya especifica color, se fija también — no editable en ese caso.
@@ -68,13 +74,13 @@ export default function DialogCrearOrden({ open, onClose, pedidoDetalle }: Props
   // y molido según materia prima + color del pigmento, que es donde más se equivoca el usuario.
 
   const materiaPrimaSeleccionada = useMemo(
-    () => (materiasPrimas ?? []).find((m) => m.id === materiaPrimaIdSeleccionada),
+    () => (materiasPrimasActivas ?? []).find((m) => m.id === materiaPrimaIdSeleccionada),
     [materiasPrimas, materiaPrimaIdSeleccionada]
   );
 
   const pigmentosFiltrados = useMemo(() => {
     if (!materiaPrimaSeleccionada) return [];
-    return (pigmentos ?? []).filter((p) => p.tipoMaterial === materiaPrimaSeleccionada.tipo);
+    return (pigmentosActivos ?? []).filter((p) => p.tipoMaterial === materiaPrimaSeleccionada.tipo);
   }, [pigmentos, materiaPrimaSeleccionada]);
 
   const pigmentoIdSeleccionado = watch("pigmentoId");
@@ -87,25 +93,27 @@ export default function DialogCrearOrden({ open, onClose, pedidoDetalle }: Props
     if (!materiaPrimaSeleccionada || !pigmentoSeleccionado?.colorSolidoId) return [];
     return (inventarioMolido ?? []).filter(
       (m) =>
-        m.materiaPrimaId === materiaPrimaSeleccionada.id &&
+        m.tipoMaterial === materiaPrimaSeleccionada.tipo &&
         m.colorSolidoId === pigmentoSeleccionado.colorSolidoId
     );
   }, [inventarioMolido, materiaPrimaSeleccionada, pigmentoSeleccionado]);
 
   // Si cambia la materia prima, limpiamos pigmento/molido para no dejar una combinación inválida "fantasma"
   useEffect(() => {
-    setValue("pigmentoId", pedidoDetalle.pigmentoId ?? "");
-    setValue("inventarioMolidoId", "");
+    if(open && pedidoDetalle) {
+      setValue("pigmentoId", pedidoDetalle.pigmentoId ?? "");
+      setValue("inventarioMolidoId", "");
+    }
   }, [materiaPrimaIdSeleccionada]);
 
   const onSubmit = async (data: CrearOrdenInput) => {
     try {
       const nuevaOrden = await crearMutation.mutateAsync(data);
       toast.success("Orden creada correctamente.");
-      reset();
-      onClose();
-      navigate(`/ordenes/${nuevaOrden.id}`);
+      handleClose();
+      navigate(`../ordenes/${nuevaOrden.id}`);
     } catch (error) {
+      handleClose();
       toast.error(error instanceof Error ? error.message : "Error al crear la orden.");
     }
   };
@@ -117,11 +125,11 @@ export default function DialogCrearOrden({ open, onClose, pedidoDetalle }: Props
 
   return (
     <Dialog open={open} onOpenChange={handleClose}>
-      <DialogContent className="max-w-lg max-h-[85vh] overflow-y-auto">
+      <DialogContent className="min-w-xl max-h-[85vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Nueva orden de producción</DialogTitle>
           <DialogDescription>
-            Producto: {pedidoDetalle.productoNombre} — Solicitado: {pedidoDetalle.cantidadSolicitada}
+            {pedidoDetalle ? `Producto: ${pedidoDetalle.productoNombre} — Material: ${pedidoDetalle.tipoMaterial.toLocaleLowerCase()} — Solicitado: ${pedidoDetalle.cantidadSolicitada}` : ""}
           </DialogDescription>
         </DialogHeader>
 
@@ -162,7 +170,7 @@ export default function DialogCrearOrden({ open, onClose, pedidoDetalle }: Props
                 <SelectValue placeholder="Selecciona" />
               </SelectTrigger>
               <SelectContent>
-                {(materiasPrimas ?? []).map((m) => (
+                {(materiasPrimasActivas ?? []).map((m) => (
                   <SelectItem key={m.id} value={m.id}>{m.nombre} ({m.tipo})</SelectItem>
                 ))}
               </SelectContent>
@@ -176,7 +184,7 @@ export default function DialogCrearOrden({ open, onClose, pedidoDetalle }: Props
             <Label>Pigmento (color)</Label>
             <Select
               value={pigmentoIdSeleccionado ?? ""}
-              disabled={!materiaPrimaSeleccionada || !!pedidoDetalle.pigmentoId}
+              disabled={!materiaPrimaSeleccionada || !!pedidoDetalle?.pigmentoId}
               onValueChange={(val) => setValue("pigmentoId", val, { shouldValidate: true })}
             >
               <SelectTrigger>
@@ -184,11 +192,11 @@ export default function DialogCrearOrden({ open, onClose, pedidoDetalle }: Props
               </SelectTrigger>
               <SelectContent>
                 {pigmentosFiltrados.map((p) => (
-                  <SelectItem key={p.id} value={p.id}>{p.color}</SelectItem>
+                  <SelectItem key={p.id} value={p.id}>{`${p.color} ${p.categoriaColor.toLowerCase()}`}</SelectItem>
                 ))}
               </SelectContent>
             </Select>
-            {pedidoDetalle.pigmentoId && (
+            {pedidoDetalle?.pigmentoId && (
               <p className="text-xs text-muted-foreground">Color ya definido por el pedido.</p>
             )}
             {"pigmentoId" in errors && errors.pigmentoId && (
@@ -261,7 +269,7 @@ export default function DialogCrearOrden({ open, onClose, pedidoDetalle }: Props
                 <SelectValue placeholder="Selecciona" />
               </SelectTrigger>
               <SelectContent>
-                {(maquinas ?? []).filter((m) => m.estado === "ACTIVA").map((m) => (
+                {(maquinasActivas ?? []).filter((m) => m.estado === "ACTIVA").map((m) => (
                   <SelectItem key={m.id} value={m.id}>{m.nombre}</SelectItem>
                 ))}
               </SelectContent>

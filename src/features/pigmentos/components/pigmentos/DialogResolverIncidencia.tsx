@@ -11,10 +11,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Select, SelectContent, SelectItem,
-  SelectTrigger, SelectValue
-} from "@/components/ui/select";
+import SelectNativo from "@/components/ui/selectNativo";
 
 interface Props {
   open: boolean;
@@ -27,7 +24,11 @@ export default function DialogResolverIncidencia({ open, incidencia, onClose }: 
     register, handleSubmit, reset, setValue, watch,
     formState: { errors, isSubmitting }
   } = useForm<ResolverIncidenciaInput>({
-    resolver: zodResolver(resolverIncidenciaSchema),
+    resolver: zodResolver(resolverIncidenciaSchema), // forma que recibe el form
+    defaultValues: {
+      kgMaterialAgregado: 0,
+      gramosPigmentoAgregado: 0,
+    },
   });
 
   const resolverMutation = useResolverIncidencia();
@@ -35,11 +36,16 @@ export default function DialogResolverIncidencia({ open, incidencia, onClose }: 
   const onSubmit = async (data: ResolverIncidenciaInput) => {
     if (!incidencia) return;
     try {
-      await resolverMutation.mutateAsync({ id: incidencia.id, data });
+      const payload = {
+        tipoMaterialAgregado: data.tipoMaterialAgregado,
+        kgMaterialAgregado: data.kgMaterialAgregado > 0 ? data.kgMaterialAgregado : undefined,
+        gramosPigmentoAgregado: data.gramosPigmentoAgregado > 0 ? data.gramosPigmentoAgregado : undefined,
+      }; // El form los hace obligatorios (number()) pero los transformamos a undefined si viene 0, y usamos un nuevo Type en useResolverIncidencia()
+      await resolverMutation.mutateAsync({ id: incidencia.id, data: payload });
       toast.success("Incidencia resuelta.");
-      reset();
-      onClose();
+      handleClose();
     } catch (error) {
+      handleClose();
       toast.error(error instanceof Error ? error.message : "Error al resolver la incidencia.");
     }
   };
@@ -61,37 +67,34 @@ export default function DialogResolverIncidencia({ open, incidencia, onClose }: 
 
         {incidencia && (
           <div className="text-sm bg-muted px-3 py-2 rounded-md">
-            <p><span className="font-medium">Piezas afectadas:</span> {incidencia.piezasAfectadas}</p>
+            <p><span className="font-medium">Orden:</span> {incidencia.ordenFolio}</p>
+            <p><span className="font-medium">Materia prima:</span> {incidencia.materiaPrimaNombre}</p>
+            <p><span className="font-medium">Pigmento:</span> {incidencia.pigmentoColor}</p>
           </div>
         )}
 
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4 mt-2">
           <div className="flex flex-col gap-1">
             <Label>Tipo de material agregado (opcional)</Label>
-            <Select
+            <SelectNativo
               value={watch("tipoMaterialAgregado") ?? ""}
               onValueChange={(val) =>
                 setValue("tipoMaterialAgregado", val as (typeof TIPO_MATERIAL_SOLICITUD)[number], { shouldValidate: true })
               }
-            >
-              <SelectTrigger><SelectValue placeholder="Ninguno" /></SelectTrigger>
-              <SelectContent>
-                {TIPO_MATERIAL_SOLICITUD.map((t) => (
-                  <SelectItem key={t} value={t}>{t}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+              opciones={TIPO_MATERIAL_SOLICITUD.map((t) => ({ value: t, label: t }))}
+              placeholder="Ninguno"
+            />
           </div>
 
           <div className="flex flex-col gap-1">
             <Label>Kg de material agregado (opcional)</Label>
-            <Input type="number" step="0.001" {...register("kgMaterialAgregado", { valueAsNumber: true })} />
+            <Input type="number" step="0.001" {...register("kgMaterialAgregado", {valueAsNumber: true})} />
             {errors.kgMaterialAgregado && <p className="text-xs text-red-500">{errors.kgMaterialAgregado.message}</p>}
           </div>
 
           <div className="flex flex-col gap-1">
             <Label>Gramos de pigmento agregado (opcional)</Label>
-            <Input type="number" step="0.001" {...register("gramosPigmentoAgregado", { valueAsNumber: true })} />
+            <Input type="number" step="0.001" {...register("gramosPigmentoAgregado", {valueAsNumber: true})} />
             {errors.gramosPigmentoAgregado && <p className="text-xs text-red-500">{errors.gramosPigmentoAgregado.message}</p>}
           </div>
 

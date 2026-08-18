@@ -23,6 +23,7 @@ export function DialogDesactivarColorSolido({ open, colorSolido, onClose }: Prop
       toast.success("Color sólido desactivado.");
       onClose();
     } catch (error) {
+      onClose();
       toast.error(error instanceof Error ? error.message : "Error al desactivar el color sólido.");
     }
   };

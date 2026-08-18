@@ -33,9 +33,9 @@ export default function DialogCrearProducto({open, onClose}: Props) {
         try {
             await crearMutation.mutateAsync(data)
             toast.success("Producto agregado exitosamente")
-            reset()
-            onClose()
+            handleClose();
         } catch (error) {
+            handleClose();
             toast.error(error instanceof Error ? error.message : "Error al crear el producto")
         }
     }

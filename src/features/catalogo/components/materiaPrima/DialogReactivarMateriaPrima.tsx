@@ -24,6 +24,7 @@ export default function DialogReactivarMateriaPrima({ open, materiaPrima, onClos
       toast.success("Materia prima reactivada.");
       onClose();
     } catch (error) {
+      onClose();
       toast.error(error instanceof Error ? error.message : "Error al reactivar la materia prima.");
     }
   };

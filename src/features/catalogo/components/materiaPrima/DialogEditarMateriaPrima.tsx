@@ -44,8 +44,9 @@ export default function DialogEditarMateriaPrima({ open, materiaPrima, onClose }
     try {
       await editarMutation.mutateAsync({ id: materiaPrima.id, data });
       toast.success("Materia prima actualizada correctamente.");
-      onClose();
+      handleClose();
     } catch (error) {
+      handleClose();
       toast.error(error instanceof Error ? error.message : "Error al actualizar la materia prima.");
     }
   };

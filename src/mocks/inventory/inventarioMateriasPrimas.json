@@ -1,7 +1,0 @@
-[
-  { "id": 1, "materiaPrimaId": 1, "nombreMateria": "Polipropileno Virgen",        "codigoInterno": "JU-PVL1", "stockActual": 1200, "stockMinimo": 500, "ultimoMovimiento": "2026-04-30" },
-  { "id": 2, "materiaPrimaId": 2, "nombreMateria": "Polipropileno Reciclado",     "codigoInterno": "JU-PRL1", "stockActual": 340,  "stockMinimo": 200, "ultimoMovimiento": "2026-04-29" },
-  { "id": 3, "materiaPrimaId": 3, "nombreMateria": "Poliestireno-Cristal Virgen", "codigoInterno": "JU-PSC1", "stockActual": 80,   "stockMinimo": 300, "ultimoMovimiento": "2026-04-28" },
-  { "id": 4, "materiaPrimaId": 4, "nombreMateria": "Aditivo UV",                  "codigoInterno": "JU-AUV1", "stockActual": 120,  "stockMinimo": 50,  "ultimoMovimiento": "2026-04-27" },
-  { "id": 5, "materiaPrimaId": 5, "nombreMateria": "Molido Colores PP",           "codigoInterno": "JU-MCP1", "stockActual": 45,   "stockMinimo": 100, "ultimoMovimiento": "2026-04-26" }
-]

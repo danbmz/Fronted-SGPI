@@ -77,6 +77,7 @@ export default function TablaPigmentos({ pigmentos }: Props) {
                 </span>
               </TableCell>
               <TableCell>{pigmento.colorSolidoNombre}</TableCell>
+              <TableCell>{pigmento.dosisGrPorKg}g</TableCell>
               <TableCell>
                 <span className={`text-xs px-2 py-1 rounded-full font-medium ${
                   pigmento.activo
@@ -86,7 +87,6 @@ export default function TablaPigmentos({ pigmentos }: Props) {
                   {pigmento.activo ? "Activo" : "Inactivo"}
                 </span>
               </TableCell>
-              <TableCell>{pigmento.dosisGrPorKg}g</TableCell>
               <TableCell>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>

@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { TIPO_INVENTARIO, ORIGEN_MOLIDO } from "@/types/enums";
+import { TIPO_INVENTARIO, ORIGEN_MOLIDO, TIPO_MATERIAL } from "@/types/enums";
 
 export const inventarioMateriaPrimaItemSchema = z.object({
   materiaPrimaId: z.string(),
@@ -17,7 +17,7 @@ export const inventarioPigmentoItemSchema = z.object({
   color: z.string(),
   categoriaColor: z.string(),
   tipo: z.string(),
-  materiaPrimaNombre: z.string(),
+  tipoMaterial: z.enum(TIPO_MATERIAL),
   cantidadActual: z.number(),
   stockMinimo: z.number(),
 });
@@ -37,8 +37,7 @@ export const listaInventarioProductoSchema = z.array(inventarioProductoItemSchem
 
 export const inventarioMolidoItemSchema = z.object({
   id: z.string(),
-  materiaPrimaId: z.string(),
-  materiaPrimaNombre: z.string(),
+  tipoMaterial: z.enum(TIPO_MATERIAL),
   origen: z.enum(ORIGEN_MOLIDO),
   colorSolidoId: z.string(),
   colorSolidoNombre: z.string(),
@@ -71,6 +70,12 @@ export const movimientoSchema = z.object({
   unidadMedida: z.string(),
   usuarioNombre: z.string(),
   createdAt: z.string(),
+  materiaPrimaNombre: z.string().nullable(),
+  pigmentoColor: z.string().nullable(),
+  pigmentoCategoria: z.string().nullable(),
+  productoNombre: z.string().nullable(),
+  materialMolidoTipo: z.string().nullable(),
+  colorSolidoNombre: z.string().nullable(),
 });
 export type Movimiento = z.infer<typeof movimientoSchema>;
 export const listaMovimientosSchema = z.array(movimientoSchema);

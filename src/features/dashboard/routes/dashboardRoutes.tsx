@@ -1,10 +1,10 @@
 import { Navigate, type RouteObject } from 'react-router-dom'
 import ProtectedRoute from '../../../shared/components/ProtectedRoute'
 import DashboardLayout from '../pages/DashboardLayout'
-import AdminDashboard from '../pages/admin/AdminDashboard'
+// import AdminDashboard from '../pages/admin/AdminDashboard'
 import OrdenesPage from '@/features/ordenes/pages/OrdenesPage'
 import Usuarios from '@/features/usuarios/pages/Usuarios'
-import AuditLog from '@/features/auditLogs/pages/AuditLog'
+// import AuditLog from '@/features/auditLogs/pages/AuditLog'
 import Operadores from '@/features/catalogo/pages/Operadores'
 import Maquinas from '@/features/catalogo/pages/Maquinas'
 import MotivosParo from '@/features/catalogo/pages/MotivosParo'
@@ -15,9 +15,9 @@ import MateriasPrimasInventario from '@/features/inventory/pages/MateriasPrimasI
 import PigmentosInventario from '@/features/inventory/pages/PigmentosInventario'
 import ProductoInventario from '@/features/inventory/pages/ProductoInventario'
 import AvancesTurnoPage from '@/features/avancesTurno/pages/supervisor/AvancesTurnoPage'
-import SeguimientoOrdenes from '@/features/avancesTurno/pages/admin/SeguimientoOrdenes'
-import MolinoAdmin from '@/features/molino/Pages/admin/MolinoAdmin'
-import Reportes from '@/features/reportes/pages/Reportes'
+import AvancesTurnoAdminPage from '@/features/avancesTurno/pages/admin/AvancesTurnoAdminPage'
+// import MolinoAdmin from '@/features/molino/Pages/admin/MolinoAdmin'
+// import Reportes from '@/features/reportes/pages/Reportes'
 import PedidosPage from '@/features/pedidos/pages/PedidosPage'
 import PedidoDetallePage from '@/features/pedidos/pages/PedidoDetallePage'
 import OrdenDetallePage from '@/features/ordenes/pages/OrdenDetallePage'
@@ -31,6 +31,8 @@ import PendientesMolerPage from '@/features/molino/Pages/molino/PendientesMolerP
 import MoliendasPage from '@/features/molino/Pages/molino/MoliendasPage'
 import OrdenesPigmentosPage from '@/features/pigmentos/pages/pigmentos/OrdenesPigmentosPage'
 import SolicitudesEIncidenciasPage from '@/features/pigmentos/pages/pigmentos/SolicitudesEIncidenciasPage'
+import HistorialInventarioPage from '@/features/inventory/components/movimientos/HistorialInventarioPage'
+import SobrantesPendientesPage from '@/features/pigmentos/pages/pigmentos/SobrantesPendientesPage'
 
 export const dashboardRoutes: RouteObject[] = [
   // ── Admin ──────────────────────────────────
@@ -41,18 +43,20 @@ export const dashboardRoutes: RouteObject[] = [
       {
         element: <DashboardLayout />,
         children: [
-          { index: true, element: <Navigate to="inicio" replace /> },
-          { path: 'dashboard', element: <AdminDashboard /> },
+          { index: true, element: <Navigate to="dashboard" replace /> },
+          // { path: 'dashboard', element: <AdminDashboard /> },
           { path: 'pedidos', element: <PedidosPage /> },
           { path: 'pedidos/:id', element: <PedidoDetallePage /> },
           { path: 'ordenes', element: <OrdenesPage /> },
           { path: 'ordenes/:id', element: <OrdenDetallePage /> },
-          { path: 'avances-turno', element: <SeguimientoOrdenes /> },
-          { path: 'molino', element: <MolinoAdmin /> },
+          { path: 'avances-turno', element: <AvancesTurnoAdminPage /> },
+          { path: 'avances-turno/:id', element: <AvanceTurnoDetallePage /> },
+          // { path: 'molino', element: <MolinoAdmin /> },
           { path: 'materias-primas', element: <MateriasPrimasInventario /> },
           { path: 'molido', element: <MolidoInventario /> },
           { path: 'pigmentos', element: <PigmentosInventario /> },
           { path: 'producto-terminado', element: <ProductoInventario /> },
+          { path: 'historial-inventario', element: <HistorialInventarioPage /> },
           { path: 'productos', element: <Productos /> },
           { path: 'materia-prima-catalogo', element: <MateriasPrimas /> },
           { path: 'pigmentos-catalogo', element: <Pigmentos /> },
@@ -61,9 +65,9 @@ export const dashboardRoutes: RouteObject[] = [
           { path: 'motivos-paro', element: <MotivosParo /> },
           { path: 'colores-solidos', element: <ColoresSolidosPage /> },
           { path: 'defectos-productos', element: <DefectosProducto /> },
-          { path: 'reportes', element: <Reportes /> },
+          // { path: 'reportes', element: <Reportes /> },
           { path: 'usuarios', element: <Usuarios /> },
-          { path: 'auditoria', element: <AuditLog /> }, 
+          // { path: 'auditoria', element: <AuditLog /> }, 
         ],
       },
     ],
@@ -97,6 +101,7 @@ export const dashboardRoutes: RouteObject[] = [
         children: [
           { index: true, element: <Navigate to="inicio" replace /> },
           { path: 'ordenes', element: <OrdenesDisponiblesPage /> },
+          { path: 'ordenes/:id', element: <OrdenDetallePage /> },
           { path: 'avances', element: <AvancesTurnoPage /> },
           { path: 'avances/:id', element: <AvanceTurnoDetallePage /> },
         ],
@@ -131,7 +136,13 @@ export const dashboardRoutes: RouteObject[] = [
         children: [
           { index: true, element: <Navigate to="inicio" replace /> },
           { path: 'ordenes', element: <OrdenesPigmentosPage /> },
+          { path: 'ordenes/:id', element: <OrdenDetallePage /> },
+          { path: 'sobrante', element: <SobrantesPendientesPage /> },
           { path: 'alertas', element: <SolicitudesEIncidenciasPage /> },
+          { path: 'materias-primas', element: <MateriasPrimasInventario /> },
+          { path: 'molido', element: <MolidoInventario /> },
+          { path: 'pigmentos', element: <PigmentosInventario /> },
+          { path: 'historial-inventario', element: <HistorialInventarioPage /> },
         ],
       },
     ],

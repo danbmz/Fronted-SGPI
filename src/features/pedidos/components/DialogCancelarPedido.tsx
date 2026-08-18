@@ -33,9 +33,9 @@ export default function DialogCancelarPedido({ open, pedido, onClose }: Props) {
     try {
       await cancelarMutation.mutateAsync({ id: pedido.id, data });
       toast.success("Pedido cancelado.");
-      reset();
-      onClose();
+      handleClose();
     } catch (error) {
+      handleClose();
       toast.error(error instanceof Error ? error.message : "Error al cancelar el pedido.");
     }
   };

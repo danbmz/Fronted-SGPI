@@ -36,9 +36,9 @@ export default function PedidoDetallePage() {
 
   return (
     <div className="flex flex-col gap-4 p-6">
-      <Button variant="ghost" size="sm" className="w-fit" onClick={() => navigate("/pedidos")}>
+      <Button variant="ghost" size="sm" className="w-fit" onClick={() => navigate(-1)}>
         <ArrowLeft size={16} className="mr-2" />
-        Volver a pedidos
+        Volver
       </Button>
 
       <div className="flex items-start justify-between">

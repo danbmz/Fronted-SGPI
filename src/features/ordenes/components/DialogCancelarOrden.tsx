@@ -35,10 +35,10 @@ export default function DialogCancelarOrden({ open, orden, onClose }: Props) {
     try {
       await cancelarMutation.mutateAsync({ id: orden.id, data });
       toast.success("Orden cancelada.");
-      reset();
-      onClose();
+      handleClose();
       navigate("/ordenes");
     } catch (error) {
+      handleClose();
       toast.error(error instanceof Error ? error.message : "Error al cancelar la orden.");
     }
   };

@@ -10,6 +10,7 @@ import {
   Select, SelectContent, SelectItem,
   SelectTrigger, SelectValue
 } from "@/components/ui/select";
+import type { Movimiento } from "../../schemas";
 
 const colorTipoMovimiento: Record<string, string> = {
   ENTRADA: "bg-green-100 text-green-700",
@@ -24,6 +25,23 @@ export default function HistorialInventarioPage() {
     tipoInventario,
     limite: 100,
   });
+
+  function detalleMovimiento(mov: Movimiento): string {
+    switch (mov.tipoInventario) {
+      case "MATERIA_PRIMA":
+        return mov.materiaPrimaNombre ?? "—";
+      case "PIGMENTO":
+        return `${mov.pigmentoColor} (${mov.pigmentoCategoria})`;
+      case "PRODUCTO":
+        return `${mov.productoNombre} — ${mov.pigmentoColor} (${mov.pigmentoCategoria})`;
+      case "MOLIDO":
+        return `${mov.materialMolidoTipo} — ${mov.colorSolidoNombre}`;
+      case "MATERIAL_PIGMENTADO":
+        return `${mov.materiaPrimaNombre} — ${mov.pigmentoColor} (${mov.pigmentoCategoria})`;
+      default:
+        return "—";
+    }
+  }
 
   return (
     <div className="flex flex-col gap-4 p-6">
@@ -52,6 +70,7 @@ export default function HistorialInventarioPage() {
           <TableHeader>
             <TableRow>
               <TableHead>Fecha</TableHead>
+              <TableHead>Detalle</TableHead>
               <TableHead>Tipo</TableHead>
               <TableHead>Motivo</TableHead>
               <TableHead>Anterior</TableHead>
@@ -64,6 +83,7 @@ export default function HistorialInventarioPage() {
             {(movimientos ?? []).map((mov) => (
               <TableRow key={mov.id}>
                 <TableCell className="text-sm">{new Date(mov.createdAt).toLocaleString()}</TableCell>
+                <TableCell className="text-sm">{detalleMovimiento(mov)}</TableCell>
                 <TableCell>
                   <Badge className={`text-xs px-2 py-1 rounded-full font-medium ${colorTipoMovimiento[mov.tipoMovimiento]}`}>
                     {mov.tipoMovimiento}

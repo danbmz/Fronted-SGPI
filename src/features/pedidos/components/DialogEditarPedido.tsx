@@ -46,6 +46,7 @@ export default function DialogEditarPedido({ open, pedido, onClose }: Props) {
       toast.success("Pedido actualizado correctamente.");
       onClose();
     } catch (error) {
+      onClose();
       toast.error(error instanceof Error ? error.message : "Error al actualizar el pedido.");
     }
   };

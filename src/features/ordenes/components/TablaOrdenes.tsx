@@ -40,7 +40,7 @@ export default function TablaOrdenes({ ordenes }: Props) {
           <TableRow
             key={orden.id}
             className="cursor-pointer hover:bg-muted/50"
-            onClick={() => navigate(`/ordenes/${orden.id}`)}
+            onClick={() => navigate(`${orden.id}`)}
           >
             <TableCell className="font-mono font-medium">{orden.folio}</TableCell>
             <TableCell>{orden.productoNombre}</TableCell>

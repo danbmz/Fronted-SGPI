@@ -41,6 +41,7 @@ export function DialogEditarColorSolido({ open, colorSolido, onClose }: Props) {
       toast.success("Color sólido actualizado correctamente.");
       onClose();
     } catch (error) {
+      onClose();
       toast.error(error instanceof Error ? error.message : "Error al actualizar el color sólido.");
     }
   };

@@ -1,10 +1,11 @@
 import { z } from "zod";
-import { ESTADO_PEDIDO } from "@/types/enums";
+import { ESTADO_PEDIDO, TIPO_MATERIAL } from "@/types/enums";
 
 export const pedidoDetalleSchema = z.object({
   id: z.string(),
   productoId: z.string(),
   productoNombre: z.string(),
+  tipoMaterial: z.enum(TIPO_MATERIAL),
   pigmentoId: z.string().nullable(),
   pigmentoColor: z.string().nullable(),
   cantidadSolicitada: z.int(),

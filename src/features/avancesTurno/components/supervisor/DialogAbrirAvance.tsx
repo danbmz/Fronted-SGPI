@@ -12,7 +12,6 @@ import {
   DialogTitle, DialogDescription
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
   Select, SelectContent, SelectItem,
@@ -25,9 +24,17 @@ interface Props {
   onClose: () => void;
 }
 
+// Determina el turno según la hora actual — ajusta los cortes según tu operación real
+function inferirTurno(): (typeof TURNO_TRABAJO)[number] {
+  const hora = new Date().getHours();
+  if (hora >= 6 && hora < 14) return "MANANA";
+  if (hora >= 14 && hora < 22) return "TARDE";
+  return "NOCHE";
+}
+
 export default function DialogAbrirAvance({ open, orden, onClose }: Props) {
   const {
-    register, handleSubmit, reset, setValue, watch,
+    handleSubmit, reset, setValue, watch,
     formState: { errors, isSubmitting }
   } = useForm<CrearAvanceTurnoInput>({
     resolver: zodResolver(crearAvanceTurnoSchema),
@@ -38,22 +45,22 @@ export default function DialogAbrirAvance({ open, orden, onClose }: Props) {
 
   useEffect(() => {
     if (open && orden) {
+      const ahora = new Date();
       setValue("ordenId", orden.id);
+      setValue("turno", inferirTurno());
+      setValue("fecha", ahora.toISOString().split("T")[0]);
+      setValue("horaInicio", ahora.toISOString());
     }
   }, [open, orden]);
 
   const onSubmit = async (data: CrearAvanceTurnoInput) => {
     try {
-      const payload = {
-        ...data,
-        horaInicio: new Date(data.horaInicio).toISOString(), // Ajustamos valor al formato esperado por el back
-      };
-      const nuevoAvance = await crearMutation.mutateAsync(payload);
+      const nuevoAvance = await crearMutation.mutateAsync(data);
       toast.success("Avance de turno iniciado.");
-      reset();
-      onClose();
-      navigate(`/supervisor/avances/${nuevoAvance.id}`);
+      handleClose();
+      navigate(`../avances/${nuevoAvance.id}`);
     } catch (error) {
+      handleClose();
       toast.error(error instanceof Error ? error.message : "Error al iniciar el avance.");
     }
   };
@@ -83,7 +90,7 @@ export default function DialogAbrirAvance({ open, orden, onClose }: Props) {
               }
             >
               <SelectTrigger>
-                <SelectValue placeholder="Selecciona un turno" />
+                <SelectValue />
               </SelectTrigger>
               <SelectContent>
                 {TURNO_TRABAJO.map((t) => (
@@ -92,18 +99,6 @@ export default function DialogAbrirAvance({ open, orden, onClose }: Props) {
               </SelectContent>
             </Select>
             {errors.turno && <p className="text-xs text-red-500">{errors.turno.message}</p>}
-          </div>
-
-          <div className="flex flex-col gap-1">
-            <Label>Fecha</Label>
-            <Input type="date" {...register("fecha")} />
-            {errors.fecha && <p className="text-xs text-red-500">{errors.fecha.message}</p>}
-          </div>
-
-          <div className="flex flex-col gap-1">
-            <Label>Hora de inicio</Label>
-            <Input type="datetime-local" {...register("horaInicio")} />
-            {errors.horaInicio && <p className="text-xs text-red-500">{errors.horaInicio.message}</p>}
           </div>
 
           <div className="flex justify-end gap-2 mt-2">

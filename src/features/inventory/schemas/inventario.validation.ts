@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { TIPO_INVENTARIO, ORIGEN_MOLIDO } from "@/types/enums";
+import { TIPO_INVENTARIO, ORIGEN_MOLIDO, TIPO_MATERIAL } from "@/types/enums";
 
 // ---------- Entrada de proveedor ----------
 
@@ -18,7 +18,7 @@ export const entradaProveedorSchema = z.discriminatedUnion("tipoInventario", [
   }),
   z.object({
     tipoInventario: z.literal("MOLIDO"),
-    materiaPrimaId: z.string().min(1, "Selecciona un material"),
+    tipoMaterial: z.enum(TIPO_MATERIAL, {message: "Selecciona el tipo de material"}),
     colorSolidoId: z.string().min(1, "Selecciona un color"),
     cantidad: z.number({ message: "La cantidad debe ser un valor numérico" }).positive("La cantidad debe ser mayor a 0"),
     descripcion: z.string().max(300).optional(),
@@ -51,7 +51,7 @@ export const ajusteManualSchema = z.discriminatedUnion("tipoInventario", [
   }),
   z.object({
     tipoInventario: z.literal("MOLIDO"),
-    materiaPrimaId: z.string().min(1, "Selecciona un material"),
+    tipoMaterial: z.enum(TIPO_MATERIAL, {message: "Selecciona el tipo de material"}),
     origen: z.enum(ORIGEN_MOLIDO, { message: "Selecciona un origen" }),
     colorSolidoId: z.string().min(1, "Selecciona un color"),
     diferencia: z.number({ message: "La diferencia debe ser un valor numérico" }),
@@ -99,6 +99,7 @@ export const historialQuerySchema = z.object({
   productoId: z.string().optional(),
   colorSolidoId: z.string().optional(),
   origen: z.enum(ORIGEN_MOLIDO).optional(),
+  tipoMaterial: z.enum(TIPO_MATERIAL).optional(),
   combinacionId: z.string().optional(),
   limite: z.number().int().min(1).max(200).optional(),
 });

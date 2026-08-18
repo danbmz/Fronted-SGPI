@@ -24,6 +24,7 @@ export default function DialogDesactivarPigmento({ open, pigmento, onClose }: Pr
       toast.success("Pigmento desactivado.");
       onClose();
     } catch (error) {
+      onClose();
       toast.error(error instanceof Error ? error.message : "Error al desactivar el pigmento.");
     }
   };

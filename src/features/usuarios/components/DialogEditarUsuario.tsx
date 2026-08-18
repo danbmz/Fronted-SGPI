@@ -50,6 +50,7 @@ export default function DialogEditarUsuario({ open, usuario, onClose }: Props) {
       toast.success("Usuario actualizado correctamente.");
       onClose();
     } catch (error) {
+      onClose();
       toast.error(error instanceof Error ? error.message : "Error al actualizar el usuario.");
     }
   };
