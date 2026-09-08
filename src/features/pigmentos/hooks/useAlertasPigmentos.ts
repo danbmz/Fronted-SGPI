@@ -1,46 +1,13 @@
-// import { useState, useEffect } from "react"
-// import { getAvancesTurno } from "@/features/avancesTurno/services/avanceTurnoService"
-// import { getOrdenesProduccion } from "@/features/ordenes/services/ordenService"
-// import { getInfoMaquinas } from "../services/pigmentosOrdenesService"
+import { useTodasSolicitudesMaterial } from "@/features/avancesTurno/hooks/useSolicitudMaterial";
+import { useIncidencias } from "@/features/avancesTurno/hooks/useIncidencia";
 
-// export const useAlertasPigmentos = () => {
-//   const [totalAlertas, setTotalAlertas] = useState(0)
+export function useAlertasPigmentos() {
+  const { data: solicitudesPendientes } = useTodasSolicitudesMaterial({ confirmado: false });
+  const { data: incidenciasPendientes } = useIncidencias({ resuelto: false });
 
-//   useEffect(() => {
-//     const calcularAlertas = async () => {
-//       try {
-//         const [avances, ordenes, maquinas] = await Promise.all([
-//           getAvancesTurno(),
-//           getOrdenesProduccion(),
-//           getInfoMaquinas()
-//         ])
+  const totalAlertas =
+    (solicitudesPendientes?.length ?? 0) +
+    (incidenciasPendientes?.length ?? 0);
 
-//         const faltantes = avances.flatMap(a =>
-//           a.solicitudesMaterial.filter(s => !s.confirmado)
-//         ).length
-
-//         const sobrantes = avances.filter(a =>
-//           a.estado === "cerrado" &&
-//           a.kgSobrante > 0 &&
-//           !a.sobranteConfirmado
-//         ).length
-
-//         const porTerminar = maquinas.filter(m =>
-//           m.colorSemaforo === "rojo" &&
-//           m.siguienteOrden !== null &&
-//           !ordenes.find(o => o.id === m.siguienteOrden?.id)?.materialSiguienteConfirmado
-//         ).length
-
-//         setTotalAlertas(faltantes + sobrantes + porTerminar)
-//       } catch {
-//         setTotalAlertas(0)
-//       }
-//     }
-
-//     calcularAlertas()
-//     const intervalo = setInterval(calcularAlertas, 5 * 60 * 1000)
-//     return () => clearInterval(intervalo)
-//   }, [])
-
-//   return totalAlertas
-// }
+  return totalAlertas;
+}

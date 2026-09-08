@@ -54,7 +54,7 @@ export default function FormularioAvanceTurno({ avance }: Props) {
       kgMerma: avance.kgMerma,
       kgPlasta: avance.kgPlasta,
       piezasCambioColor: avance.piezasCambioColor,
-      kgSobrante: avance.kgSobrante ?? undefined,
+      kgSobrante: avance.kgSobrante ?? 0,
       tipoMaterialSobrante: avance.tipoMaterialSobrante ?? undefined,
       defectoId: avance.defectoId ?? undefined,
       operadorId: avance.operadorId,
@@ -98,7 +98,11 @@ export default function FormularioAvanceTurno({ avance }: Props) {
   // ---------- Cerrar turno: usa el submit normal de react-hook-form, con el schema estricto ----------
   const onCerrar = async (data: CerrarAvanceTurnoInput) => {
     try {
-      await cerrarMutation.mutateAsync({ id: avance.id, data: data });
+      const payload = {
+      ...data,
+      kgSobrante: data.kgSobrante && data.kgSobrante > 0 ? data.kgSobrante : undefined,
+    };
+      await cerrarMutation.mutateAsync({ id: avance.id, data: payload });
       toast.success("Turno cerrado correctamente.");
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Error al cerrar el turno.");

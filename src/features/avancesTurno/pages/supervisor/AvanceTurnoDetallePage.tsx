@@ -70,7 +70,7 @@ export default function AvanceTurnoDetallePage() {
               <Badge className="ml-2">{tiemposParo.length}</Badge>
             )}
           </AccordionTrigger>
-          <AccordionContent className="flex flex-col gap-2">
+          <AccordionContent key={tiemposParo?.length} className="flex flex-col gap-2">
             {(tiemposParo ?? []).map((tp) => (
               <div key={tp.id} className="flex justify-between text-sm border-b py-2">
                 <span>{tp.motivoParoNombre}</span>
@@ -94,7 +94,7 @@ export default function AvanceTurnoDetallePage() {
               <Badge className="ml-2">{solicitudes.length}</Badge>
             )}
           </AccordionTrigger>
-          <AccordionContent className="flex flex-col gap-2">
+          <AccordionContent key={solicitudes?.length ?? 0} className="flex flex-col gap-2">
             {(solicitudes ?? []).map((s) => (
               <div key={s.id} className="flex justify-between text-sm border-b py-2">
                 <span>{s.tipoMaterial} — {s.kgSolicitados} kg</span>
@@ -120,7 +120,7 @@ export default function AvanceTurnoDetallePage() {
               <Badge className="ml-2">{incidencias.length}</Badge>
             )}
           </AccordionTrigger>
-          <AccordionContent className="flex flex-col gap-2">
+          <AccordionContent key={tiemposParo?.length ?? 0} className="flex flex-col gap-2">
             {(incidencias ?? []).map((inc) => (
               <div key={inc.id} className="flex justify-between items-center text-sm border-b py-2">
                 <span>{inc.piezasAfectadas} piezas — Destino: {inc.destino}</span>

@@ -27,6 +27,7 @@ export function useCrearIncidencia() {
       crearIncidencia(avanceTurnoId, data),
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: ["avances-turno", variables.avanceTurnoId] });
+      queryClient.invalidateQueries({ queryKey: ["incidencias-mal-pigmentado"] });
       queryClient.invalidateQueries({ queryKey: ["inventario"] }); // destino STOCK dispara movimiento
     },
   });

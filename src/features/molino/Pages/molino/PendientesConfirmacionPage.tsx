@@ -80,6 +80,8 @@ export default function PendientesConfirmacionPage() {
           <Table>
             <TableHeader>
               <TableRow>
+                <TableHead>Orden</TableHead>
+                <TableHead>Supervisor</TableHead>
                 <TableHead>Piezas afectadas</TableHead>
                 <TableHead></TableHead>
               </TableRow>
@@ -87,6 +89,8 @@ export default function PendientesConfirmacionPage() {
             <TableBody>
               {incidenciasSinConfirmar.map((inc) => (
                 <TableRow key={inc.id}>
+                  <TableCell className="font-mono text-sm">{inc.ordenFolio}</TableCell>
+                  <TableCell className="text-sm text-muted-foreground">{inc.supervisorNombre}</TableCell>
                   <TableCell className="text-sm">{inc.piezasAfectadas}</TableCell>
                   <TableCell>
                     <Button size="sm" onClick={() => setIncidenciaSeleccionada(inc)}>

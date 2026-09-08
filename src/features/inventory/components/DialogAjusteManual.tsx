@@ -53,6 +53,13 @@ export default function DialogAjusteManual({ open, tipoInventario, onClose }: Pr
   const { data: coloresSolidos } = useColorSolido();
   const { data: productos } = useProducto();
 
+  const materiasPrimasActivas = materiasPrimas?.filter((m) => m.activo);
+  const pigmentosActivos = pigmentos?.filter((p) => p.activo);
+  const coloresSolidosActivos = coloresSolidos?.filter((c) => c.activo);
+  const productosActivos = productos?.filter((m) => m.activo);
+
+  console.log(materiasPrimasActivas);
+
   useEffect(() => {
     setValue("tipoInventario", tipoInventario);
   }, [tipoInventario]);
@@ -94,7 +101,7 @@ export default function DialogAjusteManual({ open, tipoInventario, onClose }: Pr
               >
                 <SelectTrigger><SelectValue placeholder="Selecciona" /></SelectTrigger>
                 <SelectContent>
-                  {(materiasPrimas ?? []).map((m) => (
+                  {(materiasPrimasActivas ?? []).map((m) => (
                     <SelectItem key={m.id} value={m.id}>{m.nombre}</SelectItem>
                   ))}
                 </SelectContent>
@@ -114,7 +121,7 @@ export default function DialogAjusteManual({ open, tipoInventario, onClose }: Pr
               >
                 <SelectTrigger><SelectValue placeholder="Selecciona" /></SelectTrigger>
                 <SelectContent>
-                  {(pigmentos ?? []).map((p) => (
+                  {(pigmentosActivos ?? []).map((p) => (
                     <SelectItem key={p.id} value={p.id}>{p.color} — {p.tipoMaterial}</SelectItem>
                   ))}
                 </SelectContent>
@@ -135,7 +142,7 @@ export default function DialogAjusteManual({ open, tipoInventario, onClose }: Pr
                 >
                   <SelectTrigger><SelectValue placeholder="Selecciona" /></SelectTrigger>
                   <SelectContent>
-                    {(productos ?? []).map((p) => (
+                    {(productosActivos ?? []).map((p) => (
                       <SelectItem key={p.id} value={p.id}>{p.nombre}</SelectItem>
                     ))}
                   </SelectContent>
@@ -213,7 +220,7 @@ export default function DialogAjusteManual({ open, tipoInventario, onClose }: Pr
                 >
                   <SelectTrigger><SelectValue placeholder="Selecciona" /></SelectTrigger>
                   <SelectContent>
-                    {(coloresSolidos ?? []).map((c) => (
+                    {(coloresSolidosActivos ?? []).map((c) => (
                       <SelectItem key={c.id} value={c.id}>{c.nombre}</SelectItem>
                     ))}
                   </SelectContent>

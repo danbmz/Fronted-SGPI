@@ -6,6 +6,7 @@ import {
   editarPedido,
   cancelarPedido,
   agregarDetallePedido,
+  type FiltroPedidos,
 } from "../service/pedidoService";
 import type {
   CrearPedidoInput,
@@ -19,10 +20,10 @@ const queryKeyDetalle = (id: string) => ["pedidos", id];
 
 // ---------- LISTAR ----------
 
-export function usePedidos() {
+export function usePedidos(filtro?: FiltroPedidos) {
   return useQuery({
-    queryKey: QUERY_KEY_LISTA,
-    queryFn: listarPedidos,
+    queryKey: [...QUERY_KEY_LISTA, filtro],
+    queryFn: () => listarPedidos(filtro),
   });
 }
 

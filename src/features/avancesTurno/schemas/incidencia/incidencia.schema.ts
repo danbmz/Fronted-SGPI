@@ -14,6 +14,7 @@ export const incidenciaSchema = z.object({
   materiaPrimaNombre: z.string(),
   pigmentoColor: z.string(),
   ordenFolio: z.string(),
+  supervisorNombre: z.string(),
 });
 
 export type Incidencia = z.infer<typeof incidenciaSchema>;

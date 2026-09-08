@@ -12,7 +12,7 @@ export const crearIncidenciaSchema = z.object({
 export type CrearIncidenciaInput = z.infer<typeof crearIncidenciaSchema>;
 
 export const confirmarIncidenciaMolinoSchema = z.object({
-  confirmado: z.boolean(),
+  piezasRecibidas: z.number({ message: "Ingresa un valor numérico" }).int().min(0),
 });
 
 export type ConfirmarIncidenciaMolinoInput = z.infer<typeof confirmarIncidenciaMolinoSchema>;

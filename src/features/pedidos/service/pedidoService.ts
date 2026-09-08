@@ -1,17 +1,30 @@
 import { httpClient } from "@/lib/httpClient";
 import { parseOrThrow } from "@/lib/parseOrThrow";
 import { okResponseSchema } from "@/lib/commonSchemas";
-import { pedidoSchema, listaPedidoSchema, type Pedido } from "../schemas/pedido.schema";
+import { pedidoSchema, type Pedido, listaPedidoResponseSchema } from "../schemas/pedido.schema";
 import type {
   CrearPedidoInput,
   EditarPedidoInput,
   CancelarPedidoInput,
   CrearPedidoDetalleInput,
+  ListaPedidoResponse,
 } from "../schemas";
 
-export async function listarPedidos(): Promise<Pedido[]> {
-  const response = await httpClient("/pedidos");
-  return parseOrThrow(response, listaPedidoSchema);
+export interface FiltroPedidos {
+  estado?: string;
+  pagina?: number;
+  limite?: number;
+}
+
+export async function listarPedidos(filtro?: FiltroPedidos): Promise<ListaPedidoResponse> {
+  const params = new URLSearchParams();
+  if (filtro?.estado !== undefined) params.set("estado", filtro.estado);
+  if (filtro?.pagina !== undefined) params.set("pagina", String(filtro.pagina));
+  if (filtro?.limite !== undefined) params.set("limite", String(filtro.limite));
+
+  const query = params.toString();
+  const response = await httpClient(`/pedidos${query ? `?${query}` : ""}`);
+  return parseOrThrow(response, listaPedidoResponseSchema);
 }
 
 export async function obtenerPedido(id: string): Promise<Pedido> {

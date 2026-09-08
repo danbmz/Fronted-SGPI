@@ -8,9 +8,10 @@ export const pedidoDetalleSchema = z.object({
   tipoMaterial: z.enum(TIPO_MATERIAL),
   pigmentoId: z.string().nullable(),
   pigmentoColor: z.string().nullable(),
+  categoriaColor: z.string().nullable(),
   cantidadSolicitada: z.int(),
   cantidadProducida: z.int(),
-  cantidadEntregada: z.number(),
+  cantidadEntregada: z.int(),
 });
 
 export type PedidoDetalle = z.infer<typeof pedidoDetalleSchema>;
@@ -31,4 +32,21 @@ export const pedidoSchema = z.object({
 
 export type Pedido = z.infer<typeof pedidoSchema>;
 
-export const listaPedidoSchema = z.array(pedidoSchema);
+// export const listaPedidoSchema = z.array(pedidoSchema);
+
+// Forma para agregar paginacion
+export const paginacionSchema = z.object({
+  pagina: z.int(),
+  limite: z.int(),
+  total: z.int(),
+  totalPaginas: z.int(),
+});
+
+export type Paginacion = z.infer<typeof paginacionSchema>;
+
+export const listaPedidoResponseSchema = z.object({
+  data: z.array(pedidoSchema),
+  paginacion: paginacionSchema,
+});
+
+export type ListaPedidoResponse = z.infer<typeof listaPedidoResponseSchema>;

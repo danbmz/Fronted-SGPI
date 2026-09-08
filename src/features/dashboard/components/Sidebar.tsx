@@ -2,7 +2,7 @@ import { NavLink, useNavigate } from "react-router-dom"
 import { LogOut, PanelLeftClose, PanelLeftOpen } from "lucide-react"
 import { useAuth } from "@/features/auth/hooks/useAuth"
 import { sidebarItems } from "./sidebar/sidebarConfing"
-// import { useAlertasPigmentos } from "@/features/pigmentos/hooks/useAlertasPigmentos"
+import { useAlertasPigmentos } from "@/features/pigmentos/hooks/useAlertasPigmentos"
 
 interface Props {
   collapsed: boolean
@@ -18,10 +18,8 @@ export default function Sidebar({ collapsed, onToggle }: Props) {
   const items = sidebarItems[role]
 
   // Solo carga el conteo si el rol es pigmentos
-  // const alertasPigmentos = useAlertasPigmentos()
-  const alertasPigmentos = [""];
-  // const mostrarBadge = role === "PIGMENTOS" && alertasPigmentos > 0
-  const mostrarBadge = true
+  const alertasPigmentos = useAlertasPigmentos()
+  const mostrarBadge = role === "PIGMENTOS" && alertasPigmentos > 0
   
   const handleLogout = () => {
     logout()
@@ -95,7 +93,7 @@ export default function Sidebar({ collapsed, onToggle }: Props) {
                   <item.icon size={18} />
                   {collapsed && esPigmentosAlertas && mostrarBadge && (
                     <span className="absolute -top-1.5 -right-1.5 flex items-center justify-center w-4 h-4 text-[10px] font-bold bg-red-500 text-white rounded-full">
-                      {alertasPigmentos.length > 9 ? "9+" : alertasPigmentos}
+                      {alertasPigmentos > 9 ? "9+" : alertasPigmentos}
                     </span>
                   )}
                 </div>
@@ -106,7 +104,7 @@ export default function Sidebar({ collapsed, onToggle }: Props) {
                     {/* Badge también en el texto cuando está expandido */}
                     {esPigmentosAlertas && mostrarBadge && (
                       <span className="ml-auto text-[10px] font-bold bg-red-500 text-white px-1.5 py-0.5 rounded-full">
-                        {alertasPigmentos.length > 9 ? "9+" : alertasPigmentos}
+                        {alertasPigmentos > 9 ? "9+" : alertasPigmentos}
                       </span>
                     )}
                   </span>

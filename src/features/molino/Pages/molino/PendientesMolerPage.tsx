@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { usePendientesMoler } from "../../hooks/useMolienda";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
@@ -13,6 +13,19 @@ export default function PendientesMolerPage() {
   const [avancesSeleccionados, setAvancesSeleccionados] = useState<Set<string>>(new Set());
   const [incidenciasSeleccionadas, setIncidenciasSeleccionadas] = useState<Set<string>>(new Set());
   const [dialogAbierto, setDialogAbierto] = useState(false);
+
+  const materialesSeleccionados = useMemo(() => {
+    const avancesSel = (pendientes?.avances ?? []).filter((a) => avancesSeleccionados.has(a.id));
+    const incidenciasSel = (pendientes?.incidencias ?? []).filter((i) => incidenciasSeleccionadas.has(i.id));
+    const materiales = new Set([
+      ...avancesSel.map((a) => a.ordenTipoMaterial),
+      ...incidenciasSel.map((i) => i.ordenTipoMaterial),
+    ]);
+    return Array.from(materiales);
+  }, [avancesSeleccionados, incidenciasSeleccionadas, pendientes]);
+
+  const hayMezclaDeMateriales = materialesSeleccionados.length > 1;
+  const materialUnico = materialesSeleccionados.length === 1 ? materialesSeleccionados[0] : undefined;
 
   const toggleAvance = (id: string) => {
     setAvancesSeleccionados((prev) => {
@@ -32,6 +45,19 @@ export default function PendientesMolerPage() {
     });
   };
 
+  // Recorremos las listas completas de objetos y filtramos aquellos que tengan el mismo ID que el usuario selecciono
+  const avancesSeleccionadosObj = useMemo(
+    () => (pendientes?.avances ?? []).filter((a) => avancesSeleccionados.has(a.id)),
+    [pendientes, avancesSeleccionados]
+  );
+
+  console.log(avancesSeleccionadosObj);
+
+  const incidenciasSeleccionadasObj = useMemo(
+    () => (pendientes?.incidencias ?? []).filter((i) => incidenciasSeleccionadas.has(i.id)),
+    [pendientes, incidenciasSeleccionadas]
+  );
+
   const totalSeleccionados = avancesSeleccionados.size + incidenciasSeleccionadas.size;
 
   const handleCerrarDialog = () => {
@@ -49,10 +75,16 @@ export default function PendientesMolerPage() {
         <p className="text-sm text-muted-foreground">
           Selecciona los avances e incidencias que se molieron juntos en la misma tanda.
         </p>
-        <Button disabled={totalSeleccionados === 0} onClick={() => setDialogAbierto(true)}>
+        <Button disabled={totalSeleccionados === 0 || hayMezclaDeMateriales} onClick={() => setDialogAbierto(true)}>
           Crear molienda ({totalSeleccionados} seleccionados)
         </Button>
       </div>
+
+      {hayMezclaDeMateriales && (
+        <p className="text-sm text-red-600">
+          No puedes crear moliendas combinando materiales diferentes. Selecciona avances/incidencias del mismo tipo.
+        </p>
+      )}
 
       <div className="flex flex-col gap-2">
         <h2 className="text-sm font-semibold">Avances de turno confirmados</h2>
@@ -61,6 +93,7 @@ export default function PendientesMolerPage() {
             <TableRow>
               <TableHead className="w-10"></TableHead>
               <TableHead>Orden</TableHead>
+              <TableHead>Material</TableHead>
               <TableHead>Color</TableHead>
               <TableHead>Merma</TableHead>
               <TableHead>Plasta</TableHead>
@@ -77,6 +110,7 @@ export default function PendientesMolerPage() {
                   />
                 </TableCell>
                 <TableCell className="font-mono font-medium">{avance.ordenFolio}</TableCell>
+                <TableCell className="font-sm">{avance.ordenTipoMaterial}</TableCell>
                 <TableCell className="text-sm">{avance.pigmentoColor}</TableCell>
                 <TableCell className="text-sm">{avance.kgMerma} kg</TableCell>
                 <TableCell className="text-sm">{avance.kgPlasta} kg</TableCell>
@@ -101,6 +135,7 @@ export default function PendientesMolerPage() {
             <TableRow>
               <TableHead className="w-10"></TableHead>
               <TableHead>Orden</TableHead>
+              <TableHead>Material</TableHead>
               <TableHead>Color</TableHead>
               <TableHead>Piezas afectadas</TableHead>
             </TableRow>
@@ -115,6 +150,7 @@ export default function PendientesMolerPage() {
                   />
                 </TableCell>
                 <TableCell className="font-mono font-medium">{inc.ordenFolio}</TableCell>
+                <TableCell className="font-sm">{inc.ordenTipoMaterial}</TableCell>
                 <TableCell className="text-sm">{inc.pigmentoColor}</TableCell>
                 <TableCell className="text-sm">{inc.piezasAfectadas}</TableCell>
               </TableRow>
@@ -134,6 +170,9 @@ export default function PendientesMolerPage() {
         open={dialogAbierto}
         avanceTurnoIds={Array.from(avancesSeleccionados)}
         incidenciaIds={Array.from(incidenciasSeleccionadas)}
+        avancesSeleccionados={avancesSeleccionadosObj ?? []}
+        incidenciasSeleccionadas={incidenciasSeleccionadasObj ?? []} 
+        materialSugerido={materialUnico}
         onClose={handleCerrarDialog}
       />
     </div>

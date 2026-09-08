@@ -42,10 +42,14 @@ export default function DialogConfirmarMaterialOrden({ open, orden, onClose }: P
           <div className="text-sm bg-muted px-3 py-2 rounded-md grid grid-cols-2 gap-2">
             <p><span className="font-medium">Orden:</span> {orden.folio}</p>
             <p><span className="font-medium">Producto:</span> {orden.productoNombre}</p>
+            <p><span className="font-medium">Materia prima:</span> {orden.materiaPrimaNombre}</p>
+            <p><span className="font-medium">Pigmento:</span> {orden.pigmentoColor} {orden.pigmentoCategoria} {orden.pigmentoTipo}</p>
             <p><span className="font-medium">Virgen:</span> {orden.materiaPrimaVirgenKg.toFixed(2)} kg</p>
             <p><span className="font-medium">Pigmento:</span> {orden.pigmentoRequeridoKg.toFixed(3)} kg</p>
-            {orden.tipoMaterial !== "VIRGEN" && (
-              <p><span className="font-medium">Molido:</span> {orden.materialMolidoKg.toFixed(2)} kg</p>
+            {orden.tipoMaterial !== "VIRGEN" && orden.inventarioMolidoDescripcion && (
+              <p className="col-span-2">
+                <span className="font-medium">Molido:</span> {orden.inventarioMolidoDescripcion} — {orden.materialMolidoKg.toFixed(2)} kg
+              </p>
             )}
           </div>
         )}

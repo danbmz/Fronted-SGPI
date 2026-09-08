@@ -7,7 +7,6 @@ export const crearMoliendaSchema = z.object({
   kgIngresados: z
     .number({ message: "Los kilogramos deben ser un valor numérico" })
     .positive("Debe ser mayor a 0"),
-  fecha: z.string().min(1, "La fecha es requerida"),
   observaciones: z.string().max(300, "Máximo 300 caracteres").optional(),
   avanceTurnoIds: z.array(z.string()),
   incidenciaIds: z.array(z.string()),
@@ -17,3 +16,8 @@ export const crearMoliendaSchema = z.object({
 });
 
 export type CrearMoliendaInput = z.infer<typeof crearMoliendaSchema>;
+
+// Quitamos fecha de la validacion pero, lo agregamos en el type porque el back lo requiere para crear la Molienda.
+export interface CrearMoliendaPayload extends CrearMoliendaInput {
+  fecha: string;
+}

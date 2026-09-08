@@ -46,6 +46,10 @@ export default function DialogEntradaProveedor({ open, tipoInventario, onClose }
   const { data: pigmentos } = usePigmento();
   const { data: coloresSolidos } = useColorSolido();
 
+  const materiasPrimasActivas = materiasPrimas?.filter((m) => m.activo);
+  const pigmentosActivos = pigmentos?.filter((p) => p.activo);
+  const coloresSolidosActivos = coloresSolidos?.filter((c) => c.activo);
+
   const onSubmit = async (data: EntradaProveedorInput) => {
     try {
       await entradaMutation.mutateAsync(data);
@@ -85,7 +89,7 @@ export default function DialogEntradaProveedor({ open, tipoInventario, onClose }
                   <SelectValue placeholder="Selecciona" />
                 </SelectTrigger>
                 <SelectContent>
-                  {(materiasPrimas ?? []).map((m) => (
+                  {(materiasPrimasActivas ?? []).map((m) => (
                     <SelectItem key={m.id} value={m.id}>{m.nombre}</SelectItem>
                   ))}
                 </SelectContent>
@@ -107,7 +111,7 @@ export default function DialogEntradaProveedor({ open, tipoInventario, onClose }
                   <SelectValue placeholder="Selecciona" />
                 </SelectTrigger>
                 <SelectContent>
-                  {(pigmentos ?? []).map((p) => (
+                  {(pigmentosActivos ?? []).map((p) => (
                     <SelectItem key={p.id} value={p.id}>{p.color} — {p.tipoMaterial}</SelectItem>
                   ))}
                 </SelectContent>
@@ -150,7 +154,7 @@ export default function DialogEntradaProveedor({ open, tipoInventario, onClose }
                     <SelectValue placeholder="Selecciona" />
                   </SelectTrigger>
                   <SelectContent>
-                    {(coloresSolidos ?? []).map((c) => (
+                    {(coloresSolidosActivos ?? []).map((c) => (
                       <SelectItem key={c.id} value={c.id}>{c.nombre}</SelectItem>
                     ))}
                   </SelectContent>

@@ -69,6 +69,17 @@ export default function OrdenDetallePage() {
             Producto: {orden.productoNombre} — Color: {orden.pigmentoColor}
           </p>
           <p className="text-sm text-muted-foreground">Máquina: {orden.maquinaNombre}</p>
+          <p className="text-sm text-muted-foreground">
+            Material: {orden.materiaPrimaNombre} ({orden.tipoMaterial})
+          </p>
+          <p className="text-sm text-muted-foreground">
+            Pigmento: {orden.pigmentoColor} — {orden.pigmentoCategoria} ({orden.pigmentoTipo})
+          </p>
+          {orden.tipoMaterial !== "VIRGEN" && (
+            <p className="text-sm text-muted-foreground">
+              Molido a usar: {orden.inventarioMolidoDescripcion}
+            </p>
+          )}
         </div>
 
         {esAdminOProgramador && (
@@ -122,7 +133,7 @@ export default function OrdenDetallePage() {
         </div>
       )}
 
-      {esPigmentos && orden.estado === "ACTIVA" && (
+      {esPigmentos && orden.estado === "ACTIVA" && !orden.materialSiguienteConfirmado && (
         <div className="flex justify-end">
           <Button variant="outline" size="sm" onClick={() => setDialogSustituirAbierto(true)}>
             <Repeat size={16} className="mr-2" />

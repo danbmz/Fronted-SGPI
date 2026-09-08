@@ -4,6 +4,7 @@ import { TIPO_MATERIAL } from "@/types/enums";
 export const avancePendienteSchema = z.object({
   id: z.string(),
   ordenFolio: z.string(),
+  ordenTipoMaterial: z.enum(TIPO_MATERIAL),  
   pigmentoColor: z.string(),
   kgMerma: z.number(),
   kgPlasta: z.number(),
@@ -16,6 +17,7 @@ export type AvancePendiente = z.infer<typeof avancePendienteSchema>;
 export const incidenciaPendienteSchema = z.object({
   id: z.string(),
   ordenFolio: z.string(),
+  ordenTipoMaterial: z.enum(TIPO_MATERIAL), 
   pigmentoColor: z.string(),
   piezasAfectadas: z.int(),
 });
