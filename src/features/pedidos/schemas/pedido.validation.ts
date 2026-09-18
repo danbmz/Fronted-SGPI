@@ -1,5 +1,19 @@
 import { z } from "zod";
 
+const fechaNoPasada = z
+  .string()
+  .refine(
+    (val) => {
+      if (!val) return true; // si está vacío, .optional() ya lo maneja aparte
+      const fechaIngresada = new Date(val + "T00:00:00");
+      const hoy = new Date();
+      hoy.setHours(0, 0, 0, 0);
+      return fechaIngresada >= hoy;
+    },
+    { message: "La fecha de entrega no puede ser anterior a hoy" }
+  )
+  .optional();
+
 export const crearPedidoSchema = z.object({
   numeroPedido: z
     .string()
@@ -14,6 +28,7 @@ export const crearPedidoSchema = z.object({
     .max(150, "La remisión no puede exceder 150 caracteres")
     .optional(),
   descripcion: z.string().max(500, "La descripción no puede exceder 500 caracteres").optional(),
+  fechaEntrega: fechaNoPasada,
 });
 
 export type CrearPedidoInput = z.infer<typeof crearPedidoSchema>;
@@ -25,6 +40,7 @@ export const editarPedidoSchema = z.object({
     .max(150, "El cliente no puede exceder 150 caracteres")
     .optional(),
   descripcion: z.string().max(500, "La descripción no puede exceder 500 caracteres").optional(),
+  fechaEntrega: fechaNoPasada, 
 });
 
 export type EditarPedidoInput = z.infer<typeof editarPedidoSchema>;

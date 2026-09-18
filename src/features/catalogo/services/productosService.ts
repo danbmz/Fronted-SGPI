@@ -30,6 +30,6 @@ export async function desactivarProducto(id: string): Promise <void> {
 }
 
 export async function reactivarProducto(id: string): Promise <void> {
-  const response = await httpClient(`/productos/${id}`, { method: 'PATCH' });
+  const response = await httpClient(`/productos/${id}/reactivar`, { method: 'PATCH' });
   await parseOrThrow(response,okResponseSchema)
 }

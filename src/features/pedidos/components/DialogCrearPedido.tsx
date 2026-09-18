@@ -78,6 +78,12 @@ export default function DialogCrearPedido({ open, onClose }: Props) {
           </div>
 
           <div className="flex flex-col gap-1">
+            <Label>Fecha de entrega (opcional)</Label>
+            <Input type="date" min={new Date().toISOString().split("T")[0]} {...register("fechaEntrega")} />
+            {errors.fechaEntrega && <p className="text-xs text-red-500">{errors.fechaEntrega.message}</p>}
+          </div>
+
+          <div className="flex flex-col gap-1">
             <Label>Descripción (opcional)</Label>
             <Textarea {...register("descripcion")} placeholder="Notas generales del pedido..." rows={3} />
             {errors.descripcion && <p className="text-xs text-red-500">{errors.descripcion.message}</p>}

@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { limpiarOpcionales } from "@/utils/limpiarOpcionales";
 
 interface Props {
   open: boolean;
@@ -35,6 +36,7 @@ export default function DialogEditarPedido({ open, pedido, onClose }: Props) {
       reset({
         cliente: pedido.cliente,
         descripcion: pedido.descripcion ?? undefined,
+        fechaEntrega: pedido.fechaEntrega ?? undefined,
       });
     }
   }, [pedido]);
@@ -42,7 +44,8 @@ export default function DialogEditarPedido({ open, pedido, onClose }: Props) {
   const onSubmit = async (data: EditarPedidoInput) => {
     if (!pedido) return;
     try {
-      await editarMutation.mutateAsync({ id: pedido.id, data });
+      const payload = limpiarOpcionales(data);
+      await editarMutation.mutateAsync({ id: pedido.id, data: payload });
       toast.success("Pedido actualizado correctamente.");
       onClose();
     } catch (error) {
@@ -87,6 +90,12 @@ export default function DialogEditarPedido({ open, pedido, onClose }: Props) {
             <Label>Cliente</Label>
             <Input {...register("cliente")} placeholder="Ej. Comercializadora del Valle" />
             {errors.cliente && <p className="text-xs text-red-500">{errors.cliente.message}</p>}
+          </div>
+
+          <div className="flex flex-col gap-1">
+            <Label>Fecha de entrega</Label>
+            <Input type="date" {...register("fechaEntrega")} />
+            {errors.fechaEntrega && <p className="text-xs text-red-500">{errors.fechaEntrega.message}</p>}
           </div>
 
           <div className="flex flex-col gap-1">

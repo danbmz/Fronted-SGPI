@@ -36,5 +36,5 @@ export async function desactivarPigmento(id: string): Promise <void> {
 
 export async function reactivarPigmento(id: string): Promise <void> {
   const response = await httpClient(`/pigmentos/${id}/reactivar`, { method: 'PATCH'});
-  await parseOrThrow(response, pigmentoSchema)
+  await parseOrThrow(response, okResponseSchema)
 }

@@ -28,6 +28,7 @@ export const pedidoSchema = z.object({
   totalOrdenes: z.int(),
   ordenesCompletadas: z.int(),
   createdAt: z.string(),
+  fechaEntrega: z.string().nullable(), 
 });
 
 export type Pedido = z.infer<typeof pedidoSchema>;

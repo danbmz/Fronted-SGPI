@@ -10,6 +10,7 @@ import TablaDetallePedido from "../components/TablaDetallePedido";
 import DialogEditarPedido from "../components/DialogEditarPedido";
 import DialogCancelarPedido from "../components/DialogCancelarPedido";
 import DialogAgregarDetalle from "../components/DialogAgregarDetalle";
+import { formatearFechaSinHora } from "@/utils/formatFecha";
 
 const estadoColor: Record<string, string> = {
   PENDIENTE: "bg-gray-100 text-gray-700",
@@ -53,6 +54,11 @@ export default function PedidoDetallePage() {
           {pedido.remision && (
             <p className="text-sm text-muted-foreground">Remisión: {pedido.remision}</p>
           )}
+          {pedido.fechaEntrega && (
+            <p className="text-sm text-muted-foreground">
+              Fecha de entrega: {formatearFechaSinHora(pedido.fechaEntrega)}
+            </p>
+          )}
           {pedido.descripcion && (
             <p className="text-sm text-muted-foreground">{pedido.descripcion}</p>
           )}
@@ -89,7 +95,7 @@ export default function PedidoDetallePage() {
         )}
       </div>
 
-      <TablaDetallePedido detalle={pedido.detalle} />
+      <TablaDetallePedido detalle={pedido.detalle} estadoPedido={pedido.estado}/>
 
       <DialogEditarPedido
         open={dialogEditarAbierto}

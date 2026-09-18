@@ -1,10 +1,10 @@
 import { Navigate, type RouteObject } from 'react-router-dom'
 import ProtectedRoute from '../../../shared/components/ProtectedRoute'
 import DashboardLayout from '../pages/DashboardLayout'
-// import AdminDashboard from '../pages/admin/AdminDashboard'
+import DashboardPage from '../pages/admin/DashboardPage'
 import OrdenesPage from '@/features/ordenes/pages/OrdenesPage'
 import Usuarios from '@/features/usuarios/pages/Usuarios'
-// import AuditLog from '@/features/auditLogs/pages/AuditLog'
+import AuditoriaPage from '@/features/auditLogs/pages/AuditoriaPage'
 import Operadores from '@/features/catalogo/pages/Operadores'
 import Maquinas from '@/features/catalogo/pages/Maquinas'
 import MotivosParo from '@/features/catalogo/pages/MotivosParo'
@@ -16,8 +16,6 @@ import PigmentosInventario from '@/features/inventory/pages/PigmentosInventario'
 import ProductoInventario from '@/features/inventory/pages/ProductoInventario'
 import AvancesTurnoPage from '@/features/avancesTurno/pages/supervisor/AvancesTurnoPage'
 import AvancesTurnoAdminPage from '@/features/avancesTurno/pages/admin/AvancesTurnoAdminPage'
-// import MolinoAdmin from '@/features/molino/Pages/admin/MolinoAdmin'
-// import Reportes from '@/features/reportes/pages/Reportes'
 import PedidosPage from '@/features/pedidos/pages/PedidosPage'
 import PedidoDetallePage from '@/features/pedidos/pages/PedidoDetallePage'
 import OrdenDetallePage from '@/features/ordenes/pages/OrdenDetallePage'
@@ -33,6 +31,8 @@ import OrdenesPigmentosPage from '@/features/pigmentos/pages/pigmentos/OrdenesPi
 import SolicitudesEIncidenciasPage from '@/features/pigmentos/pages/pigmentos/SolicitudesEIncidenciasPage'
 import HistorialInventarioPage from '@/features/inventory/components/movimientos/HistorialInventarioPage'
 import SobrantesPendientesPage from '@/features/pigmentos/pages/pigmentos/SobrantesPendientesPage'
+import MolinoAdminPage from '@/features/molino/Pages/admin/MolinoAdminPage'
+import ReportesPage from '@/features/reportes/pages/ReportesPage'
 
 export const dashboardRoutes: RouteObject[] = [
   // ── Admin ──────────────────────────────────
@@ -44,14 +44,14 @@ export const dashboardRoutes: RouteObject[] = [
         element: <DashboardLayout />,
         children: [
           { index: true, element: <Navigate to="dashboard" replace /> },
-          // { path: 'dashboard', element: <AdminDashboard /> },
+          { path: 'dashboard', element: <DashboardPage /> },
           { path: 'pedidos', element: <PedidosPage /> },
           { path: 'pedidos/:id', element: <PedidoDetallePage /> },
           { path: 'ordenes', element: <OrdenesPage /> },
           { path: 'ordenes/:id', element: <OrdenDetallePage /> },
           { path: 'avances-turno', element: <AvancesTurnoAdminPage /> },
           { path: 'avances-turno/:id', element: <AvanceTurnoDetallePage /> },
-          // { path: 'molino', element: <MolinoAdmin /> },
+          { path: 'molino', element: <MolinoAdminPage /> },
           { path: 'materias-primas', element: <MateriasPrimasInventario /> },
           { path: 'molido', element: <MolidoInventario /> },
           { path: 'pigmentos', element: <PigmentosInventario /> },
@@ -65,9 +65,9 @@ export const dashboardRoutes: RouteObject[] = [
           { path: 'motivos-paro', element: <MotivosParo /> },
           { path: 'colores-solidos', element: <ColoresSolidosPage /> },
           { path: 'defectos-productos', element: <DefectosProducto /> },
-          // { path: 'reportes', element: <Reportes /> },
+          { path: 'reportes', element: <ReportesPage /> },
           { path: 'usuarios', element: <Usuarios /> },
-          // { path: 'auditoria', element: <AuditLog /> }, 
+          { path: 'auditoria', element: <AuditoriaPage /> }, 
         ],
       },
     ],

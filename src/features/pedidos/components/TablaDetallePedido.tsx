@@ -11,6 +11,7 @@ import DialogCrearOrden from "@/features/ordenes/components/DialogCrearOrden";
 
 interface Props {
   detalle: PedidoDetalle[];
+  estadoPedido: string;
 }
 
 const estadoColor: Record<string, string> = {
@@ -22,8 +23,9 @@ const estadoColor: Record<string, string> = {
   CANCELADA: "bg-red-100 text-red-700",
 };
 
-export default function TablaDetallePedido({ detalle }: Props) {
+export default function TablaDetallePedido({ detalle, estadoPedido }: Props) {
   const [lineaSeleccionada, setLineaSeleccionada] = useState<PedidoDetalle | null>(null);
+  const pedidoBloqueado = estadoPedido === "COMPLETADO" || estadoPedido === "CANCELADO";
   const navigate = useNavigate();
 
   const { data: todasLasOrdenes } = useOrdenes();
@@ -82,7 +84,7 @@ export default function TablaDetallePedido({ detalle }: Props) {
                     Todavía no hay órdenes creadas para esta línea.
                   </p>
                 )}
-                {linea.cantidadProducida < linea.cantidadSolicitada && (
+                {!pedidoBloqueado && linea.cantidadProducida < linea.cantidadSolicitada && (
                   <Button size="sm" variant="outline" className="w-fit" onClick={() => setLineaSeleccionada(linea)}>
                     Crear orden
                   </Button>

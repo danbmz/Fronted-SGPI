@@ -31,5 +31,5 @@ export async function desactivarColorSolido(id: string): Promise <void> {
 
 export async function reactivarColorSolido(id: string): Promise <void> {
   const response = await httpClient(`/colores-solidos/${id}/reactivar`, { method: 'PATCH'});
-  await parseOrThrow(response, colorSolidoSchema)
+  await parseOrThrow(response, okResponseSchema)
 }

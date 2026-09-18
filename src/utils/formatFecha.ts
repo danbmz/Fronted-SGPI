@@ -4,3 +4,9 @@ export const formatFecha = (fecha: string) => {
       hour: "2-digit", minute: "2-digit"
     })
   }
+
+export function formatearFechaSinHora(fechaISO: string): string {
+  const [año, mes, dia] = fechaISO.split("-").map(Number);
+  const fecha = new Date(año, mes - 1, dia); // construido con componentes locales, no parseando el string
+  return fecha.toLocaleDateString("es-MX");
+}

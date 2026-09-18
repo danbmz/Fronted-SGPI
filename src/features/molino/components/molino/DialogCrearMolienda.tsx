@@ -14,10 +14,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  Select, SelectContent, SelectItem,
-  SelectTrigger, SelectValue
-} from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import SelectNativo from "@/components/ui/selectNativo";
 
@@ -39,10 +35,9 @@ export default function DialogCrearMolienda({ open, avanceTurnoIds, incidenciaId
     resolver: zodResolver(crearMoliendaSchema),
   });
 
-  console.log(errors);
-
   const crearMutation = useCrearMolienda();
   const { data: coloresSolidos } = useColorSolido();
+  const coloresSolidosActivos = (coloresSolidos ?? []).filter((c) => c.activo);
 
   useEffect(() => {
     if (open) {
@@ -127,17 +122,12 @@ export default function DialogCrearMolienda({ open, avanceTurnoIds, incidenciaId
 
           <div className="flex flex-col gap-1">
             <Label>Color final</Label>
-            <Select
+            <SelectNativo
               value={watch("colorSolidoId") ?? ""}
               onValueChange={(val) => setValue("colorSolidoId", val, { shouldValidate: true })}
-            >
-              <SelectTrigger><SelectValue placeholder="Selecciona" /></SelectTrigger>
-              <SelectContent>
-                {(coloresSolidos ?? []).map((c) => (
-                  <SelectItem key={c.id} value={c.id}>{c.nombre}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+              opciones={coloresSolidosActivos.map((c) => ({ value: c.id, label: c.nombre }))}
+              placeholder="Selecciona"
+            />
             {errors.colorSolidoId && <p className="text-xs text-red-500">{errors.colorSolidoId.message}</p>}
           </div>
 
