@@ -18,10 +18,11 @@ export function useSolicitudesMaterial(avanceTurnoId: string | undefined) {
 }
 
 // --- Lista todas las solicitudes, para PIGMENTOS
-export function useTodasSolicitudesMaterial(filtro?: { confirmado?: boolean }) {
+export function useTodasSolicitudesMaterial(filtro?: { confirmado?: boolean }, opciones?: { enabled?: boolean }) {
   return useQuery({
     queryKey: ["solicitudes-material", "todas", filtro],
     queryFn: () => listarTodasSolicitudesMaterial(filtro),
+    enabled: opciones?.enabled ?? true, // el hook se ejecuta siempre, pero esta condicionado (la peticion no se dispara dependiendo el valor de enabled)
   });
 }
 

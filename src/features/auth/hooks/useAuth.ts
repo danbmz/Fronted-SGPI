@@ -14,7 +14,7 @@ interface UseAuthReturn {
   cargando: boolean
   role: Role | null
   login: (credentials: LoginCredentials) => Promise<AuthUser>
-  logout: () => Promise<void>
+  logout: (motivo?: "EXPLICITO" | "INACTIVIDAD") => Promise<void>
 }
 
 export function useAuth(): UseAuthReturn {
@@ -30,8 +30,8 @@ export function useAuth(): UseAuthReturn {
     return usuario;
   }
 
-  const logout = async () => {
-    await logoutService()
+  const logout = async (motivo: "EXPLICITO" | "INACTIVIDAD" = "EXPLICITO") => {
+    await logoutService(motivo)
     storeLogout()
   }
 

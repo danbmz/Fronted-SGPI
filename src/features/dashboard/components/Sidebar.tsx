@@ -17,9 +17,9 @@ export default function Sidebar({ collapsed, onToggle }: Props) {
 
   const items = sidebarItems[role]
 
-  // Solo carga el conteo si el rol es pigmentos
-  const alertasPigmentos = useAlertasPigmentos()
-  const mostrarBadge = role === "PIGMENTOS" && alertasPigmentos > 0
+  const esPigmentos = role === "PIGMENTOS";
+  const alertasPigmentos = useAlertasPigmentos(esPigmentos);  // el hook SIEMPRE se llama pero solo si es "PIGMENTOS" se ejecuta la peticion/request
+  const mostrarBadge = esPigmentos && alertasPigmentos > 0;
   
   const handleLogout = () => {
     logout()

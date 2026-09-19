@@ -13,10 +13,11 @@ import type {
 } from "../schemas/incidencia";
 
 
-export function useIncidencias(filtro?: FiltroIncidencias) {
+export function useIncidencias(filtro?: FiltroIncidencias, opciones?: { enabled?: boolean }) {
   return useQuery({
     queryKey: ["incidencias-mal-pigmentado", filtro],
     queryFn: () => listarIncidencias(filtro),
+    enabled: opciones?.enabled ?? true, // El hook se ejecuta siempre que se llama pero esta condicionado (dependiendo el rol del usuario si se lanza o no la peticion)
   });
 }
 

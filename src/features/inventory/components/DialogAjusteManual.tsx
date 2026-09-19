@@ -58,8 +58,6 @@ export default function DialogAjusteManual({ open, tipoInventario, onClose }: Pr
   const coloresSolidosActivos = coloresSolidos?.filter((c) => c.activo);
   const productosActivos = productos?.filter((m) => m.activo);
 
-  console.log(materiasPrimasActivas);
-
   useEffect(() => {
     setValue("tipoInventario", tipoInventario);
   }, [tipoInventario]);

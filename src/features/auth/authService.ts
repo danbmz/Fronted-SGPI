@@ -24,8 +24,12 @@ export async function login(usuario: string, password: string): Promise<LoginRes
   return response.json();
 }
 
-export async function logout(): Promise<void> {
-  await httpClient("/auth/logout", { method: "POST", skipAuthRetry: true });
+export async function logout(motivo: "EXPLICITO" | "INACTIVIDAD" = "EXPLICITO"): Promise<void> {
+  await httpClient("/auth/logout", {
+    method: "POST",
+    body: JSON.stringify({ motivo }),
+    skipAuthRetry: true,
+  });
 }
 
 export async function obtenerSesionActual(): Promise<LoginResponse["usuario"] | null> {
