@@ -17,6 +17,7 @@ export default function MoliendasPage() {
 
   const { data: moliendas, isLoading, error } = useMoliendas();
   const { data: coloresSolidos } = useColorSolido();
+  const coloresSolidosActivos = coloresSolidos?.filter((c) => c.activo);
 
   const moliendasFiltradas = useMemo(() => {
     return (moliendas ?? []).filter((m) => {
@@ -54,7 +55,7 @@ export default function MoliendasPage() {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="TODOS">Todos los colores</SelectItem>
-              {(coloresSolidos ?? []).map((c) => (
+              {(coloresSolidosActivos ?? []).map((c) => (
                 <SelectItem key={c.id} value={c.id}>{c.nombre}</SelectItem>
               ))}
             </SelectContent>

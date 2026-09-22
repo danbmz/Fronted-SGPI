@@ -49,7 +49,6 @@ export default function DialogCrearOrden({ open, onClose, pedidoDetalle }: Props
   const materiasPrimasActivas = materiasPrimas?.filter((m) => m.activo);
   const pigmentosActivos = pigmentos?.filter((p) => p.activo);
   const maquinasActivas = maquinas?.filter((m) => m.estado === "ACTIVA");
-  // const materiasPrimasActivas = materiasPrimas?.filter((m) => m.activo);
 
   const tipoMaterial = watch("tipoMaterial");
   const materiaPrimaIdSeleccionada = watch("materiaPrimaId");

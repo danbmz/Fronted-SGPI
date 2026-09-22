@@ -22,6 +22,8 @@ interface Props {
 
 export default function DialogEditarPigmento({ open, pigmento, onClose }: Props) {
   const { data: coloresSolidos } = useColorSolido();
+  const coloresSolidosActivos = coloresSolidos?.filter((c) => c.activo);
+
   const {
     register, handleSubmit, reset, setValue, watch,
     formState: { errors, isSubmitting, isDirty }
@@ -114,7 +116,7 @@ export default function DialogEditarPigmento({ open, pigmento, onClose }: Props)
                   <SelectValue placeholder="Selecciona (opcional)" />
                 </SelectTrigger>
                 <SelectContent>
-                  {(coloresSolidos ?? []).map((c) => (
+                  {(coloresSolidosActivos ?? []).map((c) => (
                     <SelectItem key={c.id} value={c.id}>{c.nombre}</SelectItem>
                   ))}
                 </SelectContent>

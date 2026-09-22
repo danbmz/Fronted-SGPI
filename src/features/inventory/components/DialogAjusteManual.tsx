@@ -158,7 +158,7 @@ export default function DialogAjusteManual({ open, tipoInventario, onClose }: Pr
                 >
                   <SelectTrigger><SelectValue placeholder="Selecciona" /></SelectTrigger>
                   <SelectContent>
-                    {(pigmentos ?? []).map((p) => (
+                    {(pigmentosActivos ?? []).map((p) => (
                       <SelectItem key={p.id} value={p.id}>{p.color}</SelectItem>
                     ))}
                   </SelectContent>
@@ -240,7 +240,7 @@ export default function DialogAjusteManual({ open, tipoInventario, onClose }: Pr
                 >
                   <SelectTrigger><SelectValue placeholder="Selecciona" /></SelectTrigger>
                   <SelectContent>
-                    {(materiasPrimas ?? []).map((m) => (
+                    {(materiasPrimasActivas ?? []).map((m) => (
                       <SelectItem key={m.id} value={m.id}>{m.nombre}</SelectItem>
                     ))}
                   </SelectContent>
@@ -258,7 +258,7 @@ export default function DialogAjusteManual({ open, tipoInventario, onClose }: Pr
                 >
                   <SelectTrigger><SelectValue placeholder="Selecciona" /></SelectTrigger>
                   <SelectContent>
-                    {(pigmentos ?? []).map((p) => (
+                    {(pigmentosActivos ?? []).map((p) => (
                       <SelectItem key={p.id} value={p.id}>{p.color}</SelectItem>
                     ))}
                   </SelectContent>
