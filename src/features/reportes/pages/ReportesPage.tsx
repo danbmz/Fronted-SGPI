@@ -5,12 +5,12 @@ import GraficaProduccionReporte from "../components/GraficaProduccionReporte";
 import TarjetaCumplimientoPedidos from "../components/TarjetaCumplimientoPedidos";
 import TarjetaCostoMermaPlasta from "../components/TarjetaCostoMermaPlasta";
 import TarjetaConsumoMateriales from "../components/TarjetaConsumoMateriales";
-import TarjetaDesempenoOperadoresReporte from "../components/TarjetadesempenoOperadoresReporte";
 import TarjetaTiemposParoReporte from "../components/TarjetaTiemposParoReporte";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Download } from "lucide-react";
 import { exportarTodoAExcel } from "@/lib/exportarReportesExcel";
+import TarjetaDesempenoOperadoresReporte from "../components/TarjetaDesempenoOperadoresReporte";
 
 const MAX_DIAS_EXPORTACION = 90;
 
