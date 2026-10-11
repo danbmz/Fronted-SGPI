@@ -56,9 +56,6 @@ export async function httpClient(path: string, options: RequestOptions = {}) {
   return fetch(`${BASE_URL}${path}`, {
     ...fetchOptions,
     credentials: "include",
-    headers: {
-      "Content-Type": "application/json",
-      ...fetchOptions.headers,
-    },
+    headers,
   });
 }
