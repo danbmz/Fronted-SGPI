@@ -1,0 +1,6 @@
+{
+  "rewrites": [
+    { "source": "/api/:path*", "destination": "https://demo-api-55v7.onrender.com/:path*" },
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
+}
